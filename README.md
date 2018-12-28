@@ -1,9 +1,8 @@
-[![NuGet](https://img.shields.io/nuget/v/Quartzmin.svg)](https://www.nuget.org/packages/Quartzmin)
-
 <p align="center">
     <img src="https://raw.githubusercontent.com/jlucansky/public-assets/master/Quartzmin/logo.png" height="150">
 </p>
 
+[![NuGet](https://img.shields.io/nuget/v/Quartzmin.svg)](https://www.nuget.org/packages/Quartzmin)
 ## Introduction
 Quartzmin is powerful, easy to use web management tool for Quartz.NET
 
