@@ -78,3 +78,7 @@ public void Configure(IApplicationBuilder app)
 
 ## Notes
 In clustered environment, it make more sense to host Quarzmin on single dedicated Quartz.NET node in standby mode and implement own `IExecutionHistoryStore` depending on database or ORM framework you typically incorporate. Every clustered Quarz.NET node should be configured with `ExecutionHistoryPlugin` and only dedicated node for management may have `QuartzminPlugin`.
+
+
+## License
+This project is made available under the MIT license. See [LICENSE](LICENSE) for details.
