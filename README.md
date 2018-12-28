@@ -30,7 +30,7 @@ PM> Install-Package Quartzmin
 
 ## Usage
 ### Embedded web server
-Everything you should do is just configure QuartzminPlugin and ExecutionHistoryPlugin to support histograms and statistics:
+Everything you should do is just configure `QuartzminPlugin` and `ExecutionHistoryPlugin` to support histograms and statistics:
 ```xml
 <configuration>
   <configSections>
@@ -48,8 +48,8 @@ Everything you should do is just configure QuartzminPlugin and ExecutionHistoryP
 ```
 
 ### OWIN middleware
-Add to your Startup.cs file:
-```cs
+Add to your `Startup.cs` file:
+```csharp
 public void Configuration(IAppBuilder app)
 {
     app.UseQuartzmin(new QuartzminOptions()
@@ -60,8 +60,8 @@ public void Configuration(IAppBuilder app)
 ```
 
 ### ASP.NET Core middleware
-Add to your Startup.cs file:
-```cs
+Add to your `Startup.cs` file:
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
     services.AddQuartzmin();
@@ -75,3 +75,6 @@ public void Configure(IApplicationBuilder app)
     });
 }
 ```
+
+## Notes
+In clustered environment, it make more sense to host Quarzmin on single dedicated Quartz.NET node in standby mode and implement own `IExecutionHistoryStore` depending on database or ORM framework you typically incorporate. Every clustered Quarz.NET node should be configured with `ExecutionHistoryPlugin` and only dedicated node for management may have `QuartzminPlugin`.
