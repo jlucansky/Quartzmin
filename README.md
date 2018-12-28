@@ -32,7 +32,7 @@ PM> Install-Package Quartzmin
 
 ## Usage
 ### Embedded web server
-Everything you should do is just configure `QuartzminPlugin` and `ExecutionHistoryPlugin` to support histograms and statistics:
+Everything you should do is just install [Quartzmin.SelfHost](https://www.nuget.org/packages/Quartzmin.SelfHost) package and configure `QuartzminPlugin` and `ExecutionHistoryPlugin` to support histograms and statistics:
 ```xml
 <configuration>
   <configSections>
