@@ -1,0 +1,496 @@
+﻿body {
+    background-color: #FFFFFF;
+}
+
+#top-menu {
+    background-color: #294158;
+}
+
+.top.menu .header.item img.logo {
+    margin-right: 0.8em;
+}
+
+.top.menu .header.item {
+    padding-left: 8px;
+}
+
+.main.container {
+    padding-top: 1em;
+}
+
+.ui.menu .item {
+    padding: 15px 20px;
+}
+
+.ui.menu.top,
+.ui.menu.top .item:first-child,
+.ui.menu.top .item:last-child {
+    border-radius: 0px !important;
+}
+
+.ui.menu .ui.header.item {
+    border-left: none !important;
+}
+
+.ui.left.floated.header > a > i.tiny.icon {
+    margin-left: 0.5em
+}
+
+.ui.table {
+    border-radius: 0px !important;
+}
+
+.ui.table td {
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+
+.ui.table thead th {
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.ui.table:not(.unstackable) tr {
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.ui.secondary.menu .ui.small.button {
+    height: 36px;
+}
+
+.job-type {
+    word-break: break-word;
+    white-space: normal;
+}
+
+#job-data-map.ui.table > thead > tr > th {
+    border-bottom: 0px !important;
+}
+
+#job-data-map.ui.table > tbody > tr > td {
+    border-top: 0px !important;
+}
+
+.template {
+    display: none;
+}
+
+#job-data-map > tbody > tr:last-child .delete-row {
+    display: none;
+}
+
+input:-ms-input-placeholder {
+    color: #999 !important; /* IE fix */
+}
+
+.calendar .ui.table thead th {
+    background: #f9fafb;
+    padding: 7px 0px !important;
+}
+
+.changing-type {
+    display: none;
+    bottom: 0px; width: 6px
+}
+
+.ui.table td.accept-error.error {
+    background-color: initial !important;
+}
+
+.trigger-type {
+    display: none;
+}
+
+.histogram {
+    display: block;
+    position: relative;
+}
+
+.histogram > .bar {
+    background-color: #107c10;
+    display: block;
+    position: absolute;
+    bottom: 0px;
+    width: 5px;
+}
+
+td > .histogram {
+    height: 22px;
+}
+
+.histogram > .bar:focus {
+    outline: 1px solid #212121;
+}
+
+.histogram > .bar:hover {
+    cursor: pointer;
+    background-color: #6c6;
+}
+
+.bar.grey {
+    background-color: #e6e6e6;
+}
+.bar.grey:hover {
+    background-color: #e6e6e6;
+}
+
+.bar.running {
+    background-color: #2185d0;
+}
+.bar.running:hover {
+    background-color: #7bbaea;
+}
+
+.bar.failed {
+    background-color: #db2828;
+}
+.bar.failed:hover {
+    background-color: #e97c7c;
+}
+
+.histogram-tooltip {
+    font-size: 85%;
+}
+
+i.icon.dots:before {
+    content: "...";
+}
+
+.ui.icon.detail.button {
+    margin-left: .5em;
+    padding: .3em;
+    visibility: hidden;
+}
+
+tr:hover > td > .ui.icon.detail.button, tr.active-menu > td > .ui.icon.detail.button {
+    visibility: visible;
+}
+
+table.highlight-rows > tbody > tr:hover > td, table.highlight-rows > tbody > tr.active-menu > td {
+    background-color: #f4f4f4;
+}
+
+.ui.popup.context-menu {
+    margin: 0;
+    padding: 0;
+    
+    border: none;
+    border-radius: 0;
+
+    /*-webkit-box-shadow: none;
+    box-shadow: none;
+    border-radius: 0;*/
+}
+
+.ui.vertical.menu .item > i.icon.left {
+    float: none;
+    margin: 0em 0.6em 0em 0em;
+}
+
+.context-menu > .ui.menu {
+    border: none;
+    border-radius: 0;
+}
+
+.context-menu > .ui.menu > .item {
+    padding: 10px 10px;
+}
+
+.context-menu > .ui.menu > .item > .large.icon {
+    font-size: 1.2em;
+}
+
+.context-menu > .ui.vertical.menu > .item:first-child, .context-menu > .ui.vertical.menu > .item:last-child {
+    border-radius: 0;
+}
+
+#msg-panel:not(:empty) {
+    margin-top: 15px;
+}
+
+.ui.inline.message p {
+    margin: 0;
+}
+
+.ui.inline.message {
+    padding: 8px 15px;
+}
+
+.ui.inline.message > .close.icon{
+    top: 8px;
+    right: .7em;
+}
+
+.cron-field>label>a {
+    float: right;
+    font-weight: normal;
+    font-size: 90%;
+}
+
+.cron-field > label > a:hover {
+    text-decoration: underline;
+}
+
+.cron-field > label > a> i {
+    text-decoration: none;
+}
+
+.cron-field > p {
+    font-style: italic;
+    font-size: 85%;
+    margin: 3px;
+}
+
+tr.job-key > td {
+    background-color: #f3f5f7 !important;
+}
+tr.job-key a {
+    font-weight: bold;
+}
+tr.job-key a > span.group {
+    font-weight: normal;
+    color: #cdd2d8;
+}
+
+#trigger-list .schedule-desc {
+    cursor: pointer;
+}
+
+.ui.form .wrapped.fields {
+    display: block;
+}
+
+.ui.form .wrapped.fields > .wrapped.field {
+    float: left;
+    clear: none;
+    margin-bottom: 1em;
+}
+
+.wrapped.fields + .fields {
+    clear: both;
+}
+
+.wrapped.fields input + a {
+    margin-top: .5em;
+}
+
+.wrapped.field:last-child .delete-field {
+    display: none;
+}
+
+.monthly.ui.table td {
+    border: none !important;
+    padding: 2px;
+}
+
+.monthly.ui.table .button {
+    width: 100%;
+    padding: 10px;
+}
+
+.monthly.ui.table {
+    margin-top: 0;
+}
+
+.monthly.ui.table .ui.button.toggle.active, .field.weekly .ui.button.toggle.active {
+    background-color: #b21e1e !important;
+}
+
+.monthly.ui.table td > a:hover {
+    text-decoration: underline;
+}
+
+.field.weekly .ui.button.toggle {
+    margin-bottom: .3em;
+}
+
+.ui.segments > .segment:not(:last-child):after {
+    font-family: Icons;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 1.5em;
+    position: absolute;
+    color: rgb(222,222,222);
+    background-color: #fff;
+    z-index: 2;
+    content: "\f13a";
+    left: 50%;
+    bottom: 0;
+    -webkit-transform: translateY(50%) translateX(50%);
+    transform: translateY(50%) translateX(50%);
+}
+
+#scheduler-dashboard .ui.statistic {
+    padding: 10px;
+    border-radius: 4px;
+    box-shadow: 1px 2px 4px rgba(0,0,0,0.15);
+}
+
+#scheduler-dashboard .ui.inverted.statistic {
+    text-shadow: 1px 2px 4px rgba(0,0,0,0.25);
+}
+
+.dashboard-histogram .histogram {
+    height: 100%;
+}
+
+.dashboard-histogram {
+    display: inline-flex;
+}
+
+.dashboard-histogram .histogram > .bar {
+    width: 13px;
+}
+
+#scheduler-dashboard .ui.table{
+    width: auto;
+}
+
+#scheduler-dashboard .ui.table>tbody>tr>td:nth-child(2) {
+    font-weight: bold;
+}
+
+#scheduler-dashboard .ui.table {
+    border: none;
+}
+
+.inline-stats {
+    font-size: 1em;
+    font-weight: 700;
+    text-transform: uppercase;
+    line-height: 1.8rem;
+}
+
+.inline-stats span {
+    font-size: 2rem;
+    color: #333;
+    
+}
+
+#scheduler-dashboard .ui.dividing.header {
+    margin-bottom: 0px;
+}
+
+#scheduler-dashboard .ui.table {
+    margin-top: 5px;
+}
+
+@media only screen and (max-width: 767px) {
+    #scheduler-dashboard .ui.table:not(.unstackable) td:first-child, .ui.table:not(.unstackable) th:first-child {
+        font-weight: normal;
+    }
+}
+
+#scheduler-dashboard > .ui.grid {
+    margin: 0px;
+}
+
+#scheduler-dashboard > .ui.grid > .column {
+    padding: 14px 0px 0px !important;
+}
+
+#scheduler-dashboard #msg-panel:not(:empty) {
+    margin-top: 0px;
+    margin-bottom: 15px;
+}
+
+.trigger-name .pause.icon {
+    color: #e6b800;
+}
+
+#scheduler-dashboard #col-actions .ui.button {
+    margin-bottom: 5px;
+}
+
+#scheduler-dashboard .group-actions {
+    float: left;
+    margin-right: 10px;
+}
+
+
+#scheduler-dashboard .group-actions ul {
+    margin: 5px 0px;
+    list-style:none;
+    padding-left: 16px;
+}
+
+#scheduler-dashboard .group-actions li {
+    clear: both;
+    margin: 0px;
+    padding: 0px;
+}
+
+#scheduler-dashboard .group-actions li .ui.button {
+    margin: 0px 4px;
+    float: right;
+}
+
+#scheduler-dashboard .group-actions li.paused:before,
+#scheduler-dashboard .group-actions li.resumed:before {
+    position: absolute;
+    font-size: 11px;
+    font-family: Icons;
+    font-style: normal;
+    margin-left: -1.2em;
+    margin-top: 0.1em;
+}
+
+#scheduler-dashboard .group-actions li.paused:before {
+    content: "\f04c";
+    color: #e6b800;
+}
+
+#scheduler-dashboard .group-actions li.resumed:before {
+    content: "\f111";
+    color: #21ba45;
+}
+
+input[type=text].stats {
+    font-style: italic;
+}
+
+.super.tiny.ui.button {
+    padding: 5px 8px;
+}
+
+#history-list td.job-key > .play.icon {
+    color: #2185d0;
+}
+
+#history-list td.job-key > .check.icon {
+    color: #21ba45;
+}
+
+#history-list td.job-key > .close.icon {
+    color: #db2828;
+}
+
+#history-list tr.error-row > td {
+    padding-top: 0px;
+    border-top: none;
+}
+
+#history-list tr.error-row > td p {
+    text-wrap: normal;
+    white-space: pre-wrap;
+    font-size: 90%;
+    font-weight: normal;
+    padding-left: 30px;
+}
+
+#history-list tr.error-row > td p:before {
+    font-family: Icons;
+    margin-left: -15px;
+    content: "\f101";
+    position: absolute;
+}
+
+table#history-list > tbody > tr:hover td {
+    background-color: transparent;
+}
+
+table#history-list > tbody > tr:not(.error-row):hover,
+table#history-list > tbody > tr:hover + tr.error-row {
+    background-color: #f4f4f4;
+}

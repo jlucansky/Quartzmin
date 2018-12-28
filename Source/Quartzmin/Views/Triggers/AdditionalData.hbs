@@ -1,0 +1,11 @@
+﻿<table>
+    <tbody>
+        {{#each Model}}
+        <tr data-row="{{TriggerGroup}}.{{TriggerName}}">
+            {{#if History}}
+            <td class="trigger-histogram">{{>Histogram History}}</td>
+            {{/if}}
+        </tr>
+        {{/each}}
+    </tbody>
+</table>

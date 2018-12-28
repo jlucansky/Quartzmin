@@ -1,0 +1,71 @@
+﻿{{!<Layout}}
+{{ViewBag Title='Calendars'}}
+
+<div class="ui inverted page dimmer" id="dimmer"><div class="ui loader"></div></div>
+<div class="ui small left icon input">
+    <input type="text" placeholder="Search Calendar..." id="search-calendar">
+    <i class="search icon"></i>
+</div>
+<a class="ui right floated primary button" href="{{ActionUrl 'New'}}">
+    <i class="plus icon"></i>New
+</a>
+
+<div id="msg-panel"></div>
+
+<table class="ui single line table highlight-rows" id="calendar-list">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Type</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each Model}}
+        <tr>
+            <td class="cal-name"><a href="{{ActionUrl 'Edit' @ControllerName name=Name}}">{{Name}}</a></td>
+            <td class="cal-desc">{{Description}}</td>
+            <td class="cal-type">
+                <img class="ui inline image" src="Content/Images/type.png">&nbsp;{{Type.FullName}}
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+{{#unless Model}}
+{{>EmptyList 'calendar'}}
+{{/unless}}
+
+<script>
+
+    initDimmer();
+
+    // search handling
+
+    function applyFilter() {
+        const fStr = $('#search-calendar').val().toLowerCase();
+        $('#calendar-list > tbody > tr').each(function () {
+            const $_ = $(this), txt = $_.data('fulltext');
+            if (txt.indexOf(fStr) !== -1) $_.show(); else $_.hide();
+        });
+    }
+
+    var searchTimer;
+    $('#search-calendar').on('input', function (e) {
+        window.clearTimeout(searchTimer);
+        searchTimer = window.setTimeout(function () {
+            searchTimer = null;
+            applyFilter();
+        }, 100);
+    });
+
+    // prepare calendar table
+    $('#calendar-list > tbody > tr').each(function () {
+        const
+            $_ = $(this),
+            nameElm = $_.find('>.cal-name').text();
+
+        $_.data('fulltext', nameElm.toLowerCase());
+    });
+
+</script>

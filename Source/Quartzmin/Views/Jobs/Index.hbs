@@ -1,0 +1,166 @@
+﻿{{!<Layout}}
+{{ViewBag Title='Jobs'}}
+
+<div class="ui inverted page dimmer" id="dimmer"><div class="ui loader"></div></div>
+<div class="ui small left icon input">
+    <input type="text" placeholder="Search Job..." id="search-job">
+    <i class="search icon"></i>
+</div>
+<span>&nbsp;</span>
+<div class="ui small floating dropdown labeled search icon button" id="job-group-filter">
+    <i class="filter icon"></i>
+    <span class="text">Job Group</span>
+    <div class="menu">
+        <div class="header">
+            Filter by group
+        </div>
+        <div class="divider"></div>
+        <div class="item" data-show-all="true"><i>All</i></div>
+        {{#each ViewBag.Groups}}
+        <div class="item">{{.}}</div>
+        {{/each}}
+    </div>
+</div>
+<a class="ui right floated primary button" href="{{ActionUrl 'New'}}">
+    <i class="plus icon"></i>New
+</a>
+
+<div id="msg-panel"></div>
+
+<table class="ui single line table highlight-rows" id="job-list">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Group</th>
+            <th>Class</th>
+            <th style="min-width: 160px">Next Fire Time</th>
+            <th>History</th>
+            <th>Flags</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each Model}}
+        <tr>
+            <td class="job-name">
+                <a href="{{ActionUrl 'Edit' @ControllerName group=Group name=JobName}}" title="{{Description}}">{{JobName}}</a>
+            </td>
+            <td class="job-group">{{Group}}</td>
+            <td class="job-type">{{Type}}</td>
+            <td class="next-fire-time"></td>
+            <td class="job-histogram">{{>Histogram History}}</td>
+            <td>
+                {{#if Persist}}<div class="ui mini green label" title="Persist Job Data">P</div>{{/if}}
+                {{#if Recovery}}<div class="ui mini purple label" title="Request Recovery">R</div>{{/if}}
+                {{#if Concurrent}}<div class="ui mini orange label" title="Concurrent">C</div>{{/if}}
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+{{#unless Model}}
+{{>EmptyList 'job'}}
+{{/unless}}
+
+<div style="display:none">
+    <div class="ui small vertical menu borderless" id="job-context-menu">
+        <a class="item menu-edit"><i class="left large blue pencil alternate icon"></i>Edit</a>
+        <a class="item menu-copy"><i class="left large clone outline icon"></i>Copy</a>
+        <a class="item menu-trigger"><i class="left large green play icon"></i>Trigger</a>
+        <a class="item menu-delete"><i class="left large red trash alternate outline icon"></i>Delete</a>
+    </div>
+</div>
+
+<div class="ui mini modal" id="delete-dialog">
+    <div class="content">
+        <p>Are you sure you want to delete this job?</p>
+        <p><b class="confirm-item"></b></p>
+    </div>
+    <div class="actions">
+        <div class="ui approve red button">Delete</div>
+        <div class="ui cancel button">Cancel</div>
+    </div>
+</div>
+
+<script>
+
+    initDimmer();
+
+    // search handling
+
+    var fGroup = undefined;
+    function applyFilter() {
+        const fStr = $('#search-job').val().toLowerCase();
+        $('#job-list > tbody > tr').each(function () {
+            const $_ = $(this), jobGroup = $_.data('job-group'), txt = $_.data('fulltext');
+            if (txt.indexOf(fStr) !== -1 && (!fGroup || jobGroup === fGroup)) $_.show(); else $_.hide();
+        });
+    }
+
+    var searchTimer;
+    $('#search-job').on('input', function (e) {
+        window.clearTimeout(searchTimer);
+        searchTimer = window.setTimeout(function () {
+            searchTimer = null;
+            applyFilter();
+        }, 100);
+    });
+
+    $('#job-group-filter').dropdown({
+        onChange: function (v, t, elm) {
+            if (elm.data('show-all')) fGroup = undefined; else fGroup = t;
+            applyFilter();
+        }
+    });
+
+    // histogram
+    initHistogramTooltips($('.histogram > .bar'));
+
+    // prepare job table
+    const rowIndex = {};
+    $('#job-list > tbody > tr').each(function () {
+        const
+            $_ = $(this),
+            jobNameElm = $_.find('>.job-name'),
+            jobName = jobNameElm.find('a').text(),
+            jobGroup = $_.find('>.job-group').text(),
+            jobType = $_.find('>.job-type').text();
+
+        rowIndex[jobGroup + '.' + jobName] = $_;
+
+        $_.data('fulltext', (jobGroup + '.' + jobName + ';' + jobType).toLowerCase());
+        $_.data('job-group', jobGroup);
+
+        jobNameElm.append('<button class="ui icon mini detail button"><i class="dots icon"></i></button>');
+    });
+
+    // menu handling
+
+    function bindContextMenu(menu, row, jobName, jobGroup) {
+
+        menu.find('>.menu-edit').attr('href', row.find('>.job-name a').attr('href'));
+        menu.find('>.menu-copy').attr('href', '{{ActionUrl "Duplicate"}}?group=' + jobGroup + '&name=' + jobName);
+        menu.find('>.menu-trigger').attr('href', '{{ActionUrl "Trigger"}}?group=' + jobGroup + '&name=' + jobName);
+        menu.find('>.menu-delete').click(function () {
+            $('#delete-dialog .confirm-item').text(jobGroup +'.' + jobName);
+            deleteItem({ name: jobName, group: jobGroup }, $('#msg-panel'),
+                '{{ActionUrl "Delete"}}', '{{ActionUrl ""}}');
+        });
+
+        return menu;
+    }
+
+    $('#job-list > tbody').on('click', '> tr > td > .detail.button', function () {
+        const $button = $(this), $_ = $(this).closest('tr'), jobName = $_.find('>.job-name a').text(), jobGroup = $_.find('>.job-group').text();
+        $_.addClass('active-menu'); // to preserve highlighted row
+        $button.popup({
+            transition: 'slide', position: 'bottom left', variation: 'basic', on: 'click', arrowPixelsFromEdge:0,
+            onCreate: function () { $(this).addClass('context-menu').click(function () { $button.popup('hide'); }); },
+            onHide: function () { $_.removeClass('active-menu'); },
+            html: bindContextMenu($('#job-context-menu').clone(), $_, jobName, jobGroup)
+        }).off('click').popup('show');
+    });
+
+    // lazy loading
+    loadAdditionalData(rowIndex, '{{ActionUrl "AdditionalData"}}');
+</script>

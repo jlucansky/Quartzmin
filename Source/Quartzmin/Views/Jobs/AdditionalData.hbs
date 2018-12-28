@@ -1,0 +1,12 @@
+﻿<table>
+    <tbody>
+        {{#each Model}}
+        <tr data-row="{{Group}}.{{JobName}}">
+            <td class="next-fire-time">{{NextFireTime}}</td>
+            {{#if History}}
+            <td class="job-histogram">{{>Histogram History}}</td>
+            {{/if}}
+        </tr>
+        {{/each}}
+    </tbody>
+</table>

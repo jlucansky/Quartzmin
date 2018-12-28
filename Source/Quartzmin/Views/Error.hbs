@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <base href="{{BaseUrl}}">
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <title>Error</title>
+
+    <link rel="stylesheet" href="Content/Lib/semantic-ui/semantic.min.css" type="text/css">
+    <link rel="stylesheet" href="Content/Fonts/Lato.css" type="text/css" />
+
+    <style type="text/css">
+        body > .ui.container {
+            margin-top: 3em;
+            margin-bottom: 1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="ui container">
+
+        <h2 class="ui header">
+            <i class="exclamation triangle icon"></i>
+            <div class="content">
+                An Error Has Occurred
+                <div class="sub header">{{FullName}}</div>
+            </div>
+        </h2>
+
+        <div class="ui negative message">
+            <p>{{BaseException.Message}}</p>
+        </div>
+
+        <pre style="overflow-x: scroll; background-color: #f8f8ec; border: 1px solid #f2f2d9">{{Dump}}</pre>
+    </div>
+</body>
+</html>

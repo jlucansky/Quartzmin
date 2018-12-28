@@ -1,0 +1,61 @@
+﻿{{!<Layout}}
+{{ViewBag Title='Trigger Job'}}
+
+<div class="ui inverted page dimmer" id="dimmer"><div class="ui loader"></div></div>
+<form class="ui form" id="form" method="post" enctype="multipart/form-data">
+    <div class="ui clearing basic segment" style="padding: 0px" id="header">
+        <div style="float: right">
+            <div class="ui green button" id="btn-trigger"><i class="play icon"></i>Trigger Now</div>
+        </div>
+        <h1 class="ui left floated header">{{ViewBag.Group}}.{{ViewBag.JobName}}<a title="Go to edit page" href="{{ActionUrl 'Edit' group=ViewBag.Group name=ViewBag.JobName}}"><i class="external alternate tiny icon"></i></a></h1>
+    </div>
+
+    <div class="ui segment">
+        <input type="hidden" name="name" value="{{ViewBag.JobName}}" id="jobName" />
+        <input type="hidden" name="group" value="{{ViewBag.Group}}" id="jobGroup" />
+        <h3 class="ui dividing header" style="margin-top: .3em">Job Data Map Overrides</h3>
+
+        {{>JobDataMap Model}}
+    </div>
+</form>
+
+<script>
+    $(function () {
+        initDimmer();
+
+        $('#btn-trigger').click(function () {
+
+            if ($('#job-data-map .type-col .ui.dropdown.disabled').length > 0) return; // type change in progress
+
+            $('#dimmer').dimmer('show');
+
+            $('#job-data-map').jobDataMapPrepareForm();
+
+            const formData = new FormData($('#form')[0]);
+            const msgPanel = $('#job-data-map').parent();
+
+            $.ajax({
+                type: 'POST', enctype: 'multipart/form-data', url: '{{ActionUrl "Trigger" group=ViewBag.Group name=ViewBag.JobName}}',
+                data: formData, processData: false, contentType: false, dataType: "json", cache: false,
+                success: function (data) {
+                    $('#dimmer').dimmer('hide');
+
+                    if (processValidationResponse(data)) {
+                        const msg = $('<div class="ui positive inline message"><p>Job triggered successfully.</p><i class="close icon"></i></div>');
+                        msg.transition('fade in', '500ms')
+                            .find('.close').on('click', function () { $(this).closest('.message').transition('fade'); });
+
+                        msgPanel.prepend(msg);
+                    }
+                },
+                error: function (e) {
+                    $('#dimmer').dimmer('hide');
+                    prependErrorMessage(e, msgPanel);
+                }
+            });
+        });
+
+    });
+</script>
+
+<script src="Content/Scripts/post-validation.js"></script>

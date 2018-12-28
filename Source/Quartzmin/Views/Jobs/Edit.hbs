@@ -1,0 +1,154 @@
+﻿{{!<Layout}}
+{{#if Model.Job.IsNew}}
+    {{ViewBag Title='Add Job'}}
+{{else}}
+    {{ViewBag Title='Edit Job'}}
+{{/if}}
+
+<div class="ui inverted page dimmer" id="dimmer"><div class="ui loader"></div></div>
+<form class="ui form" id="form" method="post" enctype="multipart/form-data">
+    <div class="ui clearing basic segment" style="padding: 0px" id="header">
+        <div style="float: right">
+            <a class="ui button" id="btn-discard" href="{{ActionUrl ''}}">Discard Changes</a>
+            {{#unless Model.Job.IsNew}}
+            <div class="negative ui button" id="btn-delete">Delete</div>
+            {{/unless}}
+            <div class="ui buttons">
+                <div class="ui primary button" id="btn-save">Save</div>
+                <div class="ui floating dropdown icon primary button" id="save-dropdown">
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <div class="item ui basic button" id="btn-trigger"><i class="green play icon"></i> Save &amp; Trigger Immediately</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h1 class="ui left floated header">
+            {{#if Model.Job.IsNew}}Add Job{{else}}Edit Job "{{Model.Job.JobName}}"{{/if}}
+        </h1>
+    </div>
+
+    <div class="ui segment">
+        {{#with Model.Job}}
+        <input type="hidden" name="job[isNew]" value="{{IsNew}}" />
+        {{#unless IsNew}}
+        <input type="hidden" name="job[oldJobName]" value="{{JobName}}" />
+        <input type="hidden" name="job[oldGroup]" value="{{Group}}" />
+        {{/unless}}
+        <div id="job-properties">
+
+            <div class="two fields">
+                <div class="field accept-error">
+                    <label>Name</label>
+                    <input type="text" name="job[jobName]" placeholder="Name" value="{{JobName}}" id="jobName" />
+                </div>
+                <div class="field accept-error">
+                    <label>Group</label>
+                    <input type="hidden" value="{{Group}}" id="jobGroup" />
+                    <select class="ui search selection dropdown allow-additions" name="job[group]">
+                        <option value="">Group</option>
+                        {{>DropdownOptions items=GroupList selected=Group}}
+                    </select>
+                </div>
+            </div>
+
+            <div class="field accept-error">
+                <label>Class</label>
+                <input type="hidden" value="{{Type}}" id="jobType" />
+                <select class="ui search selection dropdown allow-additions" name="job[type]" id="jobTypeDropdown">
+                    <option value="">Fully Qualified Type Name</option>
+                    {{>DropdownOptions items=TypeList selected=Type}}
+                </select>
+            </div>
+
+            <div class="field accept-error">
+                <label>Description</label>
+                <textarea rows="2" name="job[description]">{{Description}}</textarea>
+            </div>
+
+            <div class="field accept-error">
+                <div class="ui checkbox">
+                    <input name="job[recovery]" type="checkbox" value="True" {{Checked Recovery}} />
+                    <label>Requests Recovery</label>
+                </div>
+            </div>
+        </div>
+        {{/with}}
+        <h3 class="ui dividing header">Job Data Map</h3>
+
+        {{>JobDataMap Model.DataMap}}
+    </div>
+</form>
+
+<div class="ui mini modal" id="delete-dialog">
+    <div class="content">
+        <p>Are you sure you want to delete this job?</p>
+        <p><b class="confirm-item"></b></p>
+    </div>
+    <div class="actions">
+        <div class="ui approve red button">Delete</div>
+        <div class="ui cancel button">Cancel</div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        const
+            $jobGroup = $('#jobGroup').val(),
+            $jobName = $('#jobName').val(),
+            $jobType = $('#jobType').val();
+
+        // inits
+        $('#job-properties .ui.dropdown, #header .ui.dropdown').each(function () {
+            $(this).dropdown({
+                allowAdditions: $(this).hasClass('allow-additions')
+            });
+        });
+
+        $('#save-dropdown').dropdown('setting', 'action', 'hide');
+        $('#job-properties .ui.checkbox').checkbox();
+
+        $('#jobTypeDropdown').dropdown('set selected', $jobType);
+
+        initDimmer();
+
+        // event handlers
+        $('#btn-delete').click(function () {
+            $('#delete-dialog .confirm-item').text($jobGroup + '.' + $jobName);
+            deleteItem({ name: $jobName, group: $jobGroup }, $('#job-properties'),
+                '{{ActionUrl "Delete"}}', '{{ActionUrl ""}}');
+        });
+
+        function save(triggerNow) {
+            if ($('#job-data-map .type-col .ui.dropdown.disabled').length > 0) return; // type change in progress
+
+            $('#dimmer').dimmer('show');
+
+            $('#job-data-map').jobDataMapPrepareForm();
+
+            var formData = new FormData($('#form')[0]);
+
+            $.ajax({
+                type: 'POST', enctype: 'multipart/form-data', url: '{{ActionUrl "Save"}}?trigger=' + triggerNow,
+                data: formData, processData: false, contentType: false, dataType: "json", cache: false,
+                success: function (data) {
+                    if (processValidationResponse(data)) {
+                        document.location = '{{ActionUrl ""}}';
+                    } else {
+                        $('#dimmer').dimmer('hide');
+                    }
+                },
+                error: function (e) {
+                    $('#dimmer').dimmer('hide');
+                    prependErrorMessage(e, $('#job-properties'));
+                }
+            });
+        }
+
+        $('#btn-save').click(function () { save(false); });
+        $('#btn-trigger').click(function () { save(true); });
+
+    });
+</script>
+
+<script src="Content/Scripts/post-validation.js"></script>

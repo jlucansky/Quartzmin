@@ -1,0 +1,68 @@
+﻿{{!<Layout}}
+{{ViewBag Title='Executions'}}
+
+<div class="ui inverted page dimmer" id="dimmer"><div class="ui loader"></div></div>
+
+<div id="msg-panel"></div>
+
+<table class="ui single line table highlight-rows" id="execution-list">
+    <thead>
+        <tr>
+            <th>Job</th>
+            <th>Trigger</th>
+            <th>Scheduled Fire Time</th>
+            <th>Actual Fire Time</th>
+            <th>Run Time</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each Model}}
+        <tr>
+            <td><a href="{{ActionUrl 'Edit' 'Jobs' group=JobGroup name=JobName}}">{{JobGroup}}.{{JobName}}</a></td>
+            <td><a href="{{ActionUrl 'Edit' 'Triggers' group=TriggerGroup name=TriggerName}}">{{TriggerGroup}}.{{TriggerName}}</a></td>
+            <td>{{ScheduledFireTime}}</td>
+            <td>{{ActualFireTime}}</td>
+            <td>{{RunTime}}</td>
+            <td style="text-align: right"><button class="ui super tiny red button btn-interrupt" data-id="{{Id}}"><i class="stop icon"></i>Interrupt</button></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+{{#unless Model}}
+{{>EmptyList ''}}
+{{/unless}}
+
+<script>
+
+    initDimmer();
+
+    $(document).on('click', '.btn-interrupt', function () {
+
+        $('#dimmer').dimmer('show');
+        const id = $(this).data('id');
+        const btn = $(this);
+        $.ajax({
+            type: 'POST', url: '{{ActionUrl "Interrupt"}}',
+            data: JSON.stringify({ id: id}),
+            contentType: 'application/json', cache: false,
+            success: function () {
+                $('#dimmer').dimmer('hide');
+
+                const msg = $('<div class="ui positive inline message"><p>Interruption of "'+id+'" requested successfully.</p><i class="close icon"></i></div>');
+                msg.transition('fade in', '500ms')
+                    .find('.close').on('click', function () { $(this).closest('.message').transition('fade'); });
+
+                $('#msg-panel').prepend(msg);
+
+                btn.addClass('disabled');
+            },
+            error: function (e) {
+                $('#dimmer').dimmer('hide');
+                prependErrorMessage(e, $('#msg-panel'));
+            }
+        });
+
+    });
+
+</script>

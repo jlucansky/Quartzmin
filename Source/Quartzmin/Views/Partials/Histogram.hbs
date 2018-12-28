@@ -1,0 +1,6 @@
+﻿{{DoLayout}}
+<div class="histogram" style="width:{{ComputedWidth}}px;">
+    {{#each Bars}}
+    <div class="bar {{CssClass}}" style="left:{{ComputedLeft}}px; height:{{Percentage}}%" data-tooltip-html="{{Tooltip}}"></div>
+    {{/each}}
+</div>

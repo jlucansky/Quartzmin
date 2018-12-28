@@ -1,0 +1,21 @@
+﻿<table class="ui very basic single line table" id="job-data-map">
+    <thead>
+        <tr>
+            <th class="six wide">Name</th>
+            <th class="six wide">Value</th>
+            <th class="six four">Type</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{>JobDataMapRow item=Template template=true}}
+        {{#each Items}}{{>JobDataMapRow item=. template=false}}{{/each}}
+        {{>JobDataMapRow item=Template template=false}}
+    </tbody>
+</table>
+
+<script>
+    var $changeTypeCallbackUrl = '{{ActionUrl "ChangeType" "JobDataMap"}}';
+</script>
+
+<script src="Content/Scripts/job-data-map.js"></script>
+<script src="JobDataMap/TypeHandlers.js"></script>

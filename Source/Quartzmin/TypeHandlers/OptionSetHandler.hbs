@@ -1,0 +1,6 @@
+﻿<select class="ui fluid dropdown" name="data-map[option]">
+    <option value="">Select value</option>
+    {{#eachItems TypeHandler}}
+    <option value="{{Key}}" {{Selected @StringValue Key}}>{{Value}}</option>
+    {{/eachItems}}
+</select>

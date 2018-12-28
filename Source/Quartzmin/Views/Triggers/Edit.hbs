@@ -1,0 +1,481 @@
+﻿{{!<Layout}}
+{{#if Model.Trigger.IsNew}}
+    {{ViewBag Title='Add Trigger'}}
+{{else}}
+    {{ViewBag Title='Edit Trigger'}}
+{{/if}}
+
+<div class="ui inverted page dimmer" id="dimmer"><div class="ui loader"></div></div>
+<form class="ui form" id="form" method="post" enctype="multipart/form-data">
+    <div class="ui clearing basic segment" style="padding: 0px" id="header">
+        <div style="float: right">
+            <a class="ui button" id="btn-discard" href="{{ActionUrl ''}}">Discard Changes</a>
+            {{#unless Model.Trigger.IsNew}}
+            <div class="negative ui button" id="btn-delete">Delete</div>
+            {{/unless}}
+            <div class="ui primary button" id="btn-save">Save</div>
+        </div>
+        <h1 class="ui left floated header">
+            {{#if Model.Trigger.IsNew}}Add Trigger{{else}}Edit Trigger "{{Model.Trigger.TriggerName}}"{{/if}}
+        </h1>
+    </div>
+
+    <div class="ui segment">
+        {{#with Model.Trigger}}
+        <input type="hidden" name="trigger[isNew]" value="{{IsNew}}" />
+        {{#unless IsNew}}
+        <input type="hidden" name="trigger[oldTriggerName]" value="{{OldTriggerName}}" />
+        <input type="hidden" name="trigger[oldTriggerGroup]" value="{{OldTriggerGroup}}" />
+        <input type="hidden" name="trigger[job]" value="{{Job}}" />
+        {{/unless}}
+        <div id="trigger-properties">
+
+            <div class="field">
+                <label>Trigger Type</label>
+                <div class="inline fields" id="trigger-type-radios">
+                    <div class="field">
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="trigger[type]" value="cron">
+                            <label>Cron</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="trigger[type]" value="simple">
+                            <label>Simple</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="trigger[type]" value="calendar">
+                            <label>Calendar Interval</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="trigger[type]" value="daily">
+                            <label>Daily Time Interval</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="fields">
+                <div class="twelve wide field accept-error">
+                    <label>Job</label>
+                    <select class="ui fluid dropdown" name="trigger[job]" {{#unless IsNew}} disabled {{/unless}}>
+                        <option value="">Select</option>
+                        {{>DropdownOptions items=JobList selected=Job}}
+                    </select>
+                </div>
+            </div>
+
+            <div class="two fields">
+                <div class="field accept-error">
+                    <label>Trigger Name</label>
+                    <input type="text" name="trigger[triggerName]" placeholder="Trigger Name" value="{{TriggerName}}" id="triggerName" />
+                </div>
+                <div class="field accept-error">
+                    <label>Trigger Group</label>
+                    <input type="hidden" value="{{TriggerGroup}}" id="triggerGroup" />
+                    <select class="ui search selection dropdown allow-additions" name="trigger[triggerGroup]">
+                        <option value="">Trigger Group</option>
+                        {{>DropdownOptions items=TriggerGroupList selected=TriggerGroup}}
+                    </select>
+                </div>
+            </div>
+
+            <div class="field accept-error">
+                <label>Description</label>
+                <textarea rows="2" name="trigger[description]">{{Description}}</textarea>
+            </div>
+
+            <div class="fields">
+                <div class="five wide field accept-error">
+                    <label>Start Date (UTC)</label>
+                    <div class="ui calendar date-time">
+                        <div class="ui fluid input left icon">
+                            <i class="calendar alternate outline icon"></i>
+                            <input type="text" name="trigger[startTimeUtc]" autocomplete="off" value="{{StartTimeUtc}}" placeholder="Date/Time">
+                        </div>
+                    </div>
+                </div>
+                <div class="five wide field accept-error">
+                    <label>End Date (UTC)</label>
+                    <div class="ui calendar date-time">
+                        <div class="ui fluid input left icon">
+                            <i class="calendar alternate outline icon"></i>
+                            <input type="text" name="trigger[endTimeUtc]" autocomplete="off" value="{{EndTimeUtc}}" placeholder="Date/Time">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="fields">
+                <div class="eight wide field accept-error">
+                    <label>Calendar</label>
+                    <select class="ui fluid dropdown allow-empty" name="trigger[calendarName]" value="{{CalendarName}}">
+                        <option value="">--- Not Set ---</option>
+                        {{>DropdownOptions items=CalendarNameList selected=CalendarName}}
+                    </select>
+                </div>
+            </div>
+
+            <div class="fields">
+                <div class="eight wide field accept-error">
+                    <label>Misfire Instruction</label>
+                    <input type="hidden" name="trigger[misfireInstruction]" id="selectedMisfireInstruction">
+                    <select class="ui fluid dropdown" id="misfireInstructions"></select>
+                </div>
+                <div class="two wide field accept-error">
+                    <label>Priority</label>
+                    <select class="ui search selection dropdown allow-additions" name="trigger[priority]" id="triggerPriority">
+                        {{>DropdownOptions items=PriorityList selected=PriorityOrDefault}}
+                    </select>
+                </div>
+            </div>
+
+            <h3 class="ui dividing header" id="specificTriggerHeader"></h3>
+
+            <div class="cron trigger-type">
+                <div class="fields">
+                    <div class="seven wide field accept-error cron-field">
+                        <label>Cron Expression <a href="http://cronmaker.com" target="_blank"><i class="external alternate icon"></i>http://cronmaker.com</a></label>
+                        <input type="text" name="trigger[cron.expression]" placeholder="Cron Expression" id="cron-expression" value="{{Cron.Expression}}" />
+                        <div style="float: right; cursor:pointer; display: none" id="next-cron-dates"><i class="eye icon"></i></div>
+                        <p id="cron-desc"></p>
+                    </div>
+                    <div class="nine wide field accept-error">
+                        <label>Time Zone</label>
+                        <select class="ui fluid search fulltext selection dropdown allow-empty" name="trigger[cron.timeZone]">
+                            <option value="">--- Not Set ---</option>
+                            {{>DropdownOptions items=TimeZoneList selected=Cron.TimeZone}}
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="simple trigger-type">
+                <div class="fields">
+                    <div class="four wide field accept-error">
+                        <label>Repeat Interval</label>
+                        <input type="text" name="trigger[simple.repeatInterval]" placeholder="Repeat Interval" value="{{Simple.RepeatInterval}}" />
+                    </div>
+                    <div class="three wide field accept-error">
+                        <label>Unit</label>
+                        {{>UnitDropdown name='trigger[simple.repeatUnit]' allowIrregular=false allowMillisecond=true selected=Simple.RepeatUnit}}
+                    </div>
+                </div>
+
+                <div class="fields">
+                    <div class="four wide field accept-error">
+                        <label>Repeat Count</label>
+                        <input type="text" name="trigger[simple.repeatCount]" placeholder="Repeat Count" id="triggerSimpleRepeatCount" value="{{Simple.RepeatCount}}" {{Disabled Simple.RepeatForever}} />
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="ui checkbox">
+                        <input name="trigger[simple.repeatForever]" type="checkbox" value="True" data-toggle-input="triggerSimpleRepeatCount" {{Checked Simple.RepeatForever}} />
+                        <label>Repeat Forever</label>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="calendar trigger-type">
+                <div class="fields">
+                    <div class="four wide field accept-error">
+                        <label>Repeat Interval</label>
+                        <input type="text" name="trigger[calendar.repeatInterval]" placeholder="Repeat Interval" value="{{Calendar.RepeatInterval}}" />
+                    </div>
+                    <div class="three wide field accept-error">
+                        <label>Unit</label>
+                        {{>UnitDropdown name='trigger[calendar.repeatUnit]' allowIrregular=true allowMillisecond=true selected=Calendar.RepeatUnit}}
+                    </div>
+                    <div class="nine wide field accept-error">
+                        <label>Time Zone</label>
+                        <select class="ui fluid search fulltext selection dropdown allow-empty" name="trigger[calendar.timeZone]">
+                            <option value="">--- Not Set ---</option>
+                            {{>DropdownOptions items=TimeZoneList selected=Calendar.TimeZone}}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="ui checkbox">
+                        <input name="trigger[calendar.preserveHourAcrossDst]" type="checkbox" value="True" {{Checked Calendar.PreserveHourAcrossDst}} />
+                        <label>Preserve Hour of Day Across Daylight Savings</label>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="ui checkbox">
+                        <input name="trigger[calendar.skipDayIfHourDoesNotExist]" type="checkbox" value="True" {{Checked Calendar.SkipDayIfHourDoesNotExist}} />
+                        <label>Skip Day If Hour Does Not Exist</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="daily trigger-type">
+                <div class="fields">
+                    <div class="four wide field accept-error">
+                        <label>Repeat Interval</label>
+                        <input type="text" name="trigger[daily.repeatInterval]" placeholder="Repeat Interval" value="{{Daily.RepeatInterval}}" />
+                    </div>
+                    <div class="three wide field accept-error">
+                        <label>Unit</label>
+                        {{>UnitDropdown name='trigger[daily.repeatUnit]' allowIrregular=false allowMillisecond=false selected=Daily.RepeatUnit}}
+                    </div>
+                    <div class="nine wide field accept-error">
+                        <label>Time Zone</label>
+                        <select class="ui fluid search fulltext selection dropdown allow-empty" name="trigger[daily.timeZone]">
+                            <option value="">--- Not Set ---</option>
+                            {{>DropdownOptions items=TimeZoneList selected=Daily.TimeZone}}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="fields">
+                    <div class="four wide field accept-error">
+                        <label>Repeat Count</label>
+                        <input type="text" name="trigger[daily.repeatCount]" placeholder="Repeat Count" id="triggerDailyRepeatCount" value="{{Daily.RepeatCount}}" {{Disabled Daily.RepeatForever}} />
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="ui checkbox">
+                        <input name="trigger[daily.repeatForever]" type="checkbox" value="True" data-toggle-input="triggerDailyRepeatCount" {{Checked Daily.RepeatForever}}>
+                        <label>Repeat Forever</label>
+                    </div>
+                </div>
+
+                <div class="fields">
+                    <div class="four wide field accept-error">
+                        <label>Start Time of Day</label>
+                        <div class="ui calendar time-only">
+                            <div class="ui fluid input left icon">
+                                <i class="clock alternate outline icon"></i>
+                                <input type="text" autocomplete="off" name="trigger[daily.startTime]" placeholder="Time" value="{{Daily.StartTime}}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="four wide field accept-error">
+                        <label>End Time of Day</label>
+                        <div class="ui calendar time-only">
+                            <div class="ui fluid input left icon">
+                                <i class="clock alternate outline icon"></i>
+                                <input type="text" autocomplete="off" name="trigger[daily.endTime]" placeholder="Time" value="{{Daily.EndTime}}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{#with Daily.DaysOfWeek}}
+                <div class="field">
+                    <label>Days of Week</label>
+                    <div class="inline fields">
+                        <div class="field">
+                            <div class="ui checkbox">
+                                <input type="checkbox" name="trigger[daily.daysOfWeek.monday]" value="True" {{Checked Monday}} />
+                                <label>Monday</label>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui checkbox">
+                                <input type="checkbox" name="trigger[daily.daysOfWeek.tuesday]" value="True" {{Checked Tuesday}} />
+                                <label>Tuesday</label>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui checkbox">
+                                <input type="checkbox" name="trigger[daily.daysOfWeek.wednesday]" value="True" {{Checked Wednesday}} />
+                                <label>Wednesday</label>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui checkbox">
+                                <input type="checkbox" name="trigger[daily.daysOfWeek.thursday]" value="True" {{Checked Thursday}} />
+                                <label>Thursday</label>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui checkbox">
+                                <input type="checkbox" name="trigger[daily.daysOfWeek.friday]" value="True" {{Checked Friday}} />
+                                <label>Friday</label>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui checkbox">
+                                <input type="checkbox" name="trigger[daily.daysOfWeek.saturday]" value="True" {{Checked Saturday}} />
+                                <label>Saturday</label>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui checkbox">
+                                <input type="checkbox" name="trigger[daily.daysOfWeek.sunday]" value="True" {{Checked Sunday}} />
+                                <label>Sunday</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{/with}}
+            </div>
+
+        </div>
+        {{/with}}
+        <h3 class="ui dividing header">Job Data Map</h3>
+
+        {{>JobDataMap Model.DataMap}}
+    </div>
+</form>
+
+<div class="ui mini modal" id="delete-dialog">
+    <div class="content">
+        <p>Are you sure you want to delete this trigger?</p>
+        <p><b class="confirm-item"></b></p>
+    </div>
+    <div class="actions">
+        <div class="ui approve red button">Delete</div>
+        <div class="ui cancel button">Cancel</div>
+    </div>
+</div>
+
+<script>
+    const $misfireInstructionsMap = {{{ Model.Trigger.MisfireInstructionsJson }}};
+
+    $(function () {
+        const
+            $triggerGroup = $('#triggerGroup').val(),
+            $triggerName = $('#triggerName').val();
+
+        $('#trigger-properties .ui.dropdown, #header .ui.dropdown').each(function () {
+            $(this).dropdown({
+                allowAdditions: $(this).hasClass('allow-additions'),
+                placeholder: $(this).hasClass('allow-empty') ? 'false' : 'auto',
+                fullTextSearch: $(this).hasClass('fulltext') ? 'exact' : 'false'
+            });
+        });
+
+        $('#trigger-properties .ui.checkbox').checkbox();
+
+        function misfireInstrForDropdown(triggerType) {
+
+            const map = $misfireInstructionsMap[triggerType];
+            const keys = Object.keys(map);
+
+            const result = [];
+            for (let i = 0; i < keys.length; i++) { // prepare suitable object for dropdown
+                result.push({ name: map[keys[i]], value: keys[i] });
+            }
+
+            return result;
+        }
+
+        function triggerTypeChanged() {
+            const checkedInput = $('#trigger-type-radios').find(':checked');
+            $('.trigger-type').hide();
+            $('.' + checkedInput.val() + '.trigger-type').show();
+            $('#specificTriggerHeader').text(checkedInput.closest('.radio').find('label').text() + ' Trigger Properties');
+
+            $('#misfireInstructions').dropdown('change values', misfireInstrForDropdown(checkedInput.val()));
+            $('#misfireInstructions').dropdown('set selected', '0'); // reset misfire instruction to default value
+        }
+
+        $('#misfireInstructions').dropdown('setting', 'onChange', function (value) {
+            $('#selectedMisfireInstruction').val(value); // value is mirrored to hidden input because dynamically changed dropdown's value is not propagated properly during form submit
+        });
+
+        $('#trigger-type-radios .radio').checkbox('setting', 'onChange', triggerTypeChanged);
+        $('#trigger-type-radios input[value={{Lower Model.Trigger.Type}}]').closest('.radio').checkbox('check');
+
+        $('#misfireInstructions').dropdown('set selected', '{{Model.Trigger.MisfireInstruction}}'); // because misfire dropdown values were changed in triggerTypeChanged
+        $('#triggerPriority').dropdown('set selected', '{{Model.Trigger.Priority}}'); // in case priority is out of range [1-10]
+
+        $('#trigger-properties .ui.checkbox input[data-toggle-input]')
+            .closest('.ui.checkbox')
+            .checkbox('setting', 'onChange', function () {
+                $('#' + $(this).data('toggle-input')).prop('disabled', this.checked); // search for input's ID specified with attribute data-toggle-input and set accessibility for that input based on checkbox state
+            });
+
+        initDimmer();
+
+        // cron describe
+        initCronLiveDescription('{{ActionUrl "Cron"}}', $('#cron-expression'), $('#cron-desc'), $('#next-cron-dates'));
+
+        function initCalendars(elements) {
+            const
+                dateFmt = '{{Upper Model.Trigger.DateFormat}}',
+                timeFmt = '{{Model.Trigger.TimeFormat}}',
+                fmt = dateFmt + ' ' + timeFmt;
+
+            elements.each(function () {
+
+                const $cal = $(this);
+                var calType = 'datetime';
+                if ($cal.hasClass('time-only')) { calType = 'time'; }
+
+                $cal.calendar({
+                    type: calType,
+                    ampm: false,
+                    formatInput: calType === 'datetime',
+                    formatter: {
+                        date: function (date, settings) {
+                            return moment(date).format(dateFmt);
+                        },
+                        time: function (date, settings) {
+                            return moment(date).format(timeFmt);
+                        }
+                    },
+                    parser: {
+                        date: function (text, settings) {
+                            return moment(text, fmt).toDate();
+                        }
+                    }
+                });
+            });
+        }
+
+        initCalendars($('#trigger-properties .ui.calendar'));
+
+        $('#btn-delete').click(function () {
+            $('#delete-dialog .confirm-item').text($triggerGroup + '.' + $triggerName);
+            deleteItem({ name: $triggerName, group: $triggerGroup }, $('#trigger-properties'),
+                '{{ActionUrl "Delete"}}', '{{ActionUrl ""}}');
+        });
+
+        $('#btn-save').click(function () {
+
+            if ($('#job-data-map .type-col .ui.dropdown.disabled').length > 0) return; // type change in progress
+
+            $('#dimmer').dimmer('show');
+
+            $('#job-data-map').jobDataMapPrepareForm();
+
+            const formData = new FormData($('#form')[0]);
+
+            $.ajax({
+                type: 'POST', enctype: 'multipart/form-data', url: '{{ActionUrl "Save"}}',
+                data: formData, processData: false, contentType: false, dataType: "json", cache: false,
+                success: function (data) {
+                    if (processValidationResponse(data)) {
+                        document.location = '{{ActionUrl ""}}';
+                    } else {
+                        $('#dimmer').dimmer('hide');
+                    }
+                },
+                error: function (e) {
+                    $('#dimmer').dimmer('hide');
+                    prependErrorMessage(e, $('#trigger-properties'));
+                }
+            });
+        });
+
+        $('#next-cron-dates').click(function () {
+
+        });
+
+    });
+</script>
+
+<script src="Content/Scripts/post-validation.js"></script>

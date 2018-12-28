@@ -1,0 +1,6 @@
+﻿<div class="ui calendar" data-date-format="{{TypeHandler.DateFormat}}" data-time-format="{{TypeHandler.TimeFormat}}" data-date-only="{{TypeHandler.IgnoreTimeComponent}}">
+    <div class="ui fluid input left icon">
+        <i class="calendar alternate outline icon"></i>
+        <input type="text" name="data-map[date-value]" autocomplete="off" value="{{StringValue}}" placeholder="{{#if TypeHandler.IgnoreTimeComponent}}Date{{else}}Date/Time{{/if}}{{#if TypeHandler.IsUtc}} (UTC){{/if}}">
+    </div>
+</div>

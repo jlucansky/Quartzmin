@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <base href="{{BaseUrl}}">
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <title>{{ViewBag.Title}} - Quartzmin</title>
+
+    <link rel="icon" type="image/png" sizes="16x16" href="Content/Images/favicons/favicon-16.png">
+    <link rel="icon" type="image/png" sizes="24x24" href="Content/Images/favicons/favicon-24.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="Content/Images/favicons/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="Content/Images/favicons/favicon-48.png">
+    <link rel="icon" type="image/png" sizes="64x64" href="Content/Images/favicons/favicon-64.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="Content/Images/favicons/favicon-192.png">
+    <link rel="icon" type="image/png" sizes="256x256" href="Content/Images/favicons/favicon-256.png">
+
+    <link rel="stylesheet" href="Content/Lib/semantic-ui/semantic.min.css" type="text/css">
+    <link rel="stylesheet" href="Content/Lib/semantic-ui/calendar.min.css" type="text/css" />
+    <link rel="stylesheet" href="Content/Fonts/Lato.css" type="text/css" />
+    <link rel="stylesheet" href="Content/Site.css" type="text/css" />
+
+    <script src="Content/Lib/jquery-3.3.1.min.js"></script>
+    <script src="Content/Lib/moment.min.js"></script>
+    <script src="Content/Lib/FileSaver.js"></script>
+    <script src="Content/Lib/semantic-ui/semantic.min.js"></script>
+    <script src="Content/Lib/semantic-ui/state.min.js"></script>
+    <script src="Content/Lib/semantic-ui/calendar.min.js"></script>
+
+    <script src="Content/Scripts/global.js"></script>
+</head>
+<body>
+    <div class="ui top inverted stackable menu" id="top-menu">
+        <div class="ui container">
+            <div class="ui header item">
+                <img class="logo" src="Content/Images/logo.png">Quartzmin
+            </div>
+
+            {{MenuItemActionLink text='Overview' controller='Scheduler'}}
+            {{MenuItemActionLink 'Jobs'}}
+            {{MenuItemActionLink 'Triggers'}}
+            {{MenuItemActionLink 'Executions'}}
+            {{MenuItemActionLink 'History'}}
+            {{MenuItemActionLink 'Calendars'}}
+
+            <!--<div class="right menu">
+        <div class="ui dropdown item">
+            <i class="user circle large icon"></i>
+            domain\user
+            <i class="dropdown icon"></i>
+            <div class="menu">
+                <a class="item center" href="#">Logout</a>
+            </div>
+        </div>
+    </div>-->
+        </div>
+    </div>
+    <div class="ui main container">
+        {{{body}}}
+    </div>
+
+    <div class="ui hidden divider"></div>
+
+    <script>
+        $(function () {
+            $('#top-menu .ui.dropdown').dropdown();
+        });
+    </script>
+
+    {{#footer}}
+    <footer style="text-align:center; margin-top: 3em; padding: .8em 0; background-color: #f8f8f8; font-size: 90%; border-top: 1px solid rgba(34,36,38,.1);">
+        <a href="https://github.com/jlucansky/Quartzmin" target="_blank" style="color: #909090"><i class="github icon"></i> Quartzmin&nbsp;&nbsp;v{{QuartzminVersion}}</a>
+    </footer>
+    {{/footer}}
+</body>
+</html>

@@ -1,0 +1,11 @@
+﻿{{#isType items 'IEnumerable<string>'}}
+{{#each items}}
+<option value="{{.}}" {{Selected . ../selected}}>{{.}}</option>
+{{/each}}
+{{else}}
+    {{#isType items 'IEnumerable<KeyValuePair<string, string>>'}}
+    {{#eachPair items}}
+    <option value="{{Key}}" {{Selected Key ../selected}}>{{Value}}</option>
+    {{/eachPair}}
+    {{/isType}}
+{{/isType}}

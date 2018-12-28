@@ -1,0 +1,14 @@
+﻿{{#if items}}
+<div class="group-actions" id="{{id}}">
+    <h4 class="ui dividing header">{{header}}</h4>
+    <ul>
+        {{#each items}}
+        {{#if IsPaused}}
+        <li class="paused">{{Name}} <button class="ui super tiny button" data-action="resume" data-name="{{Name}}"><i class="play icon"></i>Resume</button></li>
+        {{else}}
+        <li class="resumed">{{Name}} <button class="ui super tiny button" data-action="pause" data-name="{{Name}}"><i class="pause icon"></i>Pause</button></li>
+        {{/if}}
+        {{/each}}
+    </ul>
+</div>
+{{/if}}

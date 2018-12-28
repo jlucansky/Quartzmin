@@ -1,0 +1,16 @@
+﻿<div class="ui left icon fluid input file-selector" {{#if Value}}style="display: none"{{/if}}>
+    <input type="text" placeholder="Select file..." readonly style="cursor: pointer">
+    <i class="file outline icon"></i>
+    <input type="file" name="data-map[file-value]" style="display: none">
+</div>
+
+{{#if Value}}
+<div class="ui left icon action input old-file">
+    <input type="text" value="{{Value.Length}} bytes" class="stats" readonly style="cursor: pointer">
+    <i class="file outline icon"></i>
+    <div class="ui button download-button">
+        <i class="download icon"></i>Download
+    </div>
+    <textarea name="data-map[old-file-value]" style="display: none">{{ToBase64 Value}}</textarea>
+</div>
+{{/if}}

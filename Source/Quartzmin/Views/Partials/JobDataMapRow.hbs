@@ -1,0 +1,23 @@
+﻿<tr class="{{#if template}}template{{/if}}">
+    <td class="name-col field accept-error"><input type="text" name="data-map[name]" placeholder="Parameter Name" value="{{item.Name}}" autocomplete="off"></td>
+    <td class="value-col field accept-error">
+        {{RenderJobDataMapValue @Services item}}
+    </td>
+    <td class="type-col">
+        <input type="hidden" class="type-handler" name="data-map[handler]" />
+        <div class="ui selection dropdown accept-error">
+            <input type="hidden" name="data-map[type]" class="selected-type" value="{{item.SelectedType.Name}}">
+            <i class="dropdown icon"></i>
+            <div class="default text">Select Type</div>
+            <div class="menu">
+                {{#each item.SupportedTypes}}
+                <div class="item" data-value="{{Name}}" data-type-handler="{{SerializeTypeHandler @Services}}" data-type-handler-id="{{TypeId}}">
+                    <img class="ui mini image" src="Content/Images/type.png">{{DisplayName}}
+                </div>
+                {{/each}}
+            </div>
+        </div>&nbsp;
+        <a href="javascript:void(0)" class="copy-row" title="Copy"><i class="large black copy outline icon"></i></a>
+        <a href="javascript:void(0)" class="delete-row" title="Delete"><i class="red large trash alternate outline icon"></i></a>
+    </td>
+</tr>

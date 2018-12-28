@@ -1,0 +1,14 @@
+﻿<select class="ui fluid dropdown" name="{{name}}">
+    {{#if allowMillisecond}}
+    <option value="Millisecond" {{Selected 'Millisecond'}}>Millisecond</option>
+    {{/if}}
+    <option value="Second" {{Selected 'Second'}}>Second</option>
+    <option value="Minute" {{Selected 'Minute'}}>Minute</option>
+    <option value="Hour" {{Selected 'Hour'}}>Hour</option>
+    {{#if allowIrregular}}
+    <option value="Day" {{Selected 'Day'}}>Day</option>
+    <option value="Week" {{Selected 'Week'}}>Week</option>
+    <option value="Month" {{Selected 'Month'}}>Month</option>
+    <option value="Year" {{Selected 'Hour'}}>Year</option>
+    {{/if}}
+</select>

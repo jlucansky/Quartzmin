@@ -1,0 +1,56 @@
+﻿{{!<Layout}}
+{{ViewBag Title='History'}}
+
+{{#if ViewBag.HistoryEnabled}}
+
+{{#if Model}}
+<div class="ui message">
+    <i class="info circle icon"></i>
+    History is periodicaly purged. Only recent job executions are shown.
+</div>
+{{/if}}
+
+<table class="ui single line table highlight-rows" id="history-list">
+    <thead>
+        <tr>
+            <th>Job</th>
+            <th>Trigger</th>
+            <th>Scheduled Fire Time</th>
+            <th>Actual Fire Time</th>
+            <th>Finished Time</th>
+            <th>Run Time</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each Model}}
+        <tr>
+            <td class="job-key">
+                <i class="{{StateIcon}} icon" title="{{State}}"></i>
+                <a href="{{ActionUrl 'Edit' 'Jobs' group=JobGroup name=JobName}}">{{JobGroup}}.{{JobName}}</a>
+            </td>
+            <td><a href="{{ActionUrl 'Edit' 'Triggers' group=TriggerGroup name=TriggerName}}">{{TriggerGroup}}.{{TriggerName}}</a></td>
+            <td>{{ScheduledFireTimeUtc}}</td>
+            <td>{{ActualFireTimeUtc}}</td>
+            <td>{{FinishedTimeUtc}}</td>
+            <td>{{Duration}}</td>
+        </tr>
+        {{#if Entity.ExceptionMessage}}
+        <tr class="error-row">
+            <td colspan="6">
+                <p>{{Entity.ExceptionMessage}}</p>
+            </td>
+        </tr>
+        {{/if}}
+        {{/each}}
+    </tbody>
+</table>
+
+{{#unless Model}}
+{{>EmptyList ''}}
+{{/unless}}
+{{else}}
+<div class="ui negative message">
+    <div class="header" style="margin-bottom: 0.5em">Job history is not available.</div>
+    Enable ExecutionHistoryPlugin in Quartz configuration section.
+</div>
+{{/if}}

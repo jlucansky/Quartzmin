@@ -1,0 +1,24 @@
+﻿{{#if TypeHandler.IsMultiline}}
+<div class="ui action fluid input">
+    <input type="text" value="" class="stats" readonly>
+    <div class="ui button edit-button">
+        <i class="edit icon"></i>Edit
+    </div>
+</div>
+<textarea name="data-map[string-value]" style="display: none">{{Value}}</textarea>
+<div class="ui large modal">
+    <i class="close icon"></i>
+    <div class="header">Edit Value</div>
+    <div class="content">
+        <div class="ui form">
+            <textarea style="font-family: monospace; max-height: 60em; height: 20em"></textarea>
+        </div>
+    </div>
+    <div class="actions">
+        <div class="ui button cancel">Cancel</div>
+        <div class="ui positive button">OK</div>
+    </div>
+</div>
+{{else}}
+<input type="text" name="data-map[string-value]" placeholder="String" value="{{Value}}">
+{{/if}}
