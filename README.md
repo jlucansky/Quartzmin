@@ -1,13 +1,15 @@
-[![NuGet](https://img.shields.io/nuget/v/Quartzmin.svg)](https://www.nuget.org/packages/Quartzmin)
-
 <p align="center">
     <img src="https://raw.githubusercontent.com/jlucansky/public-assets/master/Quartzmin/logo.png" height="150">
 </p>
 
-## Introduction
+---
+
+[![NuGet](https://img.shields.io/nuget/v/Quartzmin.svg)](https://www.nuget.org/packages/Quartzmin)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
 Quartzmin is powerful, easy to use web management tool for Quartz.NET
 
-Quartzmin can be used within your existing application with minimum configuration effort as a Quartz.NET plugin when it automatically creates embedded web server. Or it can be plugged into your existing OWIN-based web application as a middleware.
+Quartzmin can be used within your existing application with minimum effort as a Quartz.NET plugin when it automatically creates embedded web server. Or it can be plugged into your existing OWIN-based web application as a middleware.
 
 > [Quartz.NET](https://www.quartz-scheduler.net) is a full-featured, open source job scheduling system that can be used from smallest apps to large scale enterprise systems.
 
@@ -30,7 +32,7 @@ PM> Install-Package Quartzmin
 
 ## Usage
 ### Embedded web server
-Everything you should do is just configure `QuartzminPlugin` and `ExecutionHistoryPlugin` to support histograms and statistics:
+Everything you should do is just install [Quartzmin.SelfHost](https://www.nuget.org/packages/Quartzmin.SelfHost) package and configure `QuartzminPlugin` and `ExecutionHistoryPlugin` to support histograms and statistics:
 ```xml
 <configuration>
   <configSections>
