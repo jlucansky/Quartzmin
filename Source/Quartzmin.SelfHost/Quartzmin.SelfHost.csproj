@@ -7,18 +7,20 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>1591</NoWarn>
 
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <Product>Quartzmin.SelfHost</Product>
     <Title>Quartzmin Self Host</Title>
     <Authors>Jan Lucansky</Authors>
     <PackageProjectUrl>https://github.com/jlucansky/Quartzmin</PackageProjectUrl>
     <PackageIconUrl>https://raw.githubusercontent.com/jlucansky/public-assets/master/Quartzmin/avatar.png</PackageIconUrl>
     <Description>This package allows you to host Quartzmin within your own process.</Description>
-    <PackageTags>quartzmin web host</PackageTags>
+    <PackageTags>quartzmin;web;host</PackageTags>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <FileVersion>1.0.0.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-
+    <Copyright>Copyright © 2018 Jan Lucansky</Copyright>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/jlucansky/Quartzmin</RepositoryUrl>
   </PropertyGroup>
 
   <PropertyGroup Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('$(TargetFramework)', '^net\d'))">
@@ -34,6 +36,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="$(DefineConstants.Contains('NETFRAMEWORK'))">
+    <PackageReference Include="Microsoft.Owin.Hosting" Version="2.1.0" />
     <PackageReference Include="Microsoft.Owin.Host.HttpListener" Version="2.1.0" />
     <PackageReference Include="Microsoft.AspNet.WebApi.OwinSelfHost" Version="5.2.6" />
   </ItemGroup>

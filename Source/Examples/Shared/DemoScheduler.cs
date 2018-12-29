@@ -10,10 +10,9 @@ namespace Quartzmin
 {
     public static class DemoScheduler
     {
-        public static IScheduler Create(bool start = true)
+        public static async Task<IScheduler> Create(bool start = true)
         {
-            var schedulerFactory = new StdSchedulerFactory();
-            var scheduler = schedulerFactory.GetScheduler().Result;
+            var scheduler = await StdSchedulerFactory.GetDefaultScheduler();
 
             {
                 var jobData = new JobDataMap();
@@ -31,7 +30,7 @@ namespace Quartzmin
                     .StartNow()
                     .WithCronSchedule("0 0 8 1/1 * ? *")
                     .Build();
-                scheduler.ScheduleJob(job, trigger).Wait();
+                await scheduler.ScheduleJob(job, trigger);
 
                 trigger = TriggerBuilder.Create()
                     .WithIdentity("MonthlySales")
@@ -39,8 +38,8 @@ namespace Quartzmin
                     .StartNow()
                     .WithCronSchedule("0 0 12 1 1/1 ? *")
                     .Build();
-                scheduler.ScheduleJob(trigger).Wait();
-                scheduler.PauseTrigger(trigger.Key).Wait();
+                await scheduler.ScheduleJob(trigger);
+                await scheduler.PauseTrigger(trigger.Key);
 
                 trigger = TriggerBuilder.Create()
                     .WithIdentity("HourlySales")
@@ -48,22 +47,22 @@ namespace Quartzmin
                     .StartNow()
                     .WithSimpleSchedule(x => x.WithIntervalInHours(1).RepeatForever())
                     .Build();
-                scheduler.ScheduleJob(trigger).Wait();
+                await scheduler.ScheduleJob(trigger);
             }
 
             {
                 var job = JobBuilder.Create<DummyJob>().WithIdentity("Job1").StoreDurably().Build();
-                scheduler.AddJob(job, false).Wait();
+                await scheduler.AddJob(job, false);
                 job = JobBuilder.Create<DummyJob>().WithIdentity("Job2").StoreDurably().Build();
-                scheduler.AddJob(job, false).Wait();
+                await scheduler.AddJob(job, false);
                 job = JobBuilder.Create<DummyJob>().WithIdentity("Job3").StoreDurably().Build();
-                scheduler.AddJob(job, false).Wait();
+                await scheduler.AddJob(job, false);
                 job = JobBuilder.Create<DummyJob>().WithIdentity("Job4").StoreDurably().Build();
-                scheduler.AddJob(job, false).Wait();
+                await scheduler.AddJob(job, false);
                 job = JobBuilder.Create<DummyJob>().WithIdentity("Job5").StoreDurably().Build();
-                scheduler.AddJob(job, false).Wait();
+                await scheduler.AddJob(job, false);
                 job = JobBuilder.Create<DummyJob>().WithIdentity("Send SMS", "CRITICAL").StoreDurably().RequestRecovery().Build();
-                scheduler.AddJob(job, false).Wait();
+                await scheduler.AddJob(job, false);
 
                 var trigger = TriggerBuilder.Create()
                     .WithIdentity("PushAds  (US)")
@@ -72,7 +71,7 @@ namespace Quartzmin
                     .StartNow()
                     .WithCronSchedule("0 0/5 * 1/1 * ? *")
                     .Build();
-                scheduler.ScheduleJob(trigger).Wait();
+                await scheduler.ScheduleJob(trigger);
 
                 trigger = TriggerBuilder.Create()
                     .WithIdentity("PushAds (EU)")
@@ -81,11 +80,11 @@ namespace Quartzmin
                     .StartNow()
                     .WithCronSchedule("0 0/7 * 1/1 * ? *")
                     .Build();
-                scheduler.ScheduleJob(trigger).Wait();
-                scheduler.PauseTriggers(GroupMatcher<TriggerKey>.GroupEquals("LONGRUNNING"));
+                await scheduler.ScheduleJob(trigger);
+                await scheduler.PauseTriggers(GroupMatcher<TriggerKey>.GroupEquals("LONGRUNNING"));
 
                 job = JobBuilder.Create<DummyJob>().WithIdentity("Send Push", "CRITICAL").StoreDurably().RequestRecovery().Build();
-                scheduler.AddJob(job, false).Wait();
+                await scheduler.AddJob(job, false);
             }
 
             {
@@ -99,17 +98,17 @@ namespace Quartzmin
                     .StartNow()
                     .WithSimpleSchedule(x => x.WithIntervalInSeconds(5).RepeatForever())
                     .Build();
-                scheduler.ScheduleJob(job, trigger).Wait();
+                await scheduler.ScheduleJob(job, trigger);
                 trigger = TriggerBuilder.Create()
                     .WithIdentity("CSV_big", "LONGRUNNING")
                     .ForJob(job)
                     .StartNow()
                     .WithDailyTimeIntervalSchedule(x=>x.OnMondayThroughFriday())
                     .Build();
-                scheduler.ScheduleJob(trigger).Wait();
+                await scheduler.ScheduleJob(trigger);
             }
             if (start)
-                scheduler.Start().GetAwaiter().GetResult();
+                await scheduler.Start();
 
             return scheduler;
         }

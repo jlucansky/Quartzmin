@@ -1,5 +1,4 @@
-﻿using Quartz;
-using Quartz.Impl.Matchers;
+﻿using Quartz.Impl.Matchers;
 using Quartz.Spi;
 using System;
 using System.Threading;
@@ -13,7 +12,7 @@ namespace Quartz.Plugins.RecentHistory
         IExecutionHistoryStore _store;
 
         public string Name { get; set; }
-        public Type ExecutionHistoryStoreType { get; set; }
+        public Type StoreType { get; set; }
 
         public Task Initialize(string pluginName, IScheduler scheduler, CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -30,11 +29,11 @@ namespace Quartz.Plugins.RecentHistory
 
             if (_store == null)
             {
-                if (ExecutionHistoryStoreType != null)
-                    _store = (IExecutionHistoryStore)Activator.CreateInstance(ExecutionHistoryStoreType);
+                if (StoreType != null)
+                    _store = (IExecutionHistoryStore)Activator.CreateInstance(StoreType);
 
                 if (_store == null)
-                    throw new Exception(nameof(ExecutionHistoryStoreType) + " is not set.");
+                    throw new Exception(nameof(StoreType) + " is not set.");
 
                 _scheduler.Context.SetExecutionHistoryStore(_store);
             }

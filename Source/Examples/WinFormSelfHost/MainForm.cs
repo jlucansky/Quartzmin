@@ -18,7 +18,7 @@ namespace WinFormSelfHost
 
         void CreateScheduler()
         {
-            scheduler = DemoScheduler.Create(start: false);
+            scheduler = DemoScheduler.Create(start: false).Result;
         }
 
         private void btnStart_Click(object sender, EventArgs e)

@@ -12,7 +12,7 @@ namespace Quartzmin.AspNet
         {
             app.UseQuartzmin(new QuartzminOptions()
             {
-                Scheduler = DemoScheduler.Create(),
+                Scheduler = DemoScheduler.Create().Result,
 
                 DefaultDateFormat = "dd.MM.yyyy",
                 VirtualPathRoot = "/test",

@@ -14,7 +14,7 @@ namespace Quartzmin.AspNetCore
         {
             app.UseQuartzmin(new QuartzminOptions()
             {
-                Scheduler = DemoScheduler.Create(),
+                Scheduler = DemoScheduler.Create().Result,
             });
         }
     }
