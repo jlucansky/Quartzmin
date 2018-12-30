@@ -19,6 +19,22 @@ The goal of this project is to provide convenient tool to utilize most of the fu
 
 Quartzmin was created with **Semantic UI** and **Handlebars.Net** as the template engine.
 
+## Features
+- Add, modify jobs and triggers
+- Add, modify calenars (annual, cron, daily, holiday, monthly, weekly)
+- Change trigger type to Cron, Simple, Calendar Interval or Daily Time Interval
+- Set typed job data map values (bool, DateTime, int, float, long, double, decimal, string, byte[])
+- Create custom type editor for complex type in job data map
+- Manage scheduler state (standby, shutdown)
+- Pause and resume job and trigger groups
+- Pause and resume triggers individually
+- Pause and resume all triggers for specific job
+- Trigger specific job immediately
+- Watch currently executing jobs
+- Interrupt executing job
+- See next scheduled dates for Cron
+- See recent job history, state and error messages
+
 ## Install
 Quartzmin is available on [nuget.org](https://www.nuget.org/packages/Quartzmin)
 
@@ -32,7 +48,13 @@ PM> Install-Package Quartzmin
 
 ## Usage
 ### Embedded web server
-Everything you should do is just install [Quartzmin.SelfHost](https://www.nuget.org/packages/Quartzmin.SelfHost) package and configure `QuartzminPlugin` and `ExecutionHistoryPlugin` to support histograms and statistics:
+Everything you should do is just install [Quartzmin.SelfHost](https://www.nuget.org/packages/Quartzmin.SelfHost) package and configure `QuartzminPlugin` and `ExecutionHistoryPlugin` to support histograms and statistics.
+
+Run the following command in the Package Manager Console:
+```powershell
+PM> Install-Package Quartzmin.SelfHost
+```
+Add to your `App.config` file:
 ```xml
 <configuration>
   <configSections>
@@ -48,6 +70,10 @@ Everything you should do is just install [Quartzmin.SelfHost](https://www.nuget.
   </quartz>
 </configuration>
 ```
+Start Quartz.NET scheduler somewhere:
+```csharp
+StdSchedulerFactory.GetDefaultScheduler().Result.Start();
+```
 
 ### OWIN middleware
 Add to your `Startup.cs` file:
@@ -56,7 +82,7 @@ public void Configuration(IAppBuilder app)
 {
     app.UseQuartzmin(new QuartzminOptions()
     {
-        Scheduler = _schedulerInstance
+        Scheduler = StdSchedulerFactory.GetDefaultScheduler().Result
     });
 }
 ```
@@ -73,7 +99,7 @@ public void Configure(IApplicationBuilder app)
 {
     app.UseQuartzmin(new QuartzminOptions()
     {
-        Scheduler = _schedulerInstance
+        Scheduler = StdSchedulerFactory.GetDefaultScheduler().Result
     });
 }
 ```
