@@ -125,7 +125,9 @@ namespace Quartzmin
                 FileSystem = fs
             };
 
-            ((FileExtensionContentTypeProvider)fsOoptions.StaticFileOptions.ContentTypeProvider).Mappings.Add(".woff2", "application/font-woff2");
+            var mimeMap = ((FileExtensionContentTypeProvider)fsOoptions.StaticFileOptions.ContentTypeProvider).Mappings;
+            if (!mimeMap.ContainsKey(".woff2"))
+                mimeMap.Add(".woff2", "application/font-woff2");
 
             app.UseFileServer(fsOoptions);
         }
