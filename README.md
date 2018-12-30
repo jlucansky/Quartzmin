@@ -21,7 +21,7 @@ Quartzmin was created with **Semantic UI** and **Handlebars.Net** as the templat
 
 ## Features
 - Add, modify jobs and triggers
-- Add, modify calenars (annual, cron, daily, holiday, monthly, weekly)
+- Add, modify calendars (Annual, Cron, Daily, Holiday, Monthly, Weekly)
 - Change trigger type to Cron, Simple, Calendar Interval or Daily Time Interval
 - Set typed job data map values (bool, DateTime, int, float, long, double, decimal, string, byte[])
 - Create custom type editor for complex type in job data map
