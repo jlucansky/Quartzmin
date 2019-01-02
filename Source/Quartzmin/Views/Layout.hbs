@@ -45,19 +45,22 @@
             {{MenuItemActionLink 'History'}}
             {{MenuItemActionLink 'Calendars'}}
 
-            <!--<div class="right menu">
-        <div class="ui dropdown item">
-            <i class="user circle large icon"></i>
-            domain\user
-            <i class="dropdown icon"></i>
-            <div class="menu">
-                <a class="item center" href="#">Logout</a>
+            <!--
+            <div class="right menu">
+                <div class="ui dropdown item">
+                    <i class="user circle large icon"></i>
+                    domain\user
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <a class="item center" href="#">Logout</a>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>-->
+            -->
         </div>
     </div>
-    <div class="ui main container">
+
+    <div class="ui main container" {{#footer}}style="min-height: calc(100% - 173px);"{{/footer}}>
         {{{body}}}
     </div>
 
