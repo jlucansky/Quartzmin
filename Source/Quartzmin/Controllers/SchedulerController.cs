@@ -31,10 +31,18 @@ namespace Quartzmin.Controllers
             var jobKeys = await Scheduler.GetJobKeys(GroupMatcher<JobKey>.AnyGroup());
             var triggerKeys = await Scheduler.GetTriggerKeys(GroupMatcher<TriggerKey>.AnyGroup());
             var currentlyExecutingJobs = await Scheduler.GetCurrentlyExecutingJobs();
-            var pausedJobGroups = await GetGroupPauseState(await Scheduler.GetJobGroupNames(), async x => await Scheduler.IsJobGroupPaused(x));
-            var pausedTriggerGroups = await GetGroupPauseState(await Scheduler.GetTriggerGroupNames(), async x => await Scheduler.IsTriggerGroupPaused(x));
-            
+            IEnumerable<object> pausedJobGroups = null;
+            IEnumerable<object> pausedTriggerGroups = null;
             IEnumerable<ExecutionHistoryEntry> execHistory = null;
+
+            try
+            {
+                pausedJobGroups = await GetGroupPauseState(await Scheduler.GetJobGroupNames(), async x => await Scheduler.IsJobGroupPaused(x));
+            } catch (NotImplementedException) { }
+
+            try {
+                pausedTriggerGroups = await GetGroupPauseState(await Scheduler.GetTriggerGroupNames(), async x => await Scheduler.IsTriggerGroupPaused(x));
+            } catch (NotImplementedException) { }
 
             int? failedJobs = null;
             int executedJobs = metadata.NumberOfJobsExecuted;
