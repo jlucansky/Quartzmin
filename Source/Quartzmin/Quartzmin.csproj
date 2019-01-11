@@ -8,7 +8,7 @@
     <NoWarn>1591</NoWarn>
     <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
 
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
     <Product>Quartzmin</Product>
     <Title>Web management tool for Quartz.NET</Title>
     <Authors>Jan Lucansky</Authors>
