@@ -35,29 +35,29 @@
     <div class="ui top inverted stackable menu" id="top-menu">
         <div class="ui container">
             <div class="ui header item">
-                <img class="logo" src="Content/Images/logo.png">Quartzmin
+                <img class="logo" src="{{Logo}}">{{ProductName}} Quartzmin
             </div>
+            {{MenuItemActionLink text='Overview' controller='Scheduler'
+                }}
+                {{MenuItemActionLink 'Jobs'}}
+                {{MenuItemActionLink 'Triggers'}}
+                {{MenuItemActionLink 'Executions'}}
+                {{MenuItemActionLink 'History'}}
+                {{MenuItemActionLink 'Calendars'}}
 
-            {{MenuItemActionLink text='Overview' controller='Scheduler'}}
-            {{MenuItemActionLink 'Jobs'}}
-            {{MenuItemActionLink 'Triggers'}}
-            {{MenuItemActionLink 'Executions'}}
-            {{MenuItemActionLink 'History'}}
-            {{MenuItemActionLink 'Calendars'}}
-
-            <!--
-            <div class="right menu">
-                <div class="ui dropdown item">
-                    <i class="user circle large icon"></i>
-                    domain\user
-                    <i class="dropdown icon"></i>
-                    <div class="menu">
-                        <a class="item center" href="#">Logout</a>
-                    </div>
-                </div>
+                <!--
+    <div class="right menu">
+        <div class="ui dropdown item">
+            <i class="user circle large icon"></i>
+            domain\user
+            <i class="dropdown icon"></i>
+            <div class="menu">
+                <a class="item center" href="#">Logout</a>
             </div>
-            -->
         </div>
+    </div>
+    -->
+            </div>
     </div>
 
     <div class="ui main container" {{#footer}}style="min-height: calc(100% - 173px);"{{/footer}}>
