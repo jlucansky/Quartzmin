@@ -51,17 +51,15 @@ namespace Quartzmin
             public TypeHandlerResourcesAttribute Resources { get; set; }
         }
 
-        public TypeHandlerService(Services services) : this(services, null) { }
-
-        public TypeHandlerService(Services services, IEnumerable<TypeHandlerBase> typeHandlers)
+        public TypeHandlerService(Services services)
         {
             _services = services;
 
             _builder = JsonSubtypesConverterBuilder.Of(typeof(TypeHandlerBase), nameof(TypeHandlerBase.TypeId));
-
-            if (typeHandlers != null)
+            
+            if (services?.Options?.StandardTypes != null)
             {
-                foreach (var typeHandler in typeHandlers.Select(x => x.GetType()).Distinct())
+                foreach (var typeHandler in services.Options.StandardTypes.Select(x => x.GetType()).Distinct())
                     Register(typeHandler);
             }
 
