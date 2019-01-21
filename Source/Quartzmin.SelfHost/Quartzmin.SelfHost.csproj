@@ -7,7 +7,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>1591</NoWarn>
 
-    <Version>1.0.2</Version>
+    <Version>1.0.3</Version>
     <Product>Quartzmin.SelfHost</Product>
     <Title>Quartzmin Self Host</Title>
     <Authors>Jan Lucansky</Authors>
