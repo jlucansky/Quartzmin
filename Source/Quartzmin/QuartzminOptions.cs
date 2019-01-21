@@ -9,6 +9,15 @@ namespace Quartzmin
 {
     public class QuartzminOptions
     {
+        /// <summary>
+        /// Supports any value that is a viable as a img src attribute value: url, or base64
+        /// src='data:image/jpeg;base64, LzlqLzRBQ...[end of base64 data]'
+        /// Defaults to the quartzmin original logo
+        /// </summary>
+        public string Logo { get; set; } = "Content/Images/logo.png";
+
+        public string ProductName { get; set; } = "";
+
         public string VirtualPathRoot { get; set; } = "/";
 
         public IScheduler Scheduler { get; set; }

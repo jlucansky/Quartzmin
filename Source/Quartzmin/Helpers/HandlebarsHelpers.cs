@@ -58,6 +58,8 @@ namespace Quartzmin.Helpers
             h.RegisterHelper(nameof(ToBase64), ToBase64);
             h.RegisterHelper(nameof(footer), footer);
             h.RegisterHelper(nameof(QuartzminVersion), QuartzminVersion);
+            h.RegisterHelper(nameof(Logo), Logo);
+            h.RegisterHelper(nameof(ProductName), ProductName);
         }
 
         static bool IsTrue(object value) => value?.ToString()?.Equals("true", StringComparison.OrdinalIgnoreCase) == true;
@@ -262,5 +264,13 @@ namespace Quartzmin.Helpers
             output.Write(v.InformationalVersion);
         }
 
+        void Logo(TextWriter output, dynamic context, params object[] arguments)
+        {
+            output.Write(_services.Options.Logo);
+        }
+        void ProductName(TextWriter output, dynamic context, params object[] arguments)
+        {
+            output.Write(_services.Options.ProductName);
+        }
     }
 }
