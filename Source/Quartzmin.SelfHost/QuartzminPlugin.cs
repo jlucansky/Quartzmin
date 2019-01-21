@@ -18,6 +18,9 @@ namespace Quartzmin.SelfHost
         public string DefaultDateFormat { get; set; }
         public string DefaultTimeFormat { get; set; }
 
+        public string Logo { get; set; }
+        public string ProductName { get; set; }
+
         private IScheduler _scheduler;
         private IDisposable _webApp;
 
@@ -73,6 +76,10 @@ namespace Quartzmin.SelfHost
                 options.DefaultDateFormat = DefaultDateFormat;
             if (!string.IsNullOrEmpty(DefaultTimeFormat))
                 options.DefaultTimeFormat = DefaultTimeFormat;
+            if (!string.IsNullOrEmpty(Logo))
+                options.Logo = Logo;
+            if (!string.IsNullOrEmpty(ProductName))
+                options.ProductName = ProductName;
 
             return options;
         }
