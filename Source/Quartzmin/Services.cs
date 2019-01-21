@@ -38,7 +38,7 @@ namespace Quartzmin
             HandlebarsHelpers.Register(services);
 
             services.ViewEngine = new ViewEngine(services);
-            services.TypeHandlers = new TypeHandlerService(services, options.StandardTypes);
+            services.TypeHandlers = new TypeHandlerService(services);
             services.Cache = new Cache(services);
 
             return services;
