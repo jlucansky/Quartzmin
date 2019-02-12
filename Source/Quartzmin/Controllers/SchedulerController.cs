@@ -63,6 +63,7 @@ namespace Quartzmin.Controllers
                 History = histogram,
                 MetaData = metadata,
                 RunningSince = metadata.RunningSince?.UtcDateTime.ToDefaultFormat() ?? "N / A",
+                UtcLabel = DateTimeSettings.UseLocalTime ? string.Empty : "UTC",
                 Environment.MachineName,
                 Application = Environment.CommandLine,
                 JobsCount = jobKeys.Count,
