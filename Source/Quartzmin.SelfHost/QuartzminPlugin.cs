@@ -18,6 +18,8 @@ namespace Quartzmin.SelfHost
         public string DefaultDateFormat { get; set; }
         public string DefaultTimeFormat { get; set; }
 
+        public bool UseLocalTime { get; set; }
+
         public string Logo { get; set; }
         public string ProductName { get; set; }
 
@@ -31,7 +33,7 @@ namespace Quartzmin.SelfHost
         }
 
 #if NETSTANDARD
-        public async Task Start(CancellationToken cancellationToken = default(CancellationToken))
+        public Task Start(CancellationToken cancellationToken = default(CancellationToken))
         {
             var host = Microsoft.AspNetCore.WebHost.CreateDefaultBuilder().Configure(app => {
                 app.UseQuartzmin(CreateQuartzminOptions());
@@ -46,7 +48,7 @@ namespace Quartzmin.SelfHost
 
             _webApp = host;
 
-            await host.StartAsync();
+            return host.StartAsync();
         }
 #endif
 
@@ -80,6 +82,9 @@ namespace Quartzmin.SelfHost
                 options.Logo = Logo;
             if (!string.IsNullOrEmpty(ProductName))
                 options.ProductName = ProductName;
+
+            if (UseLocalTime)
+                options.UseLocalTime = UseLocalTime;
 
             return options;
         }
