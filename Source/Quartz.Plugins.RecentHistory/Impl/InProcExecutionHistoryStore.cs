@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Quartz.Plugins.RecentHistory.Impl
 {
+    [Serializable]
     public class InProcExecutionHistoryStore : IExecutionHistoryStore
     {
         public string SchedulerName { get; set; }
