@@ -13,7 +13,7 @@ namespace Quartz.Plugins.RecentHistory
 
         public string Name { get; set; }
         public Type StoreType { get; set; }
-
+        
         public Task Initialize(string pluginName, IScheduler scheduler, CancellationToken cancellationToken = default(CancellationToken))
         {
             Name = pluginName;
@@ -29,11 +29,7 @@ namespace Quartz.Plugins.RecentHistory
 
             if (_store == null)
             {
-                if (StoreType != null)
-                    _store = (IExecutionHistoryStore)Activator.CreateInstance(StoreType);
-
-                if (_store == null)
-                    throw new Exception(nameof(StoreType) + " is not set.");
+                _store = CreateExecutionHistoryStore();
 
                 _scheduler.Context.SetExecutionHistoryStore(_store);
             }
@@ -42,7 +38,7 @@ namespace Quartz.Plugins.RecentHistory
 
             await _store.Purge();
         }
-
+        
         public Task Shutdown(CancellationToken cancellationToken = default(CancellationToken))
         {
             return Task.FromResult(0);
@@ -87,6 +83,14 @@ namespace Quartz.Plugins.RecentHistory
                 entry.Vetoed = true;
                 await _store.Save(entry);
             }
+        }
+
+        protected virtual IExecutionHistoryStore CreateExecutionHistoryStore()
+        {
+            if (StoreType != null)
+                return (IExecutionHistoryStore)Activator.CreateInstance(StoreType);
+
+            throw new Exception(nameof(StoreType) + " is not set.");
         }
     }
 }
