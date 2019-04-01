@@ -66,8 +66,8 @@
             </table>
         </div>
         <div class="nine wide column" id="col-actions">
+            {{#if ../UserPermissions.CanControlScheduler}}
             <h3 class="ui dividing header">Actions</h3>
-
             <p style="margin-top: 1em">
                 {{#if MetaData.InStandbyMode}}
                 <button class="ui small button green" id="btn-start"><i class="play icon"></i>Start</button>
@@ -78,10 +78,15 @@
                 <button class="ui small button" id="btn-pause"><i class="pause icon"></i>Pause All</button>
                 <button class="ui small button" id="btn-resume"><i class="play icon"></i>Resume All</button>
             </p>
+            {{/if}}
 
+            {{#if ../UserPermissions.CanControlJobs}}
             {{>GroupActions items=JobGroups id='job-groups' header='Job Groups'}}
-            {{>GroupActions items=TriggerGroups id='trigger-groups' header='Trigger Groups'}}
+            {{/if}}
 
+            {{#if ../UserPermissions.CanControlTriggers}}
+            {{>GroupActions items=TriggerGroups id='trigger-groups' header='Trigger Groups'}}
+            {{/if}}
         </div>
     </div>
 

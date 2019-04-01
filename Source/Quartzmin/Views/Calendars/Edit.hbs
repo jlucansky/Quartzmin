@@ -11,10 +11,17 @@
     <div class="ui clearing basic segment" style="padding: 0px" id="header">
         <div style="float: right">
             <a class="ui button" id="btn-discard" href="{{ActionUrl ''}}">Discard Changes</a>
+            {{#if UserPermissions.CanDeleteCalendars}}
             {{#unless ViewBag.IsNew}}
             <div class="negative ui button" id="btn-delete">Delete</div>
             {{/unless}}
+            {{/if}}
+
+            {{#if UserPermissions.CanCreateNewCalendars}}
             <div class="ui primary button" id="btn-save">Save</div>
+            {{else if UserPermissions.CanEditCalendars}}
+            <div class="ui primary button" id="btn-save">Save</div>
+            {{/if}}
         </div>
         <h1 class="ui left floated header">
             {{#if ViewBag.IsNew}}Add Calendar{{else}}Edit Calendar{{/if}}

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Globalization;
+using Quartzmin.Security;
 
 #region Target-Specific Directives
 #if NETSTANDARD
@@ -99,25 +100,35 @@ namespace Quartzmin.Controllers
             switch (args.Action.ToLower())
             {
                 case "shutdown":
+                    RequireUserPermissions(UserPermissions.ControlScheduler);
                     await Scheduler.Shutdown();
                     break;
                 case "standby":
+                    RequireUserPermissions(UserPermissions.ControlScheduler);
                     await Scheduler.Standby();
                     break;
                 case "start":
+                    RequireUserPermissions(UserPermissions.ControlScheduler);
                     await Scheduler.Start();
                     break;
                 case "pause":
                     if (string.IsNullOrEmpty(args.Name))
                     {
+                        RequireUserPermissions(UserPermissions.ControlScheduler);
                         await Scheduler.PauseAll();
                     }
                     else
                     {
                         if (args.Groups == "trigger-groups")
+                        {
+                            RequireUserPermissions(UserPermissions.ControlTriggers);
                             await Scheduler.PauseTriggers(GroupMatcher<TriggerKey>.GroupEquals(args.Name));
+                        }
                         else if (args.Groups == "job-groups")
+                        {
+                            RequireUserPermissions(UserPermissions.ControlJobs);
                             await Scheduler.PauseJobs(GroupMatcher<JobKey>.GroupEquals(args.Name));
+                        }
                         else
                             throw new InvalidOperationException("Invalid groups: " + args.Groups);
                     }
@@ -125,14 +136,21 @@ namespace Quartzmin.Controllers
                 case "resume":
                     if (string.IsNullOrEmpty(args.Name))
                     {
+                        RequireUserPermissions(UserPermissions.ControlScheduler);
                         await Scheduler.ResumeAll();
                     }
                     else
                     {
                         if (args.Groups == "trigger-groups")
+                        {
+                            RequireUserPermissions(UserPermissions.ControlTriggers);
                             await Scheduler.ResumeTriggers(GroupMatcher<TriggerKey>.GroupEquals(args.Name));
+                        }
                         else if (args.Groups == "job-groups")
+                        {
+                            RequireUserPermissions(UserPermissions.ControlJobs);
                             await Scheduler.ResumeJobs(GroupMatcher<JobKey>.GroupEquals(args.Name));
+                        }
                         else
                             throw new InvalidOperationException("Invalid groups: " + args.Groups);
                     }
@@ -140,7 +158,14 @@ namespace Quartzmin.Controllers
                 default:
                     throw new InvalidOperationException("Invalid action: " + args.Action);
             }
-        }
 
+            void RequireUserPermissions(params UserPermissions[] userPermissions)
+            {
+                if (!UserHasPermissions(userPermissions))
+                {
+                    throw new UnauthorizedAccessException("Missing required permissions to perform this action");
+                }
+            }
+        }
     }
 }

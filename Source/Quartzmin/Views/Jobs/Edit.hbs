@@ -10,18 +10,24 @@
     <div class="ui clearing basic segment" style="padding: 0px" id="header">
         <div style="float: right">
             <a class="ui button" id="btn-discard" href="{{ActionUrl ''}}">Discard Changes</a>
-            {{#unless Model.Job.IsNew}}
-            <div class="negative ui button" id="btn-delete">Delete</div>
-            {{/unless}}
-            <div class="ui buttons">
-                <div class="ui primary button" id="btn-save">Save</div>
-                <div class="ui floating dropdown icon primary button" id="save-dropdown">
-                    <i class="dropdown icon"></i>
-                    <div class="menu">
-                        <div class="item ui basic button" id="btn-trigger"><i class="green play icon"></i> Save &amp; Trigger Immediately</div>
-                    </div>
+            {{#if UserPermissions.CanDeleteJobs}}
+                {{#unless Model.Job.IsNew}}
+                    <div class="negative ui button" id="btn-delete">Delete</div>
+                {{/unless}}
+            {{/if}}
+            {{#if UserPermissions.CanEditJobs}}
+                <div class="ui buttons">
+                    <div class="ui primary button" id="btn-save">Save</div>
+                    {{#if UserPermissions.CanTriggerJobs}}
+                        <div class="ui floating dropdown icon primary button" id="save-dropdown">
+                            <i class="dropdown icon"></i>
+                            <div class="menu">
+                                <div class="item ui basic button" id="btn-trigger"><i class="green play icon"></i> Save &amp; Trigger Immediately</div>
+                            </div>
+                        </div>
+                    {{/if}}
                 </div>
-            </div>
+            {{/if}}
         </div>
         <h1 class="ui left floated header">
             {{#if Model.Job.IsNew}}Add Job{{else}}Edit Job "{{Model.Job.JobName}}"{{/if}}

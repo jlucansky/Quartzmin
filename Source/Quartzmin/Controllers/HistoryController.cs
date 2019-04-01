@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Quartzmin.Security;
 
 #region Target-Specific Directives
 #if NETSTANDARD
@@ -19,6 +20,7 @@ namespace Quartzmin.Controllers
     public class HistoryController : PageControllerBase
     {
         [HttpGet]
+        [AuthorizeUser(UserPermissions.ViewHistory)]
         public async Task<IActionResult> Index()
         {
             var store = Scheduler.Context.GetExecutionHistoryStore();

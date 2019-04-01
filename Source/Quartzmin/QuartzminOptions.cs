@@ -2,7 +2,7 @@
 using Quartzmin.TypeHandlers;
 using System.Collections.Generic;
 using System.IO;
-
+using Quartzmin.Security;
 using Number = Quartzmin.TypeHandlers.NumberHandler.UnderlyingType;
 
 namespace Quartzmin
@@ -22,6 +22,8 @@ namespace Quartzmin
 
         public IScheduler Scheduler { get; set; }
 
+        public IAuthorizationProvider AuthorizationProvider { get; set; }
+        
         /// <summary>
         /// Supported value types in job data map.
         /// </summary>

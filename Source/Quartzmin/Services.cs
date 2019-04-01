@@ -1,6 +1,8 @@
-﻿using HandlebarsDotNet;
+﻿using System.Linq;
+using HandlebarsDotNet;
 using Quartz;
 using Quartzmin.Helpers;
+using Quartzmin.Security;
 
 namespace Quartzmin
 {
@@ -18,6 +20,8 @@ namespace Quartzmin
 
         public IScheduler Scheduler { get; set; }
 
+        public IAuthorizationProvider AuthorizationProvider { get; set; }
+
         internal Cache Cache { get; private set; }
 
         public static Services Create(QuartzminOptions options)
@@ -32,6 +36,7 @@ namespace Quartzmin
             {
                 Options = options,
                 Scheduler = options.Scheduler,
+                AuthorizationProvider = options.AuthorizationProvider,
                 Handlebars = HandlebarsDotNet.Handlebars.Create(handlebarsConfiguration),
             };
 

@@ -39,24 +39,34 @@
             </div>
 
             {{MenuItemActionLink text='Overview' controller='Scheduler'}}
-            {{MenuItemActionLink 'Jobs'}}
-            {{MenuItemActionLink 'Triggers'}}
-            {{MenuItemActionLink 'Executions'}}
-            {{MenuItemActionLink 'History'}}
-            {{MenuItemActionLink 'Calendars'}}
+            {{#if UserPermissions.CanViewJobs}}
+                {{MenuItemActionLink 'Jobs'}}
+            {{/if}}
+            {{#if UserPermissions.CanViewTriggers}}
+                {{MenuItemActionLink 'Triggers'}}
+            {{/if}}
+            {{#if UserPermissions.CanViewExecutions}}
+                {{MenuItemActionLink 'Executions'}}
+            {{/if}}
+            {{#if UserPermissions.CanViewHistory}}
+                {{MenuItemActionLink 'History'}}
+            {{/if}}
+            {{#if UserPermissions.CanViewCalendars}}
+                {{MenuItemActionLink 'Calendars'}}
+            {{/if}}
 
             <!--
-            <div class="right menu">
-                <div class="ui dropdown item">
-                    <i class="user circle large icon"></i>
-                    domain\user
-                    <i class="dropdown icon"></i>
-                    <div class="menu">
-                        <a class="item center" href="#">Logout</a>
-                    </div>
-                </div>
+    <div class="right menu">
+        <div class="ui dropdown item">
+            <i class="user circle large icon"></i>
+            domain\user
+            <i class="dropdown icon"></i>
+            <div class="menu">
+                <a class="item center" href="#">Logout</a>
             </div>
-            -->
+        </div>
+    </div>
+    -->
         </div>
     </div>
 
