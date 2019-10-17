@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Quartzmin.Security;
 
 #region Target-Specific Directives
 #if NETSTANDARD
@@ -23,6 +24,7 @@ namespace Quartzmin.Controllers
     public class JobsController : PageControllerBase
     {
         [HttpGet]
+        [AuthorizeUser(UserPermissions.ViewJobs)]
         public async Task<IActionResult> Index()
         {
             var keys = (await Scheduler.GetJobKeys(GroupMatcher<JobKey>.AnyGroup())).OrderBy(x => x.ToString());
@@ -55,6 +57,7 @@ namespace Quartzmin.Controllers
         }
 
         [HttpGet]
+        [AuthorizeUser(UserPermissions.CreateNewJobs)]
         public async Task<IActionResult> New()
         {
             var job = new JobPropertiesViewModel() { IsNew = true };
@@ -68,6 +71,7 @@ namespace Quartzmin.Controllers
         }
 
         [HttpGet]
+        [AuthorizeUser(UserPermissions.TriggerJobs)]
         public async Task<IActionResult> Trigger(string name, string group)
         {
             if (!EnsureValidKey(name, group)) return BadRequest();
@@ -85,6 +89,7 @@ namespace Quartzmin.Controllers
         }
 
         [HttpPost, ActionName("Trigger"), JsonErrorResponse]
+        [AuthorizeUser(UserPermissions.TriggerJobs)]
         public async Task<IActionResult> PostTrigger(string name, string group)
         {
             if (!EnsureValidKey(name, group)) return BadRequest();
@@ -104,6 +109,7 @@ namespace Quartzmin.Controllers
         }
 
         [HttpGet]
+        [AuthorizeUser(UserPermissions.ViewJobs)]
         public async Task<IActionResult> Edit(string name, string group, bool clone = false)
         {
             if (!EnsureValidKey(name, group)) return BadRequest();
@@ -142,11 +148,17 @@ namespace Quartzmin.Controllers
                 throw new InvalidOperationException("Job " + key + " not found.");
 
             return job;
-        } 
+        }
 
         [HttpPost, JsonErrorResponse]
         public async Task<IActionResult> Save([FromForm] JobViewModel model, bool trigger)
         {
+            if ((model.Job.IsNew && !UserHasPermissions(UserPermissions.CreateNewJobs)) ||
+                !UserHasPermissions(UserPermissions.EditJobs))
+            {
+                return Unauthorized();
+            }
+
             var jobModel = model.Job;
             var jobDataMap = (await Request.GetJobDataMapForm()).GetModel(Services);
 
@@ -188,6 +200,7 @@ namespace Quartzmin.Controllers
         }
 
         [HttpPost, JsonErrorResponse]
+        [AuthorizeUser(UserPermissions.DeleteJobs)]
         public async Task<IActionResult> Delete([FromBody] KeyModel model)
         {
             if (!EnsureValidKey(model)) return BadRequest();
@@ -201,6 +214,7 @@ namespace Quartzmin.Controllers
         }
 
         [HttpGet, JsonErrorResponse]
+        [AuthorizeUser(UserPermissions.ViewJobs)]
         public async Task<IActionResult> AdditionalData()
         {
             var keys = await Scheduler.GetJobKeys(GroupMatcher<JobKey>.AnyGroup());
@@ -226,6 +240,7 @@ namespace Quartzmin.Controllers
         }
 
         [HttpGet]
+        [AuthorizeUser(UserPermissions.CreateNewJobs)]
         public Task<IActionResult> Duplicate(string name, string group)
         {
             return Edit(name, group, clone: true);

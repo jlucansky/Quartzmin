@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Quartzmin.Security;
 
 #region Target-Specific Directives
 #if NETSTANDARD
@@ -21,6 +22,7 @@ namespace Quartzmin.Controllers
     public class CalendarsController : PageControllerBase
     {
         [HttpGet]
+        [AuthorizeUser(UserPermissions.ViewCalendars)]
         public async Task<IActionResult> Index()
         {
             var calendarNames = await Scheduler.GetCalendarNames();
@@ -37,6 +39,7 @@ namespace Quartzmin.Controllers
         }
 
         [HttpGet]
+        [AuthorizeUser(UserPermissions.CreateNewCalendars)]
         public IActionResult New()
         {
             ViewBag.IsNew = true;
@@ -49,6 +52,7 @@ namespace Quartzmin.Controllers
         }
 
         [HttpGet]
+        [AuthorizeUser(UserPermissions.ViewCalendars)]
         public async Task<IActionResult> Edit(string name)
         {
             var calendar = await Scheduler.GetCalendar(name);
@@ -75,6 +79,12 @@ namespace Quartzmin.Controllers
         [HttpPost, JsonErrorResponse]
         public async Task<IActionResult> Save([FromBody] CalendarViewModel[] chain, bool isNew)
         {
+            if ((isNew && !UserHasPermissions(UserPermissions.CreateNewCalendars)) ||
+                !UserHasPermissions(UserPermissions.EditCalendars))
+            {
+                return Unauthorized();
+            }
+
             var result = new ValidationResult();
 
             if (chain.Length == 0 || string.IsNullOrEmpty(chain[0].Name))
@@ -137,6 +147,7 @@ namespace Quartzmin.Controllers
 
 
         [HttpPost, JsonErrorResponse]
+        [AuthorizeUser(UserPermissions.DeleteCalendars)]
         public async Task<IActionResult> Delete([FromBody] DeleteArgs args)
         {
             if (!await Scheduler.DeleteCalendar(args.Name))

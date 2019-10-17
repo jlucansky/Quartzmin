@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Quartzmin.Models;
 using Quartz;
+using Quartzmin.Security;
 
 namespace Quartzmin.Controllers
 {
@@ -35,6 +36,16 @@ namespace Quartzmin.Controllers
             var values = Request.Headers[key];
             return values == StringValues.Empty ? (IEnumerable<string>)null : values;
         }
+
+        protected bool UserHasPermissions(params UserPermissions[] userPermissions)
+        {
+            return HttpContext.DoesUserHavePermissions(userPermissions);
+        }
+
+        protected UserPermissions[] GetUserPermissions()
+        {
+            return HttpContext.GetUserPermissions();
+        }
     }
 #endif
 #if NETFRAMEWORK
@@ -57,7 +68,7 @@ namespace Quartzmin.Controllers
 
             public Task<HttpResponseMessage> ExecuteAsync(CancellationToken cancellationToken)
             {
-                var msg = new HttpResponseMessage() { Content = new StringContent(Content) };
+                var msg = new HttpResponseMessage() {Content = new StringContent(Content)};
                 msg.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(ContentType);
 
                 if (!string.IsNullOrEmpty(ETag))
@@ -65,7 +76,7 @@ namespace Quartzmin.Controllers
 
                 if (LastModified != null)
                     msg.Content.Headers.LastModified = LastModified;
-                
+
                 return Task.FromResult(msg);
             }
         }
@@ -81,6 +92,15 @@ namespace Quartzmin.Controllers
                 return null;
         }
 
+        protected bool UserHasPermissions(params UserPermissions[] userPermissions)
+        {
+            return Request.GetOwinContext().DoesUserHavePermissions(userPermissions);
+        }
+
+        protected UserPermissions[] GetUserPermissions()
+        {
+            return Request.GetOwinContext().GetUserPermissions();
+        }
     }
 #endif
     #endregion
@@ -88,6 +108,8 @@ namespace Quartzmin.Controllers
     public abstract partial class PageControllerBase
     {
         protected IScheduler Scheduler => Services.Scheduler;
+
+        protected IAuthorizationProvider AuthorizationProvider => Services.AuthorizationProvider;
 
         protected dynamic ViewBag { get; } = new ExpandoObject();
 
@@ -105,10 +127,27 @@ namespace Quartzmin.Controllers
 
             public object Model { get; set; }
 
-            public Page(PageControllerBase controller, object model = null)
+            public object UserPermissions { get; private set; }
+
+            public Page(PageControllerBase controller, object model = null, UserPermissions[] userPermissions = null)
             {
                 _controller = controller;
                 Model = model;
+
+                SetUserPermissions(userPermissions);
+            }
+
+            private void SetUserPermissions(UserPermissions[] userPermissions = null)
+            {
+                dynamic userPermissionsBag = new ExpandoObject();
+
+                var properties = userPermissionsBag as IDictionary<String, object>;
+                foreach (var userPermission in Enum.GetValues(typeof(UserPermissions)).Cast<UserPermissions>())
+                {
+                    properties["Can" + userPermission] = userPermissions?.Contains(userPermission) ?? true;
+                }
+
+                UserPermissions = userPermissionsBag;
             }
         }
 
@@ -119,7 +158,7 @@ namespace Quartzmin.Controllers
 
         protected IActionResult View(string viewName, object model)
         {
-            string content = Services.ViewEngine.Render($"{GetRouteData("controller")}/{viewName}.hbs", new Page(this, model));
+            string content = Services.ViewEngine.Render($"{GetRouteData("controller")}/{viewName}.hbs", new Page(this, model, GetUserPermissions()));
             return Html(content);
         }
 

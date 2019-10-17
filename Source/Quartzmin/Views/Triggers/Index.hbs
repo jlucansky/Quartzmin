@@ -21,9 +21,12 @@
         {{/each}}
     </div>
 </div>
+
+{{#if UserPermissions.CanCreateNewTriggers}}
 <a class="ui right floated primary button" href="{{ActionUrl 'New'}}">
     <i class="plus icon"></i>New
 </a>
+{{/if}}
 
 <div id="msg-panel"></div>
 
@@ -49,8 +52,10 @@
             </td>
             <td class="job-group">{{JobGroup}}</td>
             <td colspan="6" style="text-align: right">
+                {{#if ../UserPermissions.CanControlTriggers}}
                 <a href="{{ActionUrl 'PauseJob' @ControllerName}}" class="ui super tiny button btn-pause-all"><i class="pause icon"></i>Pause All</a>
                 <a href="{{ActionUrl 'ResumeJob' @ControllerName}}" class="ui super tiny button btn-resume-all"><i class="play icon"></i>Resume All</a>
+                {{/if}}
             </td>
         </tr>
         {{/if}}
@@ -81,10 +86,16 @@
 <div style="display:none">
     <div class="ui small vertical menu borderless" id="trigger-context-menu">
         <a class="item menu-edit"><i class="left large blue pencil alternate icon"></i>Edit</a>
+        {{#if UserPermissions.CanCreateNewTriggers}}
         <a class="item menu-copy"><i class="left large clone outline icon"></i>Copy</a>
+        {{/if}}
+        {{#if UserPermissions.CanControlTriggers}}
         <a class="item menu-pause"><i class="left large pause icon" style="color:#e6b800"></i>Pause</a>
         <a class="item menu-resume"><i class="left large play green icon"></i>Resume</a>
+        {{/if}}
+        {{#if UserPermissions.CanDeleteTriggers}}
         <a class="item menu-delete"><i class="left large red trash alternate outline icon"></i>Delete</a>
+        {{/if}}
     </div>
 </div>
 

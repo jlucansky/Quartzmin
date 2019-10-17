@@ -38,7 +38,7 @@ namespace Quartzmin
                     await context.Response.WriteAsync(services.ViewEngine.ErrorPage(ex));
                 });
             });
-
+            
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

@@ -10,10 +10,16 @@
     <div class="ui clearing basic segment" style="padding: 0px" id="header">
         <div style="float: right">
             <a class="ui button" id="btn-discard" href="{{ActionUrl ''}}">Discard Changes</a>
+            {{#if UserPermissions.CanDeleteTriggers}}
             {{#unless Model.Trigger.IsNew}}
             <div class="negative ui button" id="btn-delete">Delete</div>
             {{/unless}}
+            {{/if}}
+            {{#if UserPermissions.CanCreateNewTriggers}}
             <div class="ui primary button" id="btn-save">Save</div>
+            {{else if UserPermissions.CanEditTriggers}}
+            <div class="ui primary button" id="btn-save">Save</div>
+            {{/if}}
         </div>
         <h1 class="ui left floated header">
             {{#if Model.Trigger.IsNew}}Add Trigger{{else}}Edit Trigger "{{Model.Trigger.TriggerName}}"{{/if}}

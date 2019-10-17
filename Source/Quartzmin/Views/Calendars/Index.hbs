@@ -6,9 +6,12 @@
     <input type="text" placeholder="Search Calendar..." id="search-calendar">
     <i class="search icon"></i>
 </div>
+
+{{#if UserPermissions.CanCreateNewJobs}}
 <a class="ui right floated primary button" href="{{ActionUrl 'New'}}">
     <i class="plus icon"></i>New
 </a>
+{{/if}}
 
 <div id="msg-panel"></div>
 

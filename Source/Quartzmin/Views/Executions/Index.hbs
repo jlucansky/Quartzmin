@@ -24,7 +24,11 @@
             <td>{{ScheduledFireTime}}</td>
             <td>{{ActualFireTime}}</td>
             <td>{{RunTime}}</td>
-            <td style="text-align: right"><button class="ui super tiny red button btn-interrupt" data-id="{{Id}}"><i class="stop icon"></i>Interrupt</button></td>
+            <td style="text-align: right">
+                {{#if ../UserPermissions.CanInterruptExecutions}}
+                <button class="ui super tiny red button btn-interrupt" data-id="{{Id}}"><i class="stop icon"></i>Interrupt</button>
+                {{/if}}
+            </td>
         </tr>
         {{/each}}
     </tbody>

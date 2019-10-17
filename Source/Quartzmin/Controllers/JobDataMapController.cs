@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
+using Quartzmin.Security;
 
 #region Target-Specific Directives
 #if NETSTANDARD
@@ -25,6 +26,7 @@ namespace Quartzmin.Controllers
     public class JobDataMapController : PageControllerBase
     {
         [HttpPost, JsonErrorResponse]
+        [AuthorizeUser(UserPermissions.ViewJobs)]
         public async Task<IActionResult> ChangeType()
         {
             var formData = await Request.GetFormData();
@@ -78,6 +80,7 @@ namespace Quartzmin.Controllers
 #endif
 
         [HttpGet, ActionName("TypeHandlers.js")]
+        [AuthorizeUser(UserPermissions.ViewJobs)]
         public IActionResult TypeHandlersScript()
         {
             var etag = Services.TypeHandlers.LastModified.ETag();

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Quartzmin.Security;
 
 #region Target-Specific Directives
 #if NETSTANDARD
@@ -23,6 +24,7 @@ namespace Quartzmin.Controllers
     public class TriggersController : PageControllerBase
     {
         [HttpGet]
+        [AuthorizeUser(UserPermissions.ViewTriggers)]
         public async Task<IActionResult> Index()
         {
             var keys = (await Scheduler.GetTriggerKeys(GroupMatcher<TriggerKey>.AnyGroup())).OrderBy(x => x.ToString());
@@ -70,6 +72,7 @@ namespace Quartzmin.Controllers
         }
 
         [HttpGet]
+        [AuthorizeUser(UserPermissions.CreateNewTriggers)]
         public async Task<IActionResult> New()
         {
             var model = await TriggerPropertiesViewModel.Create(Scheduler);
@@ -84,6 +87,7 @@ namespace Quartzmin.Controllers
         }
 
         [HttpGet]
+        [AuthorizeUser(UserPermissions.ViewTriggers)]
         public async Task<IActionResult> Edit(string name, string group, bool clone = false)
         {
             if (!EnsureValidKey(name, group)) return BadRequest();
@@ -144,6 +148,12 @@ namespace Quartzmin.Controllers
         [HttpPost, JsonErrorResponse]
         public async Task<IActionResult> Save([FromForm] TriggerViewModel model)
         {
+            if ((model.Trigger.IsNew && !UserHasPermissions(UserPermissions.CreateNewTriggers)) ||
+                !UserHasPermissions(UserPermissions.EditTriggers))
+            {
+                return Unauthorized();
+            }
+
             var triggerModel = model.Trigger;
             var jobDataMap = (await Request.GetJobDataMapForm()).GetModel(Services);
             
@@ -192,6 +202,7 @@ namespace Quartzmin.Controllers
         }
 
         [HttpPost, JsonErrorResponse]
+        [AuthorizeUser(UserPermissions.DeleteTriggers)]
         public async Task<IActionResult> Delete([FromBody] KeyModel model)
         {
             if (!EnsureValidKey(model)) return BadRequest();
@@ -205,6 +216,7 @@ namespace Quartzmin.Controllers
         }
 
         [HttpPost, JsonErrorResponse]
+        [AuthorizeUser(UserPermissions.ControlTriggers)]
         public async Task<IActionResult> Resume([FromBody] KeyModel model)
         {
             if (!EnsureValidKey(model)) return BadRequest();
@@ -213,6 +225,7 @@ namespace Quartzmin.Controllers
         }
 
         [HttpPost, JsonErrorResponse]
+        [AuthorizeUser(UserPermissions.ControlTriggers)]
         public async Task<IActionResult> Pause([FromBody] KeyModel model)
         {
             if (!EnsureValidKey(model)) return BadRequest();
@@ -221,6 +234,7 @@ namespace Quartzmin.Controllers
         }
 
         [HttpPost, JsonErrorResponse]
+        [AuthorizeUser(UserPermissions.ControlJobs)]
         public async Task<IActionResult> PauseJob([FromBody] KeyModel model)
         {
             if (!EnsureValidKey(model)) return BadRequest();
@@ -229,6 +243,7 @@ namespace Quartzmin.Controllers
         }
 
         [HttpPost, JsonErrorResponse]
+        [AuthorizeUser(UserPermissions.ControlJobs)]
         public async Task<IActionResult> ResumeJob([FromBody] KeyModel model)
         {
             if (!EnsureValidKey(model)) return BadRequest();
@@ -237,6 +252,7 @@ namespace Quartzmin.Controllers
         }
 
         [HttpPost, JsonErrorResponse]
+        [AuthorizeUser(UserPermissions.ViewTriggers)]
         public IActionResult Cron()
         {
             var cron = Request.ReadAsString()?.Trim();
@@ -284,6 +300,7 @@ namespace Quartzmin.Controllers
         }
 
         [HttpGet, JsonErrorResponse]
+        [AuthorizeUser(UserPermissions.ViewTriggers)]
         public async Task<IActionResult> AdditionalData()
         {
             var keys = await Scheduler.GetTriggerKeys(GroupMatcher<TriggerKey>.AnyGroup());
@@ -303,9 +320,9 @@ namespace Quartzmin.Controllers
 
             return View(list);
         }
-
         
         [HttpGet]
+        [AuthorizeUser(UserPermissions.CreateNewTriggers)]
         public Task<IActionResult> Duplicate(string name, string group)
         {
             return Edit(name, group, clone: true);
@@ -313,7 +330,5 @@ namespace Quartzmin.Controllers
 
         bool EnsureValidKey(string name, string group) => !(string.IsNullOrEmpty(name) || string.IsNullOrEmpty(group));
         bool EnsureValidKey(KeyModel model) => EnsureValidKey(model.Name, model.Group);
-
     }
-
 }

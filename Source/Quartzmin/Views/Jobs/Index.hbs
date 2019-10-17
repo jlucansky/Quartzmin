@@ -21,9 +21,12 @@
         {{/each}}
     </div>
 </div>
-<a class="ui right floated primary button" href="{{ActionUrl 'New'}}">
-    <i class="plus icon"></i>New
-</a>
+
+{{#if UserPermissions.CanCreateNewJobs}}
+    <a class="ui right floated primary button" href="{{ActionUrl 'New'}}">
+        <i class="plus icon"></i>New
+    </a>
+{{/if}}
 
 <div id="msg-panel"></div>
 
@@ -64,10 +67,18 @@
 
 <div style="display:none">
     <div class="ui small vertical menu borderless" id="job-context-menu">
-        <a class="item menu-edit"><i class="left large blue pencil alternate icon"></i>Edit</a>
-        <a class="item menu-copy"><i class="left large clone outline icon"></i>Copy</a>
-        <a class="item menu-trigger"><i class="left large green play icon"></i>Trigger</a>
-        <a class="item menu-delete"><i class="left large red trash alternate outline icon"></i>Delete</a>
+        {{#if UserPermissions.CanViewJobs}}
+            <a class="item menu-edit"><i class="left large blue pencil alternate icon"></i>Edit</a>
+        {{/if}}
+        {{#if UserPermissions.CanCreateNewJobs}}
+            <a class="item menu-copy"><i class="left large clone outline icon"></i>Copy</a>
+        {{/if}}
+        {{#if UserPermissions.CanTriggerJobs}}
+            <a class="item menu-trigger"><i class="left large green play icon"></i>Trigger</a>
+        {{/if}}
+        {{#if UserPermissions.CanDeleteJobs}}
+            <a class="item menu-delete"><i class="left large red trash alternate outline icon"></i>Delete</a>
+        {{/if}}
     </div>
 </div>
 

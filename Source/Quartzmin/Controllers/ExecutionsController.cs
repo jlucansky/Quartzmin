@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Globalization;
+using Quartzmin.Security;
 
 #region Target-Specific Directives
 #if NETSTANDARD
@@ -23,6 +24,7 @@ namespace Quartzmin.Controllers
     public class ExecutionsController : PageControllerBase
     {
         [HttpGet]
+        [AuthorizeUser(UserPermissions.ViewExecutions)]
         public async Task<IActionResult> Index()
         {
             var currentlyExecutingJobs = await Scheduler.GetCurrentlyExecutingJobs();
@@ -53,6 +55,7 @@ namespace Quartzmin.Controllers
         }
 
         [HttpPost, JsonErrorResponse]
+        [AuthorizeUser(UserPermissions.InterruptExecutions)]
         public async Task<IActionResult> Interrupt([FromBody] InterruptArgs args)
         {
             if (!await Scheduler.Interrupt(args.Id))
