@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Threading;
 
 #region Target-Specific Directives
-#if NETSTANDARD
+#if ( NETSTANDARD || NETCOREAPP )
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http.Features;
 #endif
@@ -37,8 +37,12 @@ namespace Quartzmin.Controllers
             }
             catch (JsonSerializationException ex) when (ex.Message.StartsWith("Could not create an instance of type"))
             {
-                return new BadRequestResult() { ReasonPhrase = "Unknown Type Handler" };
-            }
+#if NETCOREAPP
+				return new BadRequestResult();
+#else
+				return new BadRequestResult() { ReasonPhrase = "Unknown Type Handler" };
+#endif
+			}
 
             var dataMapForm = (await formData.GetJobDataMapForm(includeRowIndex: false)).SingleOrDefault(); // expected single row
 
