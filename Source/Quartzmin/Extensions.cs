@@ -13,7 +13,7 @@ using Quartz.Impl.Matchers;
 using Quartz.Plugins.RecentHistory;
 
 #region Target-Specific Directives
-#if NETSTANDARD
+#if ( NETSTANDARD || NETCOREAPP )
 using HttpRequest = Microsoft.AspNetCore.Http.HttpRequest;
 #endif
 #if NETFRAMEWORK
@@ -68,8 +68,8 @@ namespace Quartzmin
 
         public static string ReadAsString(this HttpRequest request)
         {
-#if NETSTANDARD
-            using (var ms = new MemoryStream())
+#if ( NETSTANDARD || NETCOREAPP )
+			using ( var ms = new MemoryStream())
             {
                 request.Body.CopyTo(ms);
                 return Encoding.UTF8.GetString(ms.ToArray());
