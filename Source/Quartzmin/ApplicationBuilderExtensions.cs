@@ -77,20 +77,17 @@ namespace Quartzmin
 #if NETCOREAPP
         public static void AddQuartzmin( this IServiceCollection services )
         {
-            services.AddControllers( options =>
-                 {
-                    //options.EnableEndpointRouting = false;
-                } )
+            services.AddControllers()
                 .AddApplicationPart( Assembly.GetExecutingAssembly() )
                 .AddNewtonsoftJson();
         }
 #else
-		public static void AddQuartzmin( this IServiceCollection services )
-		{
-			services.AddMvcCore()
-				.AddApplicationPart( Assembly.GetExecutingAssembly() )
-				.AddJsonFormatters();
-		}
+        public static void AddQuartzmin( this IServiceCollection services )
+        {
+            services.AddMvcCore()
+                .AddApplicationPart( Assembly.GetExecutingAssembly() )
+                .AddJsonFormatters();
+        }
 #endif
 
     }
