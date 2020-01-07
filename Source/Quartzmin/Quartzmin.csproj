@@ -24,6 +24,8 @@
 		<RepositoryUrl>https://github.com/jlucansky/Quartzmin</RepositoryUrl>
 		<EmbeddedResourceUseDependentUponConvention>false</EmbeddedResourceUseDependentUponConvention>
 		<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<PackageId>QuartzminFork</PackageId>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('$(TargetFramework)', '^net\d'))">

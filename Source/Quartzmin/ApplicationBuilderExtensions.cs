@@ -43,7 +43,7 @@ namespace Quartzmin
             app.UseRouting();
             app.UseEndpoints( endpoints =>
             {
-                endpoints.MapControllerRoute( nameof( Quartzmin ), "{controller=Scheduler}/{action=Index}" );
+                endpoints.MapControllerRoute( nameof( Quartzmin ), $"{options.VirtualPathRoot}/{{controller=Scheduler}}/{{action=Index}}" );
             } );
 #else
             app.UseMvc( routes =>
@@ -65,7 +65,7 @@ namespace Quartzmin
 
             var fsOptions = new FileServerOptions()
             {
-                RequestPath = new PathString( "/Content" ),
+                RequestPath = new PathString( $"{options.VirtualPathRoot}/Content" ),
                 EnableDefaultFiles = false,
                 EnableDirectoryBrowsing = false,
                 FileProvider = fs
