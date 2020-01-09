@@ -37,7 +37,12 @@ namespace Quartzmin
 
         public static string ToDefaultFormat(this DateTime date)
         {
-            return date.ToString(DateTimeSettings.DefaultDateFormat + " " + DateTimeSettings.DefaultTimeFormat, CultureInfo.InvariantCulture);
+            return DateTimeSettings.UseLocalTime
+                ? date.ToLocalTime()
+                    .ToString(DateTimeSettings.DefaultDateFormat + " " + DateTimeSettings.DefaultTimeFormat,
+                        CultureInfo.InvariantCulture)
+                : date.ToString(DateTimeSettings.DefaultDateFormat + " " + DateTimeSettings.DefaultTimeFormat,
+                    CultureInfo.InvariantCulture);
         }
 
         public static Dictionary<string, string> ToDictionary(this IEnumerable<TimeZoneInfo> timeZoneInfos)
