@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Source\Quartzmin\Quartzmin.csproj" />
+    <ProjectReference Include="..\..\Quartzmin\Quartzmin.csproj" />
   </ItemGroup>
 
 

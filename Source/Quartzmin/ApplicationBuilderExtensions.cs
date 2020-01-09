@@ -28,19 +28,8 @@ namespace Quartzmin
                  await next.Invoke();
              } );
 
-            app.UseExceptionHandler( errorApp =>
-             {
-                 errorApp.Run( async context =>
-                 {
-                     var ex = context.Features.Get<IExceptionHandlerFeature>().Error;
-                     context.Response.StatusCode = 500;
-                     context.Response.ContentType = "text/html";
-                     await context.Response.WriteAsync( services.ViewEngine.ErrorPage( ex ) );
-                 } );
-             } );
-
+       
 #if NETCOREAPP
-            app.UseRouting();
             app.UseEndpoints( endpoints =>
             {
                 endpoints.MapControllerRoute( nameof( Quartzmin ), $"{options.VirtualPathRoot}/{{controller=Scheduler}}/{{action=Index}}" );

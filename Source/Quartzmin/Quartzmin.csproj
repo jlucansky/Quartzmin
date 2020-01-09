@@ -8,24 +8,25 @@
 		<NoWarn>1591</NoWarn>
 		<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
 
-		<Version>1.0.3</Version>
+		<Version>1.0.5</Version>
 		<Product>Quartzmin</Product>
 		<Title>Web management tool for Quartz.NET</Title>
 		<Authors>Jan Lucansky</Authors>
 		<PackageProjectUrl>https://github.com/jlucansky/Quartzmin</PackageProjectUrl>
-		<PackageIconUrl>https://raw.githubusercontent.com/jlucansky/public-assets/master/Quartzmin/avatar.png</PackageIconUrl>
+		<PackageIconUrl></PackageIconUrl>
 		<Description>Powerful, easy to use web management tool for Quartz.NET</Description>
 		<PackageTags>quartz;web;ui</PackageTags>
 		<AssemblyVersion>1.0.0.0</AssemblyVersion>
 		<FileVersion>1.0.0.0</FileVersion>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
-		<Copyright>Copyright © 2018 Jan Lucansky</Copyright>
+		<Copyright>Copyright © 2020 Jan Lucansky</Copyright>
 		<RepositoryType>git</RepositoryType>
 		<RepositoryUrl>https://github.com/jlucansky/Quartzmin</RepositoryUrl>
 		<EmbeddedResourceUseDependentUponConvention>false</EmbeddedResourceUseDependentUponConvention>
 		<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackageId>QuartzminFork</PackageId>
+		<PackageIcon>logo.png</PackageIcon>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('$(TargetFramework)', '^net\d'))">
@@ -77,6 +78,10 @@
 
 	<ItemGroup>
 		<None Include="..\..\LICENSE" Pack="true" PackagePath="" />
+		<None Include="Content\Images\logo.png">
+		  <Pack>True</Pack>
+		  <PackagePath></PackagePath>
+		</None>
 	</ItemGroup>
 
 	<ItemGroup>

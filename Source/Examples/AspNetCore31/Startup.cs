@@ -40,13 +40,11 @@ namespace AspNetCore31
                 app.UseExceptionHandler("/Error");
             }
             var scheduler = DemoScheduler.Create().Result;
-            app.UseQuartzmin(new QuartzminOptions() { Scheduler = scheduler, VirtualPathRoot= "/Quartzmin" });
+        
             app.UseStaticFiles();
-
             app.UseRouting();
-
             app.UseAuthorization();
-
+            app.UseQuartzmin(new QuartzminOptions() { Scheduler = scheduler, VirtualPathRoot = "/Quartzmin" });
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
