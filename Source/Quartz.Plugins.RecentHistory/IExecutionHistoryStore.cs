@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 namespace Quartz.Plugins.RecentHistory
 {
+    [Serializable]
     public class ExecutionHistoryEntry
     {
         public string FireInstanceId { get; set; }

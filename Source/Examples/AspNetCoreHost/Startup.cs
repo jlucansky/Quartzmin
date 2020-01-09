@@ -16,6 +16,7 @@ namespace Quartzmin.AspNetCore
             {
                 UseLocalTime = true,
                 Scheduler = DemoScheduler.Create().Result,
+                VirtualPathRoot = "/test",
             });
         }
     }

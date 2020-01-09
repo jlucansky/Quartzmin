@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Globalization;
 
 #region Target-Specific Directives
-#if NETSTANDARD
+#if ( NETSTANDARD || NETCOREAPP )
 using Microsoft.AspNetCore.Mvc;
 #endif
 #if NETFRAMEWORK
@@ -70,7 +70,7 @@ namespace Quartzmin.Controllers
                 TriggerCount = triggerKeys.Count,
                 ExecutingJobs = currentlyExecutingJobs.Count,
                 ExecutedJobs = executedJobs,
-                FailedJobs = failedJobs?.ToString(CultureInfo.InvariantCulture) ?? "N/A",
+                FailedJobs = failedJobs?.ToString(CultureInfo.InvariantCulture) ?? "N / A",
                 JobGroups = pausedJobGroups,
                 TriggerGroups = pausedTriggerGroups,
                 HistoryEnabled = histStore != null,
