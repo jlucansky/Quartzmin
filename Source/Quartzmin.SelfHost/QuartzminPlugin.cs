@@ -21,6 +21,8 @@ namespace Quartzmin.SelfHost
         public string Logo { get; set; }
         public string ProductName { get; set; }
 
+        public string VirtualPathRoot { get; set; }
+
         private IScheduler _scheduler;
         private IDisposable _webApp;
 
@@ -80,6 +82,8 @@ namespace Quartzmin.SelfHost
                 options.Logo = Logo;
             if (!string.IsNullOrEmpty(ProductName))
                 options.ProductName = ProductName;
+            if (!string.IsNullOrEmpty(VirtualPathRoot))
+                options.VirtualPathRoot = VirtualPathRoot;
 
             return options;
         }

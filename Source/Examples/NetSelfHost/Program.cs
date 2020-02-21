@@ -2,7 +2,7 @@
 using Quartzmin;
 using System.Threading;
 
-namespace NetCoreSelfHost
+namespace NetSelfHost
 {
     class Program
     {
