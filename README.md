@@ -4,8 +4,11 @@
 
 ---
 
-[![NuGet](https://img.shields.io/nuget/v/Quartzmin.svg)](https://www.nuget.org/packages/Quartzmin)
+[![NuGet](https://img.shields.io/nuget/v/QuartzminFork.svg)](https://www.nuget.org/packages/QuartzminFork)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
+QuartzminFork is  fork from Quartzmin!
+
 
 Quartzmin is powerful, easy to use web management tool for Quartz.NET
 
@@ -36,11 +39,11 @@ Quartzmin was created with **Semantic UI** and **Handlebars.Net** as the templat
 - See recent job history, state and error messages
 
 ## Install
-Quartzmin is available on [nuget.org](https://www.nuget.org/packages/Quartzmin)
+Quartzmin is available on [nuget.org](https://www.nuget.org/packages/QuartzminFork)
 
-To install Quartzmin, run the following command in the Package Manager Console
+To install QuartzminFork, run the following command in the Package Manager Console
 ```powershell
-PM> Install-Package Quartzmin
+PM> Install-Package QuartzminFork
 ```
 ## Minimum requirements
 - .NET Framework 4.5.2 
