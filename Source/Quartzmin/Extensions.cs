@@ -13,7 +13,7 @@ using Quartz.Impl.Matchers;
 using Quartz.Plugins.RecentHistory;
 
 #region Target-Specific Directives
-#if NETSTANDARD
+#if ( NETSTANDARD || NETCOREAPP )
 using HttpRequest = Microsoft.AspNetCore.Http.HttpRequest;
 #endif
 #if NETFRAMEWORK
@@ -37,7 +37,12 @@ namespace Quartzmin
 
         public static string ToDefaultFormat(this DateTime date)
         {
-            return date.ToString(DateTimeSettings.DefaultDateFormat + " " + DateTimeSettings.DefaultTimeFormat, CultureInfo.InvariantCulture);
+            return DateTimeSettings.UseLocalTime
+                ? date.ToLocalTime()
+                    .ToString(DateTimeSettings.DefaultDateFormat + " " + DateTimeSettings.DefaultTimeFormat,
+                        CultureInfo.InvariantCulture)
+                : date.ToString(DateTimeSettings.DefaultDateFormat + " " + DateTimeSettings.DefaultTimeFormat,
+                    CultureInfo.InvariantCulture);
         }
 
         public static Dictionary<string, string> ToDictionary(this IEnumerable<TimeZoneInfo> timeZoneInfos)
@@ -68,8 +73,8 @@ namespace Quartzmin
 
         public static string ReadAsString(this HttpRequest request)
         {
-#if NETSTANDARD
-            using (var ms = new MemoryStream())
+#if ( NETSTANDARD || NETCOREAPP )
+			using ( var ms = new MemoryStream())
             {
                 request.Body.CopyTo(ms);
                 return Encoding.UTF8.GetString(ms.ToArray());

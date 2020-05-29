@@ -1,14 +1,18 @@
 ﻿
 namespace Quartzmin.Helpers
 {
-#if NETSTANDARD
+#if (NETSTANDARD || NETCOREAPP)
     using Microsoft.AspNetCore.Mvc.Filters;
     using Microsoft.AspNetCore.Mvc;
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Serialization;
 
     public class JsonErrorResponseAttribute : ActionFilterAttribute
     {
-        static readonly JsonSerializerSettings _serializerSettings = new JsonSerializerSettings();
+        private static readonly JsonSerializerSettings _serializerSettings = new JsonSerializerSettings()
+        {
+            ContractResolver = new DefaultContractResolver(), // PascalCase as default
+        };
 
         public override void OnActionExecuted(ActionExecutedContext context)
         {

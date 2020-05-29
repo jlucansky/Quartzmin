@@ -24,8 +24,8 @@ namespace Quartz.Plugins.RecentHistory.Impl
             {
                 if (_data.TryGetValue(fireInstanceId, out var entry))
                     return Task.FromResult(entry);
-                else
-                    return Task.FromResult<ExecutionHistoryEntry>(null); ;
+                return Task.FromResult<ExecutionHistoryEntry>(null);
+                
             }
         }
 

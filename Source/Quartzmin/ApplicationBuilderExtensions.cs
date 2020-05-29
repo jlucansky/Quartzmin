@@ -1,4 +1,4 @@
-﻿#if NETSTANDARD
+﻿#if ( NETSTANDARD || NETCOREAPP )
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
@@ -13,65 +13,71 @@ namespace Quartzmin
 {
     public static class ApplicationBuilderExtensions
     {
-        public static void UseQuartzmin(this IApplicationBuilder app, QuartzminOptions options, Action<Services> configure = null)
+        public static void UseQuartzmin( this IApplicationBuilder app, QuartzminOptions options, Action<Services> configure = null )
         {
-            options = options ?? throw new ArgumentNullException(nameof(options));
+            options = options ?? throw new ArgumentNullException( nameof( options ) );
 
-            app.UseFileServer(options);
+            app.UseFileServer( options );
 
-            var services = Services.Create(options);
-            configure?.Invoke(services);
+            var services = Services.Create( options );
+            configure?.Invoke( services );
 
-            app.Use(async (context, next) =>
+            app.Use( async ( context, next ) =>
+             {
+                 context.Items[typeof( Services )] = services;
+                 await next.Invoke();
+             } );
+
+       
+#if NETCOREAPP
+            app.UseEndpoints( endpoints =>
             {
-                context.Items[typeof(Services)] = services;
-                await next.Invoke();
-            });
-            
-            app.UseExceptionHandler(errorApp =>
-            {
-                errorApp.Run(async context =>
-                {
-                    var ex = context.Features.Get<IExceptionHandlerFeature>().Error;
-                    context.Response.StatusCode = 500;
-                    context.Response.ContentType = "text/html";
-                    await context.Response.WriteAsync(services.ViewEngine.ErrorPage(ex));
-                });
-            });
-
-            app.UseMvc(routes =>
+                endpoints.MapControllerRoute( nameof( Quartzmin ), $"{options.VirtualPathRoot}/{{controller=Scheduler}}/{{action=Index}}" );
+            } );
+#else
+            app.UseMvc( routes =>
             {
                 routes.MapRoute(
-                    name: nameof(Quartzmin),
-                    template: "{controller=Scheduler}/{action=Index}");
-            });
+                    name: nameof( Quartzmin ),
+                    template: "{controller=Scheduler}/{action=Index}" );
+            } );
+#endif
         }
 
-        private static void UseFileServer(this IApplicationBuilder app, QuartzminOptions options)
+        private static void UseFileServer( this IApplicationBuilder app, QuartzminOptions options )
         {
             IFileProvider fs;
-            if (string.IsNullOrEmpty(options.ContentRootDirectory))
-                fs = new ManifestEmbeddedFileProvider(Assembly.GetExecutingAssembly(), "Content");
+            if ( string.IsNullOrEmpty( options.ContentRootDirectory ) )
+                fs = new ManifestEmbeddedFileProvider( Assembly.GetExecutingAssembly(), "Content" );
             else
-                fs = new PhysicalFileProvider(options.ContentRootDirectory);
+                fs = new PhysicalFileProvider( options.ContentRootDirectory );
 
             var fsOptions = new FileServerOptions()
             {
-                RequestPath = new PathString("/Content"),
+                RequestPath = new PathString( $"{options.VirtualPathRoot}/Content" ),
                 EnableDefaultFiles = false,
                 EnableDirectoryBrowsing = false,
                 FileProvider = fs
             };
 
-            app.UseFileServer(fsOptions);
+            app.UseFileServer( fsOptions );
         }
 
-        public static void AddQuartzmin(this IServiceCollection services)
+#if NETCOREAPP
+        public static void AddQuartzmin( this IServiceCollection services )
+        {
+            services.AddControllers()
+                .AddApplicationPart( Assembly.GetExecutingAssembly() )
+                .AddNewtonsoftJson();
+        }
+#else
+        public static void AddQuartzmin( this IServiceCollection services )
         {
             services.AddMvcCore()
-                .AddApplicationPart(Assembly.GetExecutingAssembly())
+                .AddApplicationPart( Assembly.GetExecutingAssembly() )
                 .AddJsonFormatters();
         }
+#endif
 
     }
 }

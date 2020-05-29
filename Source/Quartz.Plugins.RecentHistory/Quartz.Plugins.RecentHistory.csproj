@@ -20,6 +20,7 @@
     <Copyright>Copyright © 2018 Jan Lucansky</Copyright>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/jlucansky/Quartzmin</RepositoryUrl>
+    <PackageId>Quartz.Plugins.RecentHistoryFork</PackageId>
   </PropertyGroup>
 
   <ItemGroup>

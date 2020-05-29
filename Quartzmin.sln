@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28010.2050
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29326.143
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quartzmin", "Source\Quartzmin\Quartzmin.csproj", "{E14F97E0-8B3B-43A2-9820-2F4B94497253}"
 EndProject
@@ -19,7 +19,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetCoreSelfHost", "Source\E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormSelfHost", "Source\Examples\WinFormSelfHost\WinFormSelfHost.csproj", "{C54F4403-F40A-497C-B3A7-D1F1E1830D52}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCoreDocker", "Source\Examples\AspNetCoreDocker\AspNetCoreDocker.csproj", "{68D816F2-21BF-4376-ABF4-70390E4783C5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCoreDocker", "Source\Examples\AspNetCoreDocker\AspNetCoreDocker.csproj", "{68D816F2-21BF-4376-ABF4-70390E4783C5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCore3", "Source\Examples\AspNetCore3\AspNetCore3.csproj", "{3B2A3329-3BBB-4C6B-A42A-07EE565A2EB8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCore31", "Source\Examples\AspNetCore31\AspNetCore31.csproj", "{99D97A4F-703E-42C6-89D2-5752D9707AA5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,6 +63,14 @@ Global
 		{68D816F2-21BF-4376-ABF4-70390E4783C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68D816F2-21BF-4376-ABF4-70390E4783C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{68D816F2-21BF-4376-ABF4-70390E4783C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B2A3329-3BBB-4C6B-A42A-07EE565A2EB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B2A3329-3BBB-4C6B-A42A-07EE565A2EB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B2A3329-3BBB-4C6B-A42A-07EE565A2EB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B2A3329-3BBB-4C6B-A42A-07EE565A2EB8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99D97A4F-703E-42C6-89D2-5752D9707AA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99D97A4F-703E-42C6-89D2-5752D9707AA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99D97A4F-703E-42C6-89D2-5752D9707AA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99D97A4F-703E-42C6-89D2-5752D9707AA5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -69,43 +81,10 @@ Global
 		{7CF90DB9-37C4-4704-910E-BF1DB8AB79F1} = {B669A725-70A9-4E80-BAC7-9765A14CAAA4}
 		{C54F4403-F40A-497C-B3A7-D1F1E1830D52} = {B669A725-70A9-4E80-BAC7-9765A14CAAA4}
 		{68D816F2-21BF-4376-ABF4-70390E4783C5} = {B669A725-70A9-4E80-BAC7-9765A14CAAA4}
+		{3B2A3329-3BBB-4C6B-A42A-07EE565A2EB8} = {B669A725-70A9-4E80-BAC7-9765A14CAAA4}
+		{99D97A4F-703E-42C6-89D2-5752D9707AA5} = {B669A725-70A9-4E80-BAC7-9765A14CAAA4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0357313D-BD09-4C5D-AF0D-439B3BD33B5A}
-	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 9
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://tfs/defaultcollection
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = Source\\Quartzmin\\Quartzmin.csproj
-		SccProjectName1 = Source/Quartzmin
-		SccLocalPath1 = Source\\Quartzmin
-		SccProjectUniqueName2 = Source\\Quartz.Plugins.RecentHistory\\Quartz.Plugins.RecentHistory.csproj
-		SccProjectName2 = Source/Quartz.Plugins.RecentHistory
-		SccLocalPath2 = Source\\Quartz.Plugins.RecentHistory
-		SccProjectUniqueName3 = Source\\Quartzmin.SelfHost\\Quartzmin.SelfHost.csproj
-		SccProjectName3 = Source/Quartzmin.SelfHost
-		SccLocalPath3 = Source\\Quartzmin.SelfHost
-		SccProjectUniqueName4 = Source\\Examples\\NetCoreSelfHost\\NetCoreSelfHost.csproj
-		SccProjectTopLevelParentUniqueName4 = Quartzmin.sln
-		SccProjectName4 = Source/Examples/NetCoreSelfHost
-		SccLocalPath4 = Source\\Examples\\NetCoreSelfHost
-		SccProjectUniqueName5 = Source\\Examples\\AspNetCoreHost\\AspNetCoreHost.csproj
-		SccProjectTopLevelParentUniqueName5 = Quartzmin.sln
-		SccProjectName5 = Source/Examples/AspNetCoreHost
-		SccLocalPath5 = Source\\Examples\\AspNetCoreHost
-		SccProjectUniqueName6 = Source\\Examples\\AspNetWebHost\\AspNetWebHost.csproj
-		SccProjectTopLevelParentUniqueName6 = Quartzmin.sln
-		SccProjectName6 = Source/Examples/AspNetWebHost
-		SccLocalPath6 = Source\\Examples\\AspNetWebHost
-		SccProjectUniqueName7 = Source\\Examples\\WinFormSelfHost\\WinFormSelfHost.csproj
-		SccProjectTopLevelParentUniqueName7 = Quartzmin.sln
-		SccProjectName7 = Source/Examples/WinFormSelfHost
-		SccLocalPath7 = Source\\Examples\\WinFormSelfHost
-		SccProjectUniqueName8 = Source\\Examples\\AspNetCoreDocker\\AspNetCoreDocker.csproj
-		SccProjectTopLevelParentUniqueName8 = Quartzmin.sln
-		SccProjectName8 = Source/Examples/AspNetCoreDocker
-		SccLocalPath8 = Source\\Examples\\AspNetCoreDocker
 	EndGlobalSection
 EndGlobal

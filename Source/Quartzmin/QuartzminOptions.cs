@@ -44,6 +44,12 @@ namespace Quartzmin
             set => DateTimeSettings.DefaultTimeFormat = value;
         }
 
+        public bool UseLocalTime
+        {
+            get => DateTimeSettings.UseLocalTime;
+            set => DateTimeSettings.UseLocalTime = value;
+        }
+
         public QuartzminOptions()
         {
             DefaultSelectedType = new StringHandler() { Name = "String" };
@@ -70,6 +76,7 @@ namespace Quartzmin
             string.IsNullOrEmpty(SitePhysicalDirectory) ? null : Path.Combine(SitePhysicalDirectory, "Content");
         internal string ViewsRootDirectory => 
             string.IsNullOrEmpty(SitePhysicalDirectory) ? null : Path.Combine(SitePhysicalDirectory, "Views");
+
 #else
         internal string ContentRootDirectory => null;
         internal string ViewsRootDirectory => null;

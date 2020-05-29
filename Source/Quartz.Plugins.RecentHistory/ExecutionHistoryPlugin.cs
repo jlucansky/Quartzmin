@@ -23,7 +23,7 @@ namespace Quartz.Plugins.RecentHistory
             return Task.FromResult(0);
         }
 
-        public async Task Start(CancellationToken cancellationToken = default(CancellationToken))
+        public Task Start(CancellationToken cancellationToken = default(CancellationToken))
         {
             _store = _scheduler.Context.GetExecutionHistoryStore();
 
@@ -40,7 +40,7 @@ namespace Quartz.Plugins.RecentHistory
 
             _store.SchedulerName = _scheduler.SchedulerName;
 
-            await _store.Purge();
+            return _store.Purge();
         }
 
         public Task Shutdown(CancellationToken cancellationToken = default(CancellationToken))
@@ -48,7 +48,7 @@ namespace Quartz.Plugins.RecentHistory
             return Task.FromResult(0);
         }
 
-        public async Task JobToBeExecuted(IJobExecutionContext context, CancellationToken cancellationToken = default(CancellationToken))
+        public Task JobToBeExecuted(IJobExecutionContext context, CancellationToken cancellationToken = default(CancellationToken))
         {
             var entry = new ExecutionHistoryEntry()
             {
@@ -61,7 +61,7 @@ namespace Quartz.Plugins.RecentHistory
                 Job = context.JobDetail.Key.ToString(),
                 Trigger = context.Trigger.Key.ToString(),
             };
-            await _store.Save(entry);
+            return _store.Save(entry);
         }
 
         public async Task JobWasExecuted(IJobExecutionContext context, JobExecutionException jobException, CancellationToken cancellationToken = default(CancellationToken))
