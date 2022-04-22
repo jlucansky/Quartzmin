@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net452</TargetFrameworks>
+    <TargetFrameworks>net6.0;net48</TargetFrameworks>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
     <GeneratePackageOnBuild Condition="'$(Configuration)' == 'Release'">true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -23,11 +23,11 @@
     <RepositoryUrl>https://github.com/jlucansky/Quartzmin</RepositoryUrl>
   </PropertyGroup>
 
-  <PropertyGroup Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('$(TargetFramework)', '^net\d'))">
+  <PropertyGroup Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('$(TargetFramework)', '^net4\d'))">
     <DefineConstants>NETFRAMEWORK</DefineConstants>
     <AssemblySearchPaths>$(AssemblySearchPaths);{GAC}</AssemblySearchPaths>
   </PropertyGroup>
-  <PropertyGroup Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('$(TargetFramework)', '^netstandard\d'))">
+  <PropertyGroup Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('$(TargetFramework)', '^net6.\d'))">
     <DefineConstants>NETSTANDARD</DefineConstants>
   </PropertyGroup>
 
@@ -36,15 +36,15 @@
   </ItemGroup>
 
   <ItemGroup Condition="$(DefineConstants.Contains('NETFRAMEWORK'))">
-    <PackageReference Include="Microsoft.Owin.Hosting" Version="2.1.0" />
-    <PackageReference Include="Microsoft.Owin.Host.HttpListener" Version="2.1.0" />
-    <PackageReference Include="Microsoft.AspNet.WebApi.OwinSelfHost" Version="5.2.6" />
+    <PackageReference Include="Microsoft.Owin.Hosting" Version="4.2.1" />
+    <PackageReference Include="Microsoft.Owin.Host.HttpListener" Version="4.2.1" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.OwinSelfHost" Version="5.2.8" />
   </ItemGroup>
 
   <ItemGroup Condition="$(DefineConstants.Contains('NETSTANDARD'))">
-    <PackageReference Include="Microsoft.AspNetCore" Version="2.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.1.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="2.1.0" />
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
