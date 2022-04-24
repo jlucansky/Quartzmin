@@ -74,4 +74,8 @@
     <EmbeddedResource Include="TypeHandlers\*.js" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="Content\Scripts\quartzHub.js" />
+  </ItemGroup>
+
 </Project>

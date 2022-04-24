@@ -3,11 +3,11 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using System;
 using System.Reflection;
+using Quartzmin.Hubs;
 
 namespace Quartzmin
 {
@@ -40,12 +40,14 @@ namespace Quartzmin
             });
 
             app.UseRouting();
-            
+
             app.UseEndpoints(routes =>
             {
                 routes.MapControllerRoute(
                     name: nameof(Quartzmin),
                     pattern: "{controller=Scheduler}/{action=Index}");
+                
+                routes.MapHub<QuartzHub>("quartzHub");
             });
         }
 
@@ -70,9 +72,12 @@ namespace Quartzmin
 
         public static void AddQuartzmin(this IServiceCollection services)
         {
-            services.AddMvcCore()
+            services.AddSignalR();
+            
+            services.AddMvc()
                 .AddApplicationPart(Assembly.GetExecutingAssembly())
                 .AddNewtonsoftJson();
+
         }
 
     }
