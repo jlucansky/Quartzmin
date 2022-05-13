@@ -1,27 +1,18 @@
-﻿using Quartz;
-using Quartzmin.Helpers;
-using Quartzmin.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
-#region Target-Specific Directives
-#if NETSTANDARD
 using Microsoft.AspNetCore.Mvc;
-#endif
-#if NETFRAMEWORK
-using System.Web.Http;
-using IActionResult = System.Web.Http.IHttpActionResult;
-#endif
-#endregion
+using Quartz;
+using Quartzmin.Helpers;
+using Quartzmin.Models;
 
 namespace Quartzmin.Controllers
 {
     public class CalendarsController : PageControllerBase
     {
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> IndexAsync()
         {
             var calendarNames = await Scheduler.GetCalendarNames();
 
@@ -30,9 +21,15 @@ namespace Quartzmin.Controllers
             foreach (string name in calendarNames)
             {
                 var cal = await Scheduler.GetCalendar(name);
-                list.Add(new CalendarListItem() { Name = name, Description = cal.Description, Type = cal.GetType() });
+                if (cal != null)
+                {
+                    list.Add(new CalendarListItem
+                    {
+                        Name = name, Description = cal.Description, Type = cal.GetType()
+                    });
+                }
             }
-            
+
             return View(list);
         }
 
@@ -40,16 +37,19 @@ namespace Quartzmin.Controllers
         public IActionResult New()
         {
             ViewBag.IsNew = true;
-            return View("Edit", new[] { new CalendarViewModel()
-            {
-                IsRoot = true,
-                Type = "cron",
-                TimeZone = TimeZoneInfo.Local.Id,
-            }});
+            return View("Edit",
+                new[]
+                {
+                    new CalendarViewModel
+                    {
+                        IsRoot = true, Type = "cron",
+                        TimeZone = TimeZoneInfo.Local.Id
+                    }
+                });
         }
 
         [HttpGet]
-        public async Task<IActionResult> Edit(string name)
+        public async Task<IActionResult> EditAsync(string name)
         {
             var calendar = await Scheduler.GetCalendar(name);
 
@@ -69,16 +69,20 @@ namespace Quartzmin.Controllers
         private void RemoveLastEmpty(List<string> list)
         {
             if (list?.Count > 0 && string.IsNullOrEmpty(list.Last()))
+            {
                 list.RemoveAt(list.Count - 1);
+            }
         }
 
         [HttpPost, JsonErrorResponse]
-        public async Task<IActionResult> Save([FromBody] CalendarViewModel[] chain, bool isNew)
+        public async Task<IActionResult> SaveAsync([FromBody] CalendarViewModel[] chain, bool isNew)
         {
             var result = new ValidationResult();
 
             if (chain.Length == 0 || string.IsNullOrEmpty(chain[0].Name))
+            {
                 result.Errors.Add(ValidationError.EmptyField(nameof(CalendarViewModel.Name)));
+            }
 
             for (int i = 0; i < chain.Length; i++)
             {
@@ -90,15 +94,17 @@ namespace Quartzmin.Controllers
                 errors.ForEach(x => x.SegmentIndex = i);
                 result.Errors.AddRange(errors);
             }
-            
+
             if (result.Success)
             {
                 string name = chain[0].Name;
 
                 ICalendar existing = null;
 
-                if (isNew == false)
+                if (!isNew && name != null)
+                {
                     existing = await Scheduler.GetCalendar(name);
+                }
 
                 ICalendar root = null, current = null;
                 for (int i = 0; i < chain.Length; i++)
@@ -106,20 +112,29 @@ namespace Quartzmin.Controllers
                     ICalendar newCal = chain[i].Type.Equals("custom") ? existing : chain[i].BuildCalendar();
 
                     if (newCal == null)
+                    {
                         break;
+                    }
 
                     if (i == 0)
+                    {
                         root = newCal;
+                    }
                     else
+                    {
                         current.CalendarBase = newCal;
+                    }
 
                     current = newCal;
                     existing = existing?.CalendarBase;
                 }
-                
+
                 if (root == null)
                 {
-                    result.Errors.Add(new ValidationError() { Field = nameof(CalendarViewModel.Type), Reason = "Cannot create calendar.", SegmentIndex = 0 });
+                    result.Errors.Add(new ValidationError()
+                    {
+                        Field = nameof(CalendarViewModel.Type), Reason = "Cannot create calendar.", SegmentIndex = 0
+                    });
                 }
                 else
                 {
@@ -135,15 +150,15 @@ namespace Quartzmin.Controllers
             public string Name { get; set; }
         }
 
-
         [HttpPost, JsonErrorResponse]
-        public async Task<IActionResult> Delete([FromBody] DeleteArgs args)
+        public async Task<IActionResult> DeleteAsync([FromBody] DeleteArgs args)
         {
             if (!await Scheduler.DeleteCalendar(args.Name))
+            {
                 throw new InvalidOperationException("Cannot delete calendar " + args.Name);
+            }
 
             return NoContent();
         }
-
     }
 }

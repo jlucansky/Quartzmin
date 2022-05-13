@@ -1,19 +1,18 @@
-﻿using HandlebarsDotNet;
-using Quartzmin.Models;
-using Quartzmin.TypeHandlers;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Web;
-
-using static Quartzmin.Controllers.PageControllerBase;
-
-namespace Quartzmin.Helpers
+﻿namespace Quartzmin.Helpers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.IO;
+    using System.Linq;
+    using System.Reflection;
+    using System.Text;
+    using System.Web;
+    using HandlebarsDotNet;
+    using Quartzmin.Models;
+    using Quartzmin.TypeHandlers;
+    using static Quartzmin.Controllers.PageControllerBase;
+
     internal class HandlebarsHelpers
     {
         Services _services;
@@ -32,34 +31,60 @@ namespace Quartzmin.Helpers
         {
             IHandlebars h = _services.Handlebars;
 
-            h.RegisterHelper("Upper", (o, c, a) => o.Write(a[0].ToString().ToUpper()));
-            h.RegisterHelper("Lower", (o, c, a) => o.Write(a[0].ToString().ToLower()));
-            h.RegisterHelper("LocalTimeZoneInfoId", (o, c, a) => o.Write(TimeZoneInfo.Local.Id));
-            h.RegisterHelper("SystemTimeZonesJson", (o, c, a) => Json(o, c, TimeZoneInfo.GetSystemTimeZones().ToDictionary()));
-            h.RegisterHelper("DefaultDateFormat", (o, c, a) => o.Write(DateTimeSettings.DefaultDateFormat));
-            h.RegisterHelper("DefaultTimeFormat", (o, c, a) => o.Write(DateTimeSettings.DefaultTimeFormat));
-            h.RegisterHelper("DoLayout", (o, c, a) => c.Layout());
-            h.RegisterHelper("SerializeTypeHandler", (o, c, a) => o.WriteSafeString(((Services)a[0]).TypeHandlers.Serialize((TypeHandlerBase)c)));
-            h.RegisterHelper("Disabled", (o, c, a) => { if (IsTrue(a[0])) o.Write("disabled"); });
-            h.RegisterHelper("Checked", (o, c, a) => { if (IsTrue(a[0])) o.Write("checked"); });
-            h.RegisterHelper("nvl", (o, c, a) => o.Write(a[a[0] == null ? 1 : 0]));
+            h.RegisterHelper("Upper",
+                (o, c, a) => o.Write(a[0].ToString().ToUpper()));
+            h.RegisterHelper("Lower",
+                (o, c, a) => o.Write(a[0].ToString().ToLower()));
+            h.RegisterHelper("LocalTimeZoneInfoId",
+                (o, c, a) => o.Write(TimeZoneInfo.Local.Id));
+            h.RegisterHelper("SystemTimeZonesJson",
+                (o, c, a) => Json(o, c, TimeZoneInfo.GetSystemTimeZones().ToDictionary()));
+            h.RegisterHelper("DefaultDateFormat",
+                (o, c, a) => o.Write(DateTimeSettings.DefaultDateFormat));
+            h.RegisterHelper("DefaultTimeFormat",
+                (o, c, a) => o.Write(DateTimeSettings.DefaultTimeFormat));
+            h.RegisterHelper("DoLayout",
+                (o, c, a) => c.Layout());
+            h.RegisterHelper("SerializeTypeHandler",
+                (o, c, a) => o.WriteSafeString(((Services)a[0]).TypeHandlers.Serialize((TypeHandlerBase)c)));
+            h.RegisterHelper("Disabled",
+                (o, c, a) => { if (IsTrue(a[0])) o.Write("disabled"); });
+            h.RegisterHelper("Checked",
+                (o, c, a) => { if (IsTrue(a[0])) o.Write("checked"); });
+            h.RegisterHelper("nvl",
+                (o, c, a) => o.Write(a[a[0] == null ? 1 : 0]));
             h.RegisterHelper("not", (o, c, a) => o.Write(IsTrue(a[0]) ? "False" : "True"));
 
-            h.RegisterHelper(nameof(BaseUrl), (o, c, a) => o.WriteSafeString(BaseUrl));
-            h.RegisterHelper(nameof(MenuItemActionLink), MenuItemActionLink);
-            h.RegisterHelper(nameof(RenderJobDataMapValue), RenderJobDataMapValue);
-            h.RegisterHelper(nameof(ViewBag), ViewBag);
-            h.RegisterHelper(nameof(ActionUrl), ActionUrl);
-            h.RegisterHelper(nameof(Json), Json);
-            h.RegisterHelper(nameof(Selected), Selected);
-            h.RegisterHelper(nameof(isType), isType);
-            h.RegisterHelper(nameof(eachPair), eachPair);
-            h.RegisterHelper(nameof(eachItems), eachItems);
-            h.RegisterHelper(nameof(ToBase64), ToBase64);
-            h.RegisterHelper(nameof(footer), footer);
-            h.RegisterHelper(nameof(QuartzminVersion), QuartzminVersion);
-            h.RegisterHelper(nameof(Logo), Logo);
-            h.RegisterHelper(nameof(ProductName), ProductName);
+            h.RegisterHelper(nameof(BaseUrl),
+                (o, c, a) => o.WriteSafeString(BaseUrl));
+            h.RegisterHelper(nameof(MenuItemActionLink),
+                (o, c, a) => MenuItemActionLink(o, c, a));
+            h.RegisterHelper(nameof(RenderJobDataMapValue),
+                (o, c, a) => RenderJobDataMapValue(o, c, a));
+            h.RegisterHelper(nameof(ViewBag),
+                (o, c, a) => ViewBag(o, c, a));
+            h.RegisterHelper(nameof(ActionUrl),
+                (o, c, a) => ActionUrl(o, c, a));
+            h.RegisterHelper(nameof(Json),
+                (o, c, a) => Json(o, c, a));
+            h.RegisterHelper(nameof(Selected),
+                (o, c, a) => Selected(o, c, a));
+            h.RegisterHelper(nameof(isType),
+                (o, c, a) => isType(o, c, a));
+            h.RegisterHelper(nameof(eachPair),
+                (o, c, a) => eachPair(o, c, a));
+            h.RegisterHelper(nameof(eachItems),
+                (o, c, a) => eachItems(o, c, a));
+            h.RegisterHelper(nameof(ToBase64),
+                (o, c, a) => ToBase64(o, c, a));
+            h.RegisterHelper(nameof(footer),
+                (o, c, a) => footer(o, c, a));
+            h.RegisterHelper(nameof(QuartzminVersion),
+                (o, c, a) => QuartzminVersion(o, c, a));
+            h.RegisterHelper(nameof(Logo),
+                (o, c, a) => Logo(o, c, a));
+            h.RegisterHelper(nameof(ProductName),
+                (o, c, a) => ProductName(o, c, a));
         }
 
         static bool IsTrue(object value) => value?.ToString()?.Equals("true", StringComparison.OrdinalIgnoreCase) == true;
@@ -251,6 +276,7 @@ namespace Quartzmin.Helpers
 
         void footer(TextWriter writer, HelperOptions options, dynamic context, params object[] arguments)
         {
+            Console.WriteLine("==================================");
             IDictionary<string, object> viewBag = context.ViewBag;
 
             if (viewBag.TryGetValue("ShowFooter", out var show) && (bool)show == true)

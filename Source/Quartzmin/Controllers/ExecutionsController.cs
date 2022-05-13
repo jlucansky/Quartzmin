@@ -1,29 +1,20 @@
-﻿using Quartz;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Quartz;
+using Quartz.Impl.Matchers;
+using Quartz.Plugins.RecentHistory;
 using Quartzmin.Helpers;
 using Quartzmin.Models;
-using Quartz.Plugins.RecentHistory;
-using Quartz.Impl.Matchers;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Globalization;
-
-#region Target-Specific Directives
-#if NETSTANDARD
-using Microsoft.AspNetCore.Mvc;
-#endif
-#if NETFRAMEWORK
-using System.Web.Http;
-using IActionResult = System.Web.Http.IHttpActionResult;
-#endif
-#endregion
 
 namespace Quartzmin.Controllers
 {
     public class ExecutionsController : PageControllerBase
     {
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> IndexAsync()
         {
             var currentlyExecutingJobs = await Scheduler.GetCurrentlyExecutingJobs();
 
@@ -53,10 +44,12 @@ namespace Quartzmin.Controllers
         }
 
         [HttpPost, JsonErrorResponse]
-        public async Task<IActionResult> Interrupt([FromBody] InterruptArgs args)
+        public async Task<IActionResult> InterruptAsync([FromBody] InterruptArgs args)
         {
             if (!await Scheduler.Interrupt(args.Id))
+            {
                 throw new InvalidOperationException("Cannot interrupt execution " + args.Id);
+            }
 
             return NoContent();
         }

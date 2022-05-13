@@ -1,33 +1,24 @@
-﻿using Quartzmin.Helpers;
+﻿using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Quartzmin.Helpers;
 using Quartzmin.Models;
 using Quartzmin.TypeHandlers;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Threading;
-
-#region Target-Specific Directives
-#if NETSTANDARD
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http.Features;
-#endif
-#if NETFRAMEWORK
-using System.Web.Http;
-using IActionResult = System.Web.Http.IHttpActionResult;
-using System.Web.Http.Results;
-#endif
-#endregion
 
 namespace Quartzmin.Controllers
 {
     public class JobDataMapController : PageControllerBase
     {
         [HttpPost, JsonErrorResponse]
-        public async Task<IActionResult> ChangeType()
+        public async Task<IActionResult> ChangeTypeAsync()
         {
-            var formData = await Request.GetFormData();
+            var formData = await Request.GetFormDataAsync();
 
             TypeHandlerBase selectedType, targetType;
             try
@@ -37,10 +28,10 @@ namespace Quartzmin.Controllers
             }
             catch (JsonSerializationException ex) when (ex.Message.StartsWith("Could not create an instance of type"))
             {
-                return new BadRequestResult() { ReasonPhrase = "Unknown Type Handler" };
+                return new BadRequestResult { ReasonPhrase = "Unknown Type Handler" };
             }
 
-            var dataMapForm = (await formData.GetJobDataMapForm(includeRowIndex: false)).SingleOrDefault(); // expected single row
+            var dataMapForm = (await formData.GetJobDataMapFormAsync(includeRowIndex: false)).SingleOrDefault(); // expected single row
 
             object oldValue = selectedType.ConvertFrom(dataMapForm);
 
@@ -57,7 +48,6 @@ namespace Quartzmin.Controllers
             return Html(targetType.RenderView(Services, newValue));
         }
 
-#if NETSTANDARD
         private class BadRequestResult : IActionResult
         {
             public string ReasonPhrase { get; set; }
@@ -67,15 +57,6 @@ namespace Quartzmin.Controllers
                 return Task.FromResult(0);
             }
         }
-#endif
-#if NETFRAMEWORK
-        private class BadRequestResult : IActionResult
-        {
-            public string ReasonPhrase { get; set; }
-            public Task<System.Net.Http.HttpResponseMessage> ExecuteAsync(CancellationToken cancellationToken) =>
-                Task.FromResult(new System.Net.Http.HttpResponseMessage(System.Net.HttpStatusCode.BadRequest) { ReasonPhrase = ReasonPhrase });
-        }
-#endif
 
         [HttpGet, ActionName("TypeHandlers.js")]
         public IActionResult TypeHandlersScript()
@@ -92,10 +73,10 @@ namespace Quartzmin.Controllers
 
             string execStub = execStubBuilder.ToString();
 
-            var js = Services.TypeHandlers.GetScripts().ToDictionary(x => x.Key, 
+            var js = Services.TypeHandlers.GetScripts().ToDictionary(x => x.Key,
                 x => new JRaw("function(f) {" + x.Value + execStub + "}"));
 
-            return TextFile("var $typeHandlerScripts = " + JsonConvert.SerializeObject(js) + ";", 
+            return TextFile("var $typeHandlerScripts = " + JsonConvert.SerializeObject(js) + ";",
                 "application/javascript", Services.TypeHandlers.LastModified, etag);
         }
     }

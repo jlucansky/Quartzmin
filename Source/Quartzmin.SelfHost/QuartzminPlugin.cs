@@ -1,13 +1,10 @@
-﻿using Quartz;
-using Quartz.Spi;
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-
-#if NETSTANDARD
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
-#endif
+using Quartz;
+using Quartz.Spi;
 
 namespace Quartzmin.SelfHost
 {
@@ -30,7 +27,6 @@ namespace Quartzmin.SelfHost
             return Task.FromResult(0);
         }
 
-#if NETSTANDARD
         public async Task Start(CancellationToken cancellationToken = default(CancellationToken))
         {
             var host = Microsoft.AspNetCore.WebHost.CreateDefaultBuilder().Configure(app => {
@@ -48,17 +44,7 @@ namespace Quartzmin.SelfHost
 
             await host.StartAsync();
         }
-#endif
 
-#if NETFRAMEWORK
-        public Task Start(CancellationToken cancellationToken = default(CancellationToken))
-        {
-            _webApp = Microsoft.Owin.Hosting.WebApp.Start(Url, app => {
-                app.UseQuartzmin(CreateQuartzminOptions());
-            });
-            return Task.FromResult(0);
-        }
-#endif
         public Task Shutdown(CancellationToken cancellationToken = default(CancellationToken))
         {
             _webApp.Dispose();

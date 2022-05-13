@@ -1,29 +1,20 @@
-﻿using Quartz;
-using Quartz.Impl.Matchers;
-using Quartzmin.Helpers;
-using Quartzmin.Models;
-using Quartz.Plugins.RecentHistory;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
-#region Target-Specific Directives
-#if NETSTANDARD
 using Microsoft.AspNetCore.Mvc;
-#endif
-#if NETFRAMEWORK
-using System.Web.Http;
-using IActionResult = System.Web.Http.IHttpActionResult;
-#endif
-#endregion
+using Quartz;
+using Quartz.Impl.Matchers;
+using Quartz.Plugins.RecentHistory;
+using Quartzmin.Helpers;
+using Quartzmin.Models;
 
 namespace Quartzmin.Controllers
 {
     public class JobsController : PageControllerBase
     {
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> IndexAsync()
         {
             var keys = (await Scheduler.GetJobKeys(GroupMatcher<JobKey>.AnyGroup())).OrderBy(x => x.ToString());
             var list = new List<JobListItem>();
@@ -89,7 +80,7 @@ namespace Quartzmin.Controllers
         {
             if (!EnsureValidKey(name, group)) return BadRequest();
 
-            var jobDataMap = (await Request.GetJobDataMapForm()).GetModel(Services);
+            var jobDataMap = (await Request.GetJobDataMapFormAsync()).GetModel(Services);
 
             var result = new ValidationResult();
 
@@ -142,13 +133,13 @@ namespace Quartzmin.Controllers
                 throw new InvalidOperationException("Job " + key + " not found.");
 
             return job;
-        } 
+        }
 
         [HttpPost, JsonErrorResponse]
         public async Task<IActionResult> Save([FromForm] JobViewModel model, bool trigger)
         {
             var jobModel = model.Job;
-            var jobDataMap = (await Request.GetJobDataMapForm()).GetModel(Services);
+            var jobDataMap = (await Request.GetJobDataMapFormAsync()).GetModel(Services);
 
             var result = new ValidationResult();
 

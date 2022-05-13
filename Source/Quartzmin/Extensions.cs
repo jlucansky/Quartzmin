@@ -1,25 +1,17 @@
-﻿using Quartz;
-using Quartzmin.Models;
-using Quartzmin.TypeHandlers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using System.IO;
+using Quartz;
 using Quartz.Impl.Matchers;
 using Quartz.Plugins.RecentHistory;
-
-#region Target-Specific Directives
-#if NETSTANDARD
+using Quartzmin.Models;
+using Quartzmin.TypeHandlers;
 using HttpRequest = Microsoft.AspNetCore.Http.HttpRequest;
-#endif
-#if NETFRAMEWORK
-using HttpRequest = System.Net.Http.HttpRequestMessage;
-#endif
-#endregion
 
 namespace Quartzmin
 {
@@ -68,16 +60,11 @@ namespace Quartzmin
 
         public static string ReadAsString(this HttpRequest request)
         {
-#if NETSTANDARD
             using (var ms = new MemoryStream())
             {
                 request.Body.CopyTo(ms);
                 return Encoding.UTF8.GetString(ms.ToArray());
             }
-#endif
-#if NETFRAMEWORK
-            return request.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-#endif
         }
 
         public static JobDataMap GetQuartzJobDataMap(this IEnumerable<JobDataMapItemBase> models)
@@ -269,7 +256,7 @@ namespace Quartzmin
                     if (t.StartTimeUtc < DateTimeOffset.UtcNow) b.StartNow();
                     return b.Build();
                 }).ToArray();
-                
+
                 // delete old job
                 await scheduler.DeleteJob(jobKey);
 
@@ -394,7 +381,7 @@ namespace Quartzmin
 
             return result;
         }
-        
+
 
         public static string ToShortFormat(this TimeOfDay timeOfDay)
         {
@@ -465,7 +452,7 @@ namespace Quartzmin
                 if (detailed)
                     detailsHtml = $"Job: <b>{entry.Job}</b><br>Trigger: <b>{entry.Trigger}</b><br>";
 
-                hst.AddBar(duration?.TotalSeconds ?? 1, 
+                hst.AddBar(duration?.TotalSeconds ?? 1,
                     $"{detailsHtml}Fired: <b>{entry.ActualFireTimeUtc.ToDefaultFormat()} UTC</b>{durationHtml}{delayHtml}"+
                     $"<br>State: <b>{state}</b>{errorHtml}",
                     cssClass);

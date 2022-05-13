@@ -1,12 +1,10 @@
-﻿#if NETSTANDARD
-
+﻿using System;
+using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
-using System;
-using System.Reflection;
 using Quartzmin.Hubs;
 
 namespace Quartzmin
@@ -27,7 +25,7 @@ namespace Quartzmin
                 context.Items[typeof(Services)] = services;
                 await next.Invoke();
             });
-            
+
             app.UseExceptionHandler(errorApp =>
             {
                 errorApp.Run(async context =>
@@ -46,7 +44,7 @@ namespace Quartzmin
                 routes.MapControllerRoute(
                     name: nameof(Quartzmin),
                     pattern: "{controller=Scheduler}/{action=Index}");
-                
+
                 routes.MapHub<QuartzHub>("quartzHub");
             });
         }
@@ -73,7 +71,7 @@ namespace Quartzmin
         public static void AddQuartzmin(this IServiceCollection services)
         {
             services.AddSignalR();
-            
+
             services.AddMvc()
                 .AddApplicationPart(Assembly.GetExecutingAssembly())
                 .AddNewtonsoftJson();
@@ -82,5 +80,3 @@ namespace Quartzmin
 
     }
 }
-
-#endif

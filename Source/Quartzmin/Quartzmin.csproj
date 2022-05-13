@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net6.0;net48</TargetFrameworks>
+    <TargetFramework>net6.0</TargetFramework>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
     <GeneratePackageOnBuild Condition="'$(Configuration)' == 'Release'">true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -24,14 +24,6 @@
     <RepositoryUrl>https://github.com/jlucansky/Quartzmin</RepositoryUrl>
   </PropertyGroup>
 
-  <PropertyGroup Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('$(TargetFramework)', '^net4\d'))">
-    <DefineConstants>NETFRAMEWORK</DefineConstants>
-    <AssemblySearchPaths>$(AssemblySearchPaths);{GAC}</AssemblySearchPaths>
-  </PropertyGroup>
-  <PropertyGroup Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('$(TargetFramework)', '^net6.\d'))">
-    <DefineConstants>NETSTANDARD</DefineConstants>
-  </PropertyGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Quartz.Plugins.RecentHistory\Quartz.Plugins.RecentHistory.csproj" />
   </ItemGroup>
@@ -42,15 +34,7 @@
     <PackageReference Include="Quartz" Version="3.4.0" />
   </ItemGroup>
   
-  <ItemGroup Condition="$(DefineConstants.Contains('NETFRAMEWORK'))">
-    <Reference Include="System.Web" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <PackageReference Include="Microsoft.AspNet.WebApi" Version="5.2.8" />
-    <PackageReference Include="Microsoft.AspNet.WebApi.Owin" Version="5.2.8" />
-    <PackageReference Include="Microsoft.Owin.StaticFiles" Version="4.2.1" />
-  </ItemGroup>
-
-  <ItemGroup Condition="$(DefineConstants.Contains('NETSTANDARD'))">
+  <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />

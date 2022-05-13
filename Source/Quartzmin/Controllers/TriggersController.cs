@@ -1,29 +1,20 @@
-﻿using Quartz;
-using Quartz.Impl.Matchers;
-using Quartzmin.Helpers;
-using Quartzmin.Models;
-using Quartz.Plugins.RecentHistory;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
-#region Target-Specific Directives
-#if NETSTANDARD
 using Microsoft.AspNetCore.Mvc;
-#endif
-#if NETFRAMEWORK
-using System.Web.Http;
-using IActionResult = System.Web.Http.IHttpActionResult;
-#endif
-#endregion
+using Quartz;
+using Quartz.Impl.Matchers;
+using Quartz.Plugins.RecentHistory;
+using Quartzmin.Helpers;
+using Quartzmin.Models;
 
 namespace Quartzmin.Controllers
 {
     public class TriggersController : PageControllerBase
     {
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> IndexAsync()
         {
             var keys = (await Scheduler.GetTriggerKeys(GroupMatcher<TriggerKey>.AnyGroup())).OrderBy(x => x.ToString());
             var list = new List<TriggerListItem>();
@@ -70,7 +61,7 @@ namespace Quartzmin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> New()
+        public async Task<IActionResult> NewAsync()
         {
             var model = await TriggerPropertiesViewModel.Create(Scheduler);
             var jobDataMap = new JobDataMapModel() { Template = JobDataMapItemTemplate };
@@ -145,8 +136,8 @@ namespace Quartzmin.Controllers
         public async Task<IActionResult> Save([FromForm] TriggerViewModel model)
         {
             var triggerModel = model.Trigger;
-            var jobDataMap = (await Request.GetJobDataMapForm()).GetModel(Services);
-            
+            var jobDataMap = (await Request.GetJobDataMapFormAsync()).GetModel(Services);
+
             var result = new ValidationResult();
 
             model.Validate(result.Errors);
@@ -293,7 +284,7 @@ namespace Quartzmin.Controllers
             var list = new List<object>();
             foreach (var key in keys)
             {
-                list.Add(new 
+                list.Add(new
                 {
                     TriggerName = key.Name,
                     TriggerGroup = key.Group,
@@ -304,7 +295,7 @@ namespace Quartzmin.Controllers
             return View(list);
         }
 
-        
+
         [HttpGet]
         public Task<IActionResult> Duplicate(string name, string group)
         {
