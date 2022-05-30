@@ -146,6 +146,7 @@
             foreach (var pair in dict)
             {
                 viewBag[pair.Key] = pair.Value;
+                Console.WriteLine($"================{pair.Key}:{viewBag[pair.Key]}==================");
             }
         }
 
@@ -276,10 +277,11 @@
 
         void footer(TextWriter writer, HelperOptions options, dynamic context, params object[] arguments)
         {
-            Console.WriteLine("==================================");
             IDictionary<string, object> viewBag = context.ViewBag;
 
-            if (viewBag.TryGetValue("ShowFooter", out var show) && (bool)show == true)
+            Console.WriteLine($"================{viewBag["ShowFooter"]}==================");
+
+            if (viewBag.TryGetValue("ShowFooter", out var show) && (bool)show)
             {
                 options.Template(writer, (object)context);
             }

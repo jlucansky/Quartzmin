@@ -18,7 +18,7 @@ connection.start().then(function () {
 });
 
 setInterval(function() {
-    connection.invoke("GetScheduleInfo").catch(function (err) {
+    connection.invoke("GetScheduleInfoAsync").catch(function (err) {
         return console.error(err.toString());
     });
 }, 10000);
