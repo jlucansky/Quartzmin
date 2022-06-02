@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
@@ -11,6 +13,7 @@ using Quartzmin.Models;
 
 namespace Quartzmin.Controllers
 {
+    [Authorize (AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
     public abstract partial class PageControllerBase : ControllerBase
     {
         private static readonly JsonSerializerSettings _serializerSettings = new JsonSerializerSettings()

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <base href="{{BaseUrl}}">
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <title>Login - Quartzmin</title>
+
+    <link rel="icon" type="image/png" sizes="16x16" href="Content/Images/favicons/favicon-16.png">
+    <link rel="icon" type="image/png" sizes="24x24" href="Content/Images/favicons/favicon-24.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="Content/Images/favicons/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="Content/Images/favicons/favicon-48.png">
+    <link rel="icon" type="image/png" sizes="64x64" href="Content/Images/favicons/favicon-64.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="Content/Images/favicons/favicon-192.png">
+    <link rel="icon" type="image/png" sizes="256x256" href="Content/Images/favicons/favicon-256.png">
+
+    <link rel="stylesheet" href="Content/Lib/semantic-ui/semantic.min.css" type="text/css">
+    <link rel="stylesheet" href="Content/Lib/semantic-ui/calendar.min.css" type="text/css" />
+    <link rel="stylesheet" href="Content/Fonts/Lato.css" type="text/css" />
+    <link rel="stylesheet" href="Content/Site.css" type="text/css" />
+
+    <script src="Content/Lib/jquery.min.js"></script>
+</head>
+<body>
+<div class="ui top inverted stackable menu" id="top-menu">
+    <div class="ui container">
+        <div class="ui header item">
+            <img class="logo" src="{{Logo}}">{{ProductName}} Quartzmin
+        </div>
+    </div>
+</div>
+
+<div class="ui main container">
+    <div class="ui container">
+        <label for="Username"><b>Username</b></label>
+        <input type="text" placeholder="Enter Username" id="Username" name="Username" required>
+
+        <label for="Password"><b>Password</b></label>
+        <input type="password" placeholder="Enter Password" id="Password" name="Password" required>
+
+        <button class="ui button" id="login">Login</button>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        function save(triggerNow) {
+            var object = {
+                Username: $("#UserName").val(),
+                Passowrd: $("#Password").val()
+            };
+            var json = JSON.stringify(object);
+            $.ajax({
+                type: 'POST', url: '{{ActionUrl "Login"}}',
+                data: JSON.stringify({data: 's' + btoa(json)}) , processData: false, 
+                contentType: "application/json", dataType: "application/json", cache: false,
+                success: function (data) {
+                    console.log(data);
+                },
+                error: function (e) {
+                }
+            });
+        }
+
+        $('#login').click(function () { save(false); });
+
+    });
+</script>
+
+</body>
+</html>
