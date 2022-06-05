@@ -1,0 +1,64 @@
+# ASP.NET Core (.NET Framework)
+# Build and test ASP.NET Core projects targeting the full .NET Framework.
+# Add steps that publish symbols, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- SignalR
+
+pool:
+  vmImage: ubuntu-latest
+
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+
+steps:
+- task: NuGetToolInstaller@1
+
+- task: NuGetCommand@2
+  inputs:
+    restoreSolution: '$(solution)'
+
+- script: nbgv cloud
+  displayName: Set Version
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: '**/Source/**/*.csproj'
+    arguments: '--configuration $(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Publish and zip (Quartzmin)'
+  inputs:
+    command: 'publish'
+    projects: './Source/Quartzmin/Quartzmin.csproj'
+    publishWebProjects: false
+    arguments: '--configuration $(buildConfiguration) -r $(targetRuntime) --no-self-contained --output $(Build.ArtifactStagingDirectory)/Quartzmin/'
+    zipAfterPublish: true
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Build artifacts (Quartzmin)'
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/Quartzmin/'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Publish and zip (Quartzmin.SelfHost)'
+  inputs:
+    command: 'publish'
+    projects: './Source/Quartzmin.SelfHost/Quartzmin.SelfHost.csproj'
+    publishWebProjects: false
+    arguments: '--configuration $(buildConfiguration) -r $(targetRuntime) --no-self-contained --output $(Build.ArtifactStagingDirectory)/Quartzmin.SelfHost/'
+    zipAfterPublish: true
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Build artifacts (Quartzmin.SelfHost)'
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/Quartzmin.SelfHost/'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
