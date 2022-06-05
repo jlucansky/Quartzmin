@@ -39,4 +39,10 @@
     <None Remove="*.vspscc" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Update="Nerdbank.GitVersioning">
+      <Version>3.5.107</Version>
+    </PackageReference>
+  </ItemGroup>
+
 </Project>

@@ -47,18 +47,13 @@
             {{MenuItemActionLink 'History'}}
             {{MenuItemActionLink 'Calendars'}}
 
-            <!--
             <div class="right menu">
                 <div class="ui dropdown item">
-                    <i class="user circle large icon"></i>
-                    domain\user
-                    <i class="dropdown icon"></i>
-                    <div class="menu">
-                        <a class="item center" href="#">Logout</a>
-                    </div>
+                    <form id="logout" method="post" action="{{ActionUrl "Logout" "Auth"}}">
+                        <a class="item center" onclick="this.parentNode.submit();">Logout</a>
+                    </form>
                 </div>
             </div>
-            -->
         </div>
     </div>
 

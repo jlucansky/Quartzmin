@@ -1,21 +1,30 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Quartzmin;
 
-namespace Quartzmin.AspNetCore
+namespace AspNetCoreHost;
+
+public class Startup
 {
-    public class Startup
-    {
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddQuartzmin();
-        }
+    private readonly string _virtialPathRoot = "/q";
 
-        public void Configure(IApplicationBuilder app)
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services.AddQuartzmin(_virtialPathRoot);
+    }
+
+    public void Configure(IApplicationBuilder app)
+    {
+        app.UseRouting();
+        app.UseEndpoints(endpoints =>
         {
-            app.UseQuartzmin(new QuartzminOptions()
-            {
-                Scheduler = DemoScheduler.Create().Result,
-            });
-        }
+            endpoints.MapGet("/", () => "Hello");
+        });
+
+        app.UseQuartzmin(new QuartzminOptions()
+        {
+            Scheduler = DemoScheduler.Create().Result,
+            VirtualPathRoot = _virtialPathRoot
+        });
     }
 }

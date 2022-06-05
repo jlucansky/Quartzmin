@@ -42,7 +42,7 @@
         {{#each Model}}
         <tr>
             <td class="job-name">
-                <a href="{{ActionUrl 'Edit' @ControllerName group=Group name=JobName}}" title="{{Description}}">{{JobName}}</a>
+                <a href="{{ActionUrl 'Edit' 'Jobs' group=Group name=JobName}}" title="{{Description}}">{{JobName}}</a>
             </td>
             <td class="job-group">{{Group}}</td>
             <td class="job-type">{{Type}}</td>

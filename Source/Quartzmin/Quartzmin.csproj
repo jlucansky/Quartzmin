@@ -1,66 +1,73 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
-    <GeneratePackageOnBuild Condition="'$(Configuration)' == 'Release'">true</GeneratePackageOnBuild>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <NoWarn>1591</NoWarn>
-    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>true</ImplicitUsings>
+        <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+        <GeneratePackageOnBuild Condition="'$(Configuration)' == 'Release'">true</GeneratePackageOnBuild>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <NoWarn>1591</NoWarn>
+        <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
 
-    <Version>1.0.3</Version>
-    <Product>Quartzmin</Product>
-    <Title>Web management tool for Quartz.NET</Title>
-    <Authors>Jan Lucansky</Authors>
-    <PackageProjectUrl>https://github.com/jlucansky/Quartzmin</PackageProjectUrl>
-    <PackageIconUrl>https://raw.githubusercontent.com/jlucansky/public-assets/master/Quartzmin/avatar.png</PackageIconUrl>
-    <Description>Powerful, easy to use web management tool for Quartz.NET</Description>
-    <PackageTags>quartz;web;ui</PackageTags>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <FileVersion>1.0.0.0</FileVersion>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <Copyright>Copyright © 2018 Jan Lucansky</Copyright>
-    <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/jlucansky/Quartzmin</RepositoryUrl>
-  </PropertyGroup>
+        <Version>1.0.3</Version>
+        <Product>Quartzmin</Product>
+        <Title>Web management tool for Quartz.NET</Title>
+        <Authors>Jan Lucansky</Authors>
+        <PackageProjectUrl>https://github.com/jlucansky/Quartzmin</PackageProjectUrl>
+        <PackageIconUrl>https://raw.githubusercontent.com/jlucansky/public-assets/master/Quartzmin/avatar.png</PackageIconUrl>
+        <Description>Powerful, easy to use web management tool for Quartz.NET</Description>
+        <PackageTags>quartz;web;ui</PackageTags>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+        <FileVersion>1.0.0.0</FileVersion>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <Copyright>Copyright © 2018 Jan Lucansky</Copyright>
+        <RepositoryType>git</RepositoryType>
+        <RepositoryUrl>https://github.com/jlucansky/Quartzmin</RepositoryUrl>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Quartz.Plugins.RecentHistory\Quartz.Plugins.RecentHistory.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Quartz.Plugins.RecentHistory\Quartz.Plugins.RecentHistory.csproj" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Handlebars.Net" Version="1.11.5" />
-    <PackageReference Include="JsonSubTypes" Version="1.9.0" />
-    <PackageReference Include="Quartz" Version="3.4.0" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.5" />
-    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="6.0.5" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="6.0.0" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Handlebars.Net" Version="2.1.2" />
+        <PackageReference Include="JsonSubTypes" Version="1.9.0" />
+        <PackageReference Include="Quartz" Version="3.4.0" />
+        <PackageReference Update="Nerdbank.GitVersioning">
+            <Version>3.5.107</Version>
+        </PackageReference>
+    </ItemGroup>
 
-  <ItemGroup>
-    <None Include="..\..\LICENSE" Pack="true" PackagePath="" />
-  </ItemGroup>
+    <ItemGroup>
+        <FrameworkReference Include="Microsoft.AspNetCore.App" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.5" />
+        <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="2.2.0" />
+        <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="6.0.5" />
+        <PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="6.0.0" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <None Remove="*.vspscc" />
-  </ItemGroup>
+    <ItemGroup>
+        <None Include="..\..\LICENSE" Pack="true" PackagePath="" />
+        <None Update="users.json">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Include="Content\**" />
-    <EmbeddedResource Include="Views\**" />
-    <EmbeddedResource Include="TypeHandlers\*.hbs" />
-    <EmbeddedResource Include="TypeHandlers\*.js" />
-  </ItemGroup>
+    <ItemGroup>
+        <None Remove="*.vspscc" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <Content Include="Content\Scripts\quartzHub.js" />
-    <Content Include="Views\Auth\Login.hbs" />
-  </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Include="Content\**" />
+        <EmbeddedResource Include="Views\**" />
+        <EmbeddedResource Include="TypeHandlers\*.hbs" />
+        <EmbeddedResource Include="TypeHandlers\*.js" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="Content\Scripts\quartzHub.js" />
+        <Content Include="Views\Auth\Login.hbs" />
+    </ItemGroup>
 
 </Project>

@@ -49,8 +49,8 @@
             </td>
             <td class="job-group">{{JobGroup}}</td>
             <td colspan="6" style="text-align: right">
-                <a href="{{ActionUrl 'PauseJob' @ControllerName}}" class="ui super tiny button btn-pause-all"><i class="pause icon"></i>Pause All</a>
-                <a href="{{ActionUrl 'ResumeJob' @ControllerName}}" class="ui super tiny button btn-resume-all"><i class="play icon"></i>Resume All</a>
+                <a href="{{ActionUrl 'PauseJob' 'Triggers'}}" class="ui super tiny button btn-pause-all"><i class="pause icon"></i>Pause All</a>
+                <a href="{{ActionUrl 'ResumeJob' 'Triggers'}}" class="ui super tiny button btn-resume-all"><i class="play icon"></i>Resume All</a>
             </td>
         </tr>
         {{/if}}
@@ -58,7 +58,7 @@
         <tr>
             <td class="trigger-name">
                 {{#if IsPaused}}<i class="small pause icon" title="Paused"></i>{{/if}}
-                <a href="{{ActionUrl 'Edit' @ControllerName group=TriggerGroup name=TriggerName}}" title="{{Description}}">{{TriggerName}}</a>
+                <a href="{{ActionUrl 'Edit' 'Triggers' group=TriggerGroup name=TriggerName}}" title="{{Description}}">{{TriggerName}}</a>
             </td>
             <td class="trigger-group">{{TriggerGroup}}</td>
             <td class="schedule-desc" data-content="{{ScheduleDescription}}">

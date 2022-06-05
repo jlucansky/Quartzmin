@@ -35,37 +35,54 @@
 
 <div class="ui main container">
     <div class="ui container">
-        <label for="Username"><b>Username</b></label>
-        <input type="text" placeholder="Enter Username" id="Username" name="Username" required>
-
-        <label for="Password"><b>Password</b></label>
-        <input type="password" placeholder="Enter Password" id="Password" name="Password" required>
-
-        <button class="ui button" id="login">Login</button>
+        <form class="ui form" id="form">
+            <label for="Username"><b>Username</b></label>
+            <input type="text" placeholder="Enter Username" id="Username" name="Username" required>
+    
+            <label for="Password"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" id="Password" name="Password" required>
+            
+            <div class="ui error message">
+                <div class="header">Something wrong!</div>
+                <p id="failed">You can only sign up for an account once with a given e-mail address.</p>
+            </div>
+            
+            <div style="margin-top: 5px;">
+                <span class="ui button" id="login">Login</span>
+            </div>
+        </form>
     </div>
 </div>
 
 <script>
     $(function () {
-        function save(triggerNow) {
-            var object = {
-                Username: $("#UserName").val(),
-                Passowrd: $("#Password").val()
-            };
+        function save(object) {
             var json = JSON.stringify(object);
             $.ajax({
                 type: 'POST', url: '{{ActionUrl "Login"}}',
-                data: JSON.stringify({data: 's' + btoa(json)}) , processData: false, 
-                contentType: "application/json", dataType: "application/json", cache: false,
-                success: function (data) {
-                    console.log(data);
-                },
-                error: function (e) {
-                }
+                data: JSON.stringify({data: btoa(json)}) , processData: false, 
+                contentType: "application/json", dataType: "json", cache: false
+            })
+            .done(function (data) {
+                $('#form').removeClass('error');
+                window.location.replace(data.returnUrl);
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                $('#form').addClass('error');
+                $('#failed').text(jqXHR.responseText);
             });
         }
 
-        $('#login').click(function () { save(false); });
+        $('#login').click(function () {
+            if ($('#form')[0].reportValidity()) {
+                var data = $('#form').serializeArray().reduce(function(obj, item) {
+                    obj[item.name] = item.value;
+                    return obj;
+                }, {});
+                
+                save(data);
+            }
+        });
 
     });
 </script>

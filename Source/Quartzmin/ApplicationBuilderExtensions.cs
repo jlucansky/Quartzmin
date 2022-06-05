@@ -49,9 +49,9 @@ namespace Quartzmin
             {
                 routes.MapControllerRoute(
                     name: nameof(Quartzmin),
-                    pattern: "{controller=Scheduler}/{action=Index}");
+                    pattern: $"{options.VirtualPathRoot}/{{controller=Scheduler}}/{{action=Index}}");
 
-                routes.MapHub<QuartzHub>("quartzHub");
+                routes.MapHub<QuartzHub>($"{options.VirtualPathRoot}/quartzHub");
             });
         }
 
@@ -67,9 +67,9 @@ namespace Quartzmin
                 fs = new PhysicalFileProvider(options.ContentRootDirectory);
             }
 
-            var fsOptions = new FileServerOptions()
+            var fsOptions = new FileServerOptions
             {
-                RequestPath = new PathString("/Content"),
+                RequestPath = new PathString($"{options.VirtualPathRoot}/Content"),
                 EnableDefaultFiles = false,
                 EnableDirectoryBrowsing = false,
                 FileProvider = fs
@@ -78,7 +78,7 @@ namespace Quartzmin
             app.UseFileServer(fsOptions);
         }
 
-        public static void AddQuartzmin(this IServiceCollection services)
+        public static void AddQuartzmin(this IServiceCollection services, string virtualPathRoot = "")
         {
             services.AddSignalR();
 
@@ -95,8 +95,8 @@ namespace Quartzmin
                     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                     options.Cookie.SameSite = SameSiteMode.Strict;
                     options.Cookie.Name = "s-s-h";
-                    options.LoginPath = "/auth/login";
-                    options.LogoutPath = "/auth/logout";
+                    options.LoginPath = $"{virtualPathRoot}/auth/login";
+                    options.LogoutPath = $"{virtualPathRoot}/auth/logout";
                     options.ExpireTimeSpan = TimeSpan.FromHours(1);
                 });
 
