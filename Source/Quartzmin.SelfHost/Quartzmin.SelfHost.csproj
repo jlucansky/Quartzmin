@@ -10,7 +10,7 @@
         <Version>1.0.3</Version>
         <PackageId>Quartzmin.SelfHost-Next</PackageId>
         <Product>Quartzmin.SelfHost-Next</Product>
-        <Title>Quartzmin Self Host</Title>
+        <Title>Quartzmin Self Host - Next</Title>
         <Authors>Jan Lucansky</Authors>
         <PackageProjectUrl>https://github.com/david-x-chen/Quartzmin</PackageProjectUrl>
         <PackageIconUrl>https://raw.githubusercontent.com/jlucansky/public-assets/master/Quartzmin/avatar.png</PackageIconUrl>

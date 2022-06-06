@@ -8,12 +8,12 @@
         <NoWarn>1591</NoWarn>
 
         <Version>1.0.3</Version>
-        <PackageId>Quartz.Plugins.RecentHistory-Next</PackageId>
-        <Product>Quartz.Plugins.RecentHistory-Next</Product>
+        <PackageId>NextQuartmin.Plugins.RecentHistory</PackageId>
+        <Product>NextQuartmin.Plugins.RecentHistory</Product>
         <Title>Quartz.NET plugin to persist recent job execution history</Title>
         <Authors>Jan Lucansky</Authors>
         <PackageProjectUrl>https://github.com/david-x-chen/Quartzmin</PackageProjectUrl>
-        <Description>This is supporting package for Quartzmin</Description>
+        <Description>This is supporting package for Quartzmin-Next</Description>
         <PackageTags>quartz;recent;history</PackageTags>
         <AssemblyVersion>1.0.0.0</AssemblyVersion>
         <FileVersion>1.0.0.0</FileVersion>

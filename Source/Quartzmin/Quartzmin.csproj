@@ -12,7 +12,7 @@
         <Version>1.0.3</Version>
         <PackageId>Quartzmin-Next</PackageId>
         <Product>Quartzmin-Next</Product>
-        <Title>Web management tool for Quartz.NET</Title>
+        <Title>Web management tool for Quartz.NET - Next</Title>
         <Authors>Jan Lucansky</Authors>
         <PackageProjectUrl>https://github.com/david-x-chen/Quartzmin</PackageProjectUrl>
         <PackageIconUrl>https://raw.githubusercontent.com/jlucansky/public-assets/master/Quartzmin/avatar.png</PackageIconUrl>
