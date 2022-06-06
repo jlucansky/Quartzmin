@@ -43,8 +43,8 @@ To install Quartzmin, run the following command in the Package Manager Console
 PM> Install-Package Quartzmin
 ```
 ## Minimum requirements
-- .NET Framework 4.5.2 
-- .NET Standard 2.0
+- ~~.NET Framework 4.5.2~~ No longer support .NET Framework in branch SignalR
+- .NET Standard 2.0 / dotnet 6
 
 ## Usage
 ### Embedded web server

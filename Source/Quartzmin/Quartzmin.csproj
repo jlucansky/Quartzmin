@@ -65,9 +65,4 @@
         <EmbeddedResource Include="TypeHandlers\*.js" />
     </ItemGroup>
 
-    <ItemGroup>
-        <Content Include="Content\Scripts\quartzHub.js" />
-        <Content Include="Views\Auth\Login.hbs" />
-    </ItemGroup>
-
 </Project>
