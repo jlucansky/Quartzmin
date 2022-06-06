@@ -75,5 +75,5 @@ steps:
 - powershell: |
     mkdir $(Build.ArtifactStagingDirectory)\Packages
     $version = nbgv get-version -f json | ConvertFrom-Json
-    dotnet pack --no-build -p:NuspecProperties="Version=$($version.NuGetPackageVersion);RepositoryType=git;RepositoryCommit=$($version.GitCommitId)"
+    dotnet pack --no-build --configuration $(buildConfiguration) -p:NuspecProperties="Version=$($version.NuGetPackageVersion);RepositoryType=git;RepositoryCommit=$($version.GitCommitId)"
   displayName: Create packages
