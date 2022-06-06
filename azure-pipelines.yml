@@ -74,6 +74,6 @@ steps:
 # package https://ml-software.ch/posts/versioning-made-easier-with-nerdbank-gitversioning
 - powershell: |
     mkdir $(Build.ArtifactStagingDirectory)\Packages
-    $version = .\nbgv.exe get-version -f json | ConvertFrom-Json
+    $version = nbgv get-version -f json | ConvertFrom-Json
     dotnet pack --no-build /p:NuspecProperties="version=$($version.NuGetPackageVersion);RepositoryType=git;RepositoryCommit=$($version.GitCommitId);"
   displayName: Create packages
