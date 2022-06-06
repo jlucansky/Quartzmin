@@ -10,7 +10,7 @@
         <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
 
         <Version>1.0.3</Version>
-        <Product>Quartzmin</Product>
+        <Product>Quartzmin-SignalR</Product>
         <Title>Web management tool for Quartz.NET</Title>
         <Authors>Jan Lucansky</Authors>
         <PackageProjectUrl>https://github.com/jlucansky/Quartzmin</PackageProjectUrl>
@@ -20,7 +20,7 @@
         <AssemblyVersion>1.0.0.0</AssemblyVersion>
         <FileVersion>1.0.0.0</FileVersion>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
-        <Copyright>Copyright © 2018 Jan Lucansky</Copyright>
+        <Copyright>Copyright © 2018 Jan Lucansky © 2022 </Copyright>
         <RepositoryType>git</RepositoryType>
         <RepositoryUrl>https://github.com/jlucansky/Quartzmin</RepositoryUrl>
     </PropertyGroup>

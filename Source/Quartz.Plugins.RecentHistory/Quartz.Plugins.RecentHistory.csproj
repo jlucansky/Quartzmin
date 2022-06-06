@@ -8,7 +8,7 @@
     <NoWarn>1591</NoWarn>
 
     <Version>1.0.3</Version>
-    <Product>Quartz.Plugins.RecentHistory</Product>
+    <Product>Quartz.Plugins.RecentHistory-SignalR</Product>
     <Title>Quartz.NET plugin to persist recent job execution history</Title>
     <Authors>Jan Lucansky</Authors>
     <PackageProjectUrl>https://github.com/jlucansky/Quartzmin</PackageProjectUrl>
