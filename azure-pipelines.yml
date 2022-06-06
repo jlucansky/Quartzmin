@@ -75,15 +75,10 @@ steps:
 - powershell: |
     mkdir $(Build.ArtifactStagingDirectory)\Packages
     $version = nbgv get-version -f json | ConvertFrom-Json
-    dotnet pack ./Source/Quartzmin/Quartzmin.csproj ^
-    --no-build --configuration $(buildConfiguration) --include-symbols ^
-    -p:NuspecProperties="Version=$($version.NuGetPackageVersion);RepositoryType=git;RepositoryCommit=$($version.GitCommitId)"
     
-    dotnet pack ./Source/Quartzmin.SelfHost/Quartzmin.SelfHost.csproj ^
-    --no-build --configuration $(buildConfiguration) --include-symbols ^
-    -p:NuspecProperties="Version=$($version.NuGetPackageVersion);RepositoryType=git;RepositoryCommit=$($version.GitCommitId)"
+    dotnet pack ./Source/Quartzmin/Quartzmin.csproj --no-build --configuration $(buildConfiguration) --include-symbols -p:NuspecProperties="Version=$($version.NuGetPackageVersion);RepositoryType=git;RepositoryCommit=$($version.GitCommitId)"
     
-    dotnet pack ./Source/Quartz.Plugins.RecentHistory/Quartz.Plugins.RecentHistory.csproj ^
-    --no-build --configuration $(buildConfiguration) --include-symbols ^
-    -p:NuspecProperties="Version=$($version.NuGetPackageVersion);RepositoryType=git;RepositoryCommit=$($version.GitCommitId)"
+    dotnet pack ./Source/Quartzmin.SelfHost/Quartzmin.SelfHost.csproj --no-build --configuration $(buildConfiguration) --include-symbols -p:NuspecProperties="Version=$($version.NuGetPackageVersion);RepositoryType=git;RepositoryCommit=$($version.GitCommitId)"
+    
+    dotnet pack ./Source/Quartz.Plugins.RecentHistory/Quartz.Plugins.RecentHistory.csproj --no-build --configuration $(buildConfiguration) --include-symbols -p:NuspecProperties="Version=$($version.NuGetPackageVersion);RepositoryType=git;RepositoryCommit=$($version.GitCommitId)"
   displayName: Create packages
