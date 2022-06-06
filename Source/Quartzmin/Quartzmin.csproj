@@ -10,6 +10,7 @@
         <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
 
         <Version>1.0.3</Version>
+        <PackageId>Quartzmin-Next</PackageId>
         <Product>Quartzmin-Next</Product>
         <Title>Web management tool for Quartz.NET</Title>
         <Authors>Jan Lucansky</Authors>
