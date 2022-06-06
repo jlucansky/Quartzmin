@@ -135,7 +135,6 @@ internal class HandlebarsHelpers
         foreach (var pair in dict)
         {
             viewBag[pair.Key] = pair.Value;
-            Console.WriteLine($"================{pair.Key}:{viewBag[pair.Key]}==================");
         }
     }
 
@@ -215,7 +214,6 @@ internal class HandlebarsHelpers
     {
         if (arguments.Length > 0)
         {
-            Console.WriteLine(JsonConvert.SerializeObject(arguments[0]));
             output.WriteSafeString(JsonConvert.SerializeObject(arguments[0]));
         }
 
@@ -224,7 +222,6 @@ internal class HandlebarsHelpers
             return;
         }
 
-        Console.WriteLine(JsonConvert.SerializeObject(args));
         output.WriteSafeString(JsonConvert.SerializeObject(args[0]));
     }
 

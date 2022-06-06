@@ -24,10 +24,10 @@ public class AuthController : PageControllerBase
             return BadRequest("Failed!");
         }
 
-        var validUser = ValidateUser(modelData);
+        var validUser = await ValidateUserAsync(modelData);
         if (validUser == null)
         {
-            return BadRequest("Failed!");
+            return BadRequest("Failed! No user found!");
         }
 
         var claims = new List<Claim>
@@ -65,10 +65,22 @@ public class AuthController : PageControllerBase
         return RedirectToAction("Login");
     }
 
-    private SystemUser ValidateUser(LoginViewModel user)
+    private async Task<SystemUser> ValidateUserAsync(LoginViewModel user)
     {
-        var content = System.IO.File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "users.json"));
-        var users = JsonConvert.DeserializeObject<List<SystemUser>>(content);
+        List<SystemUser> users;
+
+        var usersFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "users.json");
+        if (!System.IO.File.Exists(usersFile))
+        {
+            // build blank user file
+            users = new List<SystemUser>();
+
+            var defaultContent = JsonConvert.SerializeObject(users, Formatting.Indented);
+            await System.IO.File.WriteAllTextAsync(usersFile, defaultContent).ConfigureAwait(false);
+        }
+
+        var content = await System.IO.File.ReadAllTextAsync(usersFile);
+        users = JsonConvert.DeserializeObject<List<SystemUser>>(content);
 
         return users?.FirstOrDefault(u =>
             u.UserName.Equals(user.Username, StringComparison.InvariantCultureIgnoreCase)
