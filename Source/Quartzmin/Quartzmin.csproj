@@ -14,8 +14,8 @@
         <Product>Quartzmin-Next</Product>
         <Title>Web management tool for Quartz.NET</Title>
         <Authors>Jan Lucansky</Authors>
-        <PackageProjectUrl>https://github.com/jlucansky/Quartzmin</PackageProjectUrl>
-        <PackageIconUrl>https://raw.githubusercontent.com/jlucansky/public-assets/master/Quartzmin/avatar.png</PackageIconUrl>
+        <PackageProjectUrl>https://github.com/david-x-chen/Quartzmin</PackageProjectUrl>
+        <PackageIcon>https://raw.githubusercontent.com/jlucansky/public-assets/master/Quartzmin/avatar.png</PackageIcon>
         <Description>Powerful, easy to use web management tool for Quartz.NET</Description>
         <PackageTags>quartz;web;ui</PackageTags>
         <AssemblyVersion>1.0.0.0</AssemblyVersion>
