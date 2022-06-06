@@ -8,7 +8,7 @@
     <NoWarn>1591</NoWarn>
 
     <Version>1.0.3</Version>
-    <Product>Quartzmin.SelfHost-SignalR</Product>
+    <Product>Quartzmin.SelfHost-Next</Product>
     <Title>Quartzmin Self Host</Title>
     <Authors>Jan Lucansky</Authors>
     <PackageProjectUrl>https://github.com/jlucansky/Quartzmin</PackageProjectUrl>

@@ -10,7 +10,7 @@
         <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
 
         <Version>1.0.3</Version>
-        <Product>Quartzmin-SignalR</Product>
+        <Product>Quartzmin-Next</Product>
         <Title>Web management tool for Quartz.NET</Title>
         <Authors>Jan Lucansky</Authors>
         <PackageProjectUrl>https://github.com/jlucansky/Quartzmin</PackageProjectUrl>
