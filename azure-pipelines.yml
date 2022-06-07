@@ -4,7 +4,9 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
 trigger:
-- SignalR
+  - main
+
+pr: none
 
 pool:
   vmImage: ubuntu-latest
@@ -13,86 +15,92 @@ pool:
 variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
+  dotNetVersion: '6.0.x'
   buildConfiguration: 'Release'
 
 steps:
-- task: NuGetToolInstaller@1
+  - task: UseDotNet@2
+    inputs:
+      version: $(dotNetVersion)
+      includePreviewVersions: true
 
-- task: NuGetCommand@2
-  inputs:
-    restoreSolution: '$(solution)'
+  - task: NuGetToolInstaller@1
 
-- script: nbgv cloud
-  displayName: Set Version
+  - task: NuGetCommand@2
+    inputs:
+      restoreSolution: '$(solution)'
 
-- task: DotNetCoreCLI@2
-  displayName: 'Build Quartzmin'
-  inputs:
-    command: 'build'
-    projects: '**/Source/Quartzmin/Quartzmin.csproj'
-    arguments: '--configuration $(buildConfiguration)'
+  - script: nbgv cloud
+    displayName: Set Version
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Build Quartzmin'
+    inputs:
+      command: 'build'
+      projects: '**/Source/Quartzmin/Quartzmin.csproj'
+      arguments: '--configuration $(buildConfiguration)'
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Build Quartzmin.SelfHost'
+    inputs:
+      command: 'build'
+      projects: '**/Source/Quartzmin.SelfHost/Quartzmin.SelfHost.csproj'
+      arguments: '--configuration $(buildConfiguration)'
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Publish and zip (Quartzmin)'
+    inputs:
+      command: 'publish'
+      projects: './Source/Quartzmin/Quartzmin.csproj'
+      publishWebProjects: false
+      arguments: '--configuration $(buildConfiguration) -r $(targetRuntime) --no-self-contained --output $(Build.ArtifactStagingDirectory)/Quartzmin/'
+      zipAfterPublish: true
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Build artifacts (Quartzmin)'
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)/Quartzmin/'
+      ArtifactName: 'drop'
+      publishLocation: 'Container'
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Publish and zip (Quartzmin.SelfHost)'
+    inputs:
+      command: 'publish'
+      projects: './Source/Quartzmin.SelfHost/Quartzmin.SelfHost.csproj'
+      publishWebProjects: false
+      arguments: '--configuration $(buildConfiguration) -r $(targetRuntime) --no-self-contained --output $(Build.ArtifactStagingDirectory)/Quartzmin.SelfHost/'
+      zipAfterPublish: true
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Build artifacts (Quartzmin.SelfHost)'
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)/Quartzmin.SelfHost/'
+      ArtifactName: 'drop'
+      publishLocation: 'Container'
   
-- task: DotNetCoreCLI@2
-  displayName: 'Build Quartzmin.SelfHost'
-  inputs:
-    command: 'build'
-    projects: '**/Source/Quartzmin.SelfHost/Quartzmin.SelfHost.csproj'
-    arguments: '--configuration $(buildConfiguration)'
+  # package https://ml-software.ch/posts/versioning-made-easier-with-nerdbank-gitversioning
+  - powershell: |
+      $version = nbgv get-version -f json | ConvertFrom-Json
+      
+      dotnet pack ./Source/Quartzmin/Quartzmin.csproj --no-build --configuration $(buildConfiguration) --include-symbols --output $(Build.ArtifactStagingDirectory)/packages/ -p:NuspecProperties="Version=$($version.NuGetPackageVersion);RepositoryType=git;RepositoryCommit=$($version.GitCommitId)"
+      
+      dotnet pack ./Source/Quartzmin.SelfHost/Quartzmin.SelfHost.csproj --no-build --configuration $(buildConfiguration) --include-symbols --output $(Build.ArtifactStagingDirectory)/packages/ -p:NuspecProperties="Version=$($version.NuGetPackageVersion);RepositoryType=git;RepositoryCommit=$($version.GitCommitId)"
+      
+      dotnet pack ./Source/Quartz.Plugins.RecentHistory/Quartz.Plugins.RecentHistory.csproj --no-build --configuration $(buildConfiguration) --include-symbols --output $(Build.ArtifactStagingDirectory)/packages/ -p:NuspecProperties="Version=$($version.NuGetPackageVersion);RepositoryType=git;RepositoryCommit=$($version.GitCommitId)"
+    displayName: Create packages
 
-- task: DotNetCoreCLI@2
-  displayName: 'Publish and zip (Quartzmin)'
-  inputs:
-    command: 'publish'
-    projects: './Source/Quartzmin/Quartzmin.csproj'
-    publishWebProjects: false
-    arguments: '--configuration $(buildConfiguration) -r $(targetRuntime) --no-self-contained --output $(Build.ArtifactStagingDirectory)/Quartzmin/'
-    zipAfterPublish: true
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish packages'
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)/packages/'
+      ArtifactName: 'drop'
+      publishLocation: 'Container'
 
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish Build artifacts (Quartzmin)'
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)/Quartzmin/'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
-
-- task: DotNetCoreCLI@2
-  displayName: 'Publish and zip (Quartzmin.SelfHost)'
-  inputs:
-    command: 'publish'
-    projects: './Source/Quartzmin.SelfHost/Quartzmin.SelfHost.csproj'
-    publishWebProjects: false
-    arguments: '--configuration $(buildConfiguration) -r $(targetRuntime) --no-self-contained --output $(Build.ArtifactStagingDirectory)/Quartzmin.SelfHost/'
-    zipAfterPublish: true
-
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish Build artifacts (Quartzmin.SelfHost)'
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)/Quartzmin.SelfHost/'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
-
-# package https://ml-software.ch/posts/versioning-made-easier-with-nerdbank-gitversioning
-- powershell: |
-    $version = nbgv get-version -f json | ConvertFrom-Json
-    
-    dotnet pack ./Source/Quartzmin/Quartzmin.csproj --no-build --configuration $(buildConfiguration) --include-symbols --output $(Build.ArtifactStagingDirectory)/packages/ -p:NuspecProperties="Version=$($version.NuGetPackageVersion);RepositoryType=git;RepositoryCommit=$($version.GitCommitId)"
-    
-    dotnet pack ./Source/Quartzmin.SelfHost/Quartzmin.SelfHost.csproj --no-build --configuration $(buildConfiguration) --include-symbols --output $(Build.ArtifactStagingDirectory)/packages/ -p:NuspecProperties="Version=$($version.NuGetPackageVersion);RepositoryType=git;RepositoryCommit=$($version.GitCommitId)"
-    
-    dotnet pack ./Source/Quartz.Plugins.RecentHistory/Quartz.Plugins.RecentHistory.csproj --no-build --configuration $(buildConfiguration) --include-symbols --output $(Build.ArtifactStagingDirectory)/packages/ -p:NuspecProperties="Version=$($version.NuGetPackageVersion);RepositoryType=git;RepositoryCommit=$($version.GitCommitId)"
-  displayName: Create packages
-  
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish packages'
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)/packages/'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
-
-- task: NuGetCommand@2
-  inputs:
-    command: 'push'
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
-    nuGetFeedType: 'external'
-    publishFeedCredentials: 'NextQuartzmin'
-    verbosityPush: 'Normal'
+  - task: NuGetCommand@2
+    inputs:
+      command: 'push'
+      packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+      nuGetFeedType: 'external'
+      publishFeedCredentials: 'NextQuartzmin'
+      verbosityPush: 'Normal'
