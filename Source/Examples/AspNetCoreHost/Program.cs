@@ -1,17 +1,16 @@
-﻿using AspNetCoreHost;
-using Microsoft.AspNetCore;
+﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
-namespace Quartzmin.AspNetCore
+namespace AspNetCoreHost
 {
-    class Program
+    internal static class Program
     {
         public static void Main(string[] args)
         {
             BuildWebHost(args).Run();
         }
 
-        public static IWebHost BuildWebHost(string[] args)
+        private static IWebHost BuildWebHost(string[] args)
         {
             return WebHost.CreateDefaultBuilder(args).UseStartup<Startup>().Build();
         }

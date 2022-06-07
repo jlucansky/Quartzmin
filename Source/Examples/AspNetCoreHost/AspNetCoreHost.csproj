@@ -14,7 +14,6 @@
     <PackageReference Update="Nerdbank.GitVersioning">
       <Version>3.5.107</Version>
     </PackageReference>
-    <PackageReference Include="Quartzmin-Next" Version="1.0.16-g27d04309f6" />
   </ItemGroup>
   
   <ItemGroup>
@@ -25,6 +24,10 @@
     <None Update="app.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Quartzmin\Quartzmin.csproj" />
   </ItemGroup>
 
 </Project>

@@ -6,7 +6,7 @@ namespace AspNetCoreHost;
 
 public class Startup
 {
-    private readonly string _virtialPathRoot = "/q";
+    private const string _virtialPathRoot = "/quartzmin";
 
     public void ConfigureServices(IServiceCollection services)
     {
@@ -21,7 +21,7 @@ public class Startup
             endpoints.MapGet("/", () => "Hello");
         });
 
-        app.UseQuartzmin(new QuartzminOptions()
+        app.UseQuartzmin(new QuartzminOptions
         {
             Scheduler = DemoScheduler.Create().Result,
             VirtualPathRoot = _virtialPathRoot
