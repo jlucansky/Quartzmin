@@ -1,108 +1,112 @@
-﻿using System;
-using System.Reflection;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileProviders;
-using Quartzmin.Hubs;
+﻿namespace Quartzmin;
 
-namespace Quartzmin
+public static class ApplicationBuilderExtensions
 {
-    public static class ApplicationBuilderExtensions
+    public static void UseQuartzmin(this IApplicationBuilder app,
+        QuartzminOptions options,
+        Action<Services> configure = null)
     {
-        public static void UseQuartzmin(this IApplicationBuilder app,
-            QuartzminOptions options,
-            Action<Services> configure = null)
+        var opt = app.ApplicationServices.GetService<QuartzminOptions>();
+
+        options = options ?? throw new ArgumentNullException(nameof(options));
+
+        // override the virtual path root from AddQuartzmin
+        if (opt != null && opt.VirtualPathRoot != "/")
         {
-            options = options ?? throw new ArgumentNullException(nameof(options));
-
-            app.UseFileServer(options);
-
-            var services = Services.Create(options);
-            configure?.Invoke(services);
-
-            // middleware
-            app.Use(async (context, next) =>
-            {
-                context.Items[typeof(Services)] = services;
-                await next.Invoke();
-            });
-
-            app.UseExceptionHandler(errorApp =>
-            {
-                errorApp.Run(async context =>
-                {
-                    var ex = context.Features.Get<IExceptionHandlerFeature>()?.Error;
-                    context.Response.StatusCode = 500;
-                    context.Response.ContentType = "text/html";
-                    await context.Response.WriteAsync(services.ViewEngine.ErrorPage(ex));
-                });
-            });
-
-            app.UseAuthentication();
-            app.UseRouting();
-            app.UseAuthorization();
-            app.UseEndpoints(routes =>
-            {
-                routes.MapControllerRoute(
-                    name: nameof(Quartzmin),
-                    pattern: $"{options.VirtualPathRoot}/{{controller=Scheduler}}/{{action=Index}}");
-
-                routes.MapHub<QuartzHub>($"{options.VirtualPathRoot}/quartzHub");
-            });
+            options.VirtualPathRoot = opt.VirtualPathRoot;
         }
 
-        private static void UseFileServer(this IApplicationBuilder app, QuartzminOptions options)
+        app.UseFileServer(options);
+
+        var services = Services.Create(options);
+        configure?.Invoke(services);
+
+        // middleware
+        app.Use(async (context, next) =>
         {
-            IFileProvider fs;
-            if (string.IsNullOrEmpty(options.ContentRootDirectory))
-            {
-                fs = new ManifestEmbeddedFileProvider(Assembly.GetExecutingAssembly(), "Content");
-            }
-            else
-            {
-                fs = new PhysicalFileProvider(options.ContentRootDirectory);
-            }
+            context.Items[typeof(Services)] = services;
+            await next.Invoke(context);
+        });
 
-            var fsOptions = new FileServerOptions
+        app.UseExceptionHandler(errorApp =>
+        {
+            errorApp.Run(async context =>
             {
-                RequestPath = new PathString($"{options.VirtualPathRoot}/Content"),
-                EnableDefaultFiles = false,
-                EnableDirectoryBrowsing = false,
-                FileProvider = fs
-            };
+                var ex = context.Features.Get<IExceptionHandlerFeature>()?.Error;
+                context.Response.StatusCode = 500;
+                context.Response.ContentType = "text/html";
+                await context.Response.WriteAsync(services.ViewEngine.ErrorPage(ex));
+            });
+        });
 
-            app.UseFileServer(fsOptions);
+        app.UseAuthentication();
+        app.UseRouting();
+        app.UseAuthorization();
+        app.UseEndpoints(routes =>
+        {
+            routes.MapControllerRoute(
+                name: nameof(Quartzmin),
+                pattern: $"{options.VirtualPathRoot}{{controller=Scheduler}}/{{action=Index}}");
+
+            routes.MapHub<QuartzHub>($"{options.VirtualPathRoot}quartzHub");
+        });
+    }
+
+    private static void UseFileServer(this IApplicationBuilder app, QuartzminOptions options)
+    {
+        IFileProvider fs;
+        if (string.IsNullOrEmpty(options.ContentRootDirectory))
+        {
+            fs = new ManifestEmbeddedFileProvider(Assembly.GetExecutingAssembly(), "Content");
+        }
+        else
+        {
+            fs = new PhysicalFileProvider(options.ContentRootDirectory);
         }
 
-        public static void AddQuartzmin(this IServiceCollection services, string virtualPathRoot = "")
+        var fsOptions = new FileServerOptions
         {
-            services.AddSignalR();
+            RequestPath = new PathString($"{options.VirtualPathRoot}Content"),
+            EnableDefaultFiles = false,
+            EnableDirectoryBrowsing = false,
+            FileProvider = fs
+        };
 
-            services.AddAuthentication(opt =>
-                {
-                    opt.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    opt.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    opt.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                })
-                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
-                {
-                    options.Cookie.IsEssential = true;
-                    options.Cookie.HttpOnly = true;
-                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                    options.Cookie.SameSite = SameSiteMode.Strict;
-                    options.Cookie.Name = "s-s-h";
-                    options.LoginPath = $"{virtualPathRoot}/auth/login";
-                    options.LogoutPath = $"{virtualPathRoot}/auth/logout";
-                    options.ExpireTimeSpan = TimeSpan.FromHours(1);
-                });
+        app.UseFileServer(fsOptions);
+    }
 
-            services.AddMvc()
-                .AddApplicationPart(Assembly.GetExecutingAssembly())
-                .AddNewtonsoftJson();
-        }
+    /// <summary>
+    /// Add Quartzmin app
+    /// </summary>
+    /// <param name="services">Service collection</param>
+    /// <param name="virtualPathRoot">Virtual path root, default empty; if set, it will replace the value set in UseQuartzmin</param>
+    public static void AddQuartzmin(this IServiceCollection services, string virtualPathRoot = "")
+    {
+        var options = new QuartzminOptions { VirtualPathRoot = virtualPathRoot };
+        services.AddSingleton(options);
+
+        services.AddSignalR();
+
+        services.AddAuthentication(opt =>
+            {
+                opt.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                opt.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                opt.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            })
+            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, opt =>
+            {
+                opt.Cookie.IsEssential = true;
+                opt.Cookie.HttpOnly = true;
+                opt.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                opt.Cookie.SameSite = SameSiteMode.Strict;
+                opt.Cookie.Name = "s-s-h";
+                opt.LoginPath = $"{options.VirtualPathRoot}auth/login";
+                opt.LogoutPath = $"{options.VirtualPathRoot}auth/logout";
+                opt.ExpireTimeSpan = TimeSpan.FromHours(1);
+            });
+
+        services.AddMvc()
+            .AddApplicationPart(Assembly.GetExecutingAssembly())
+            .AddNewtonsoftJson();
     }
 }

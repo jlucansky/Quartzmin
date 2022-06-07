@@ -53,9 +53,9 @@ namespace Quartzmin.SelfHost
 
         private QuartzminOptions CreateQuartzminOptions()
         {
-            var options = new QuartzminOptions()
+            var options = new QuartzminOptions
             {
-                Scheduler = _scheduler,
+                Scheduler = _scheduler
             };
 
             if (!string.IsNullOrEmpty(DefaultDateFormat))

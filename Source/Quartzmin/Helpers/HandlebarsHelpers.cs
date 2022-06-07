@@ -86,10 +86,7 @@ internal class HandlebarsHelpers
     {
         get
         {
-            string url = _services.Options.VirtualPathRoot;
-            if (!url.EndsWith("/"))
-                url += "/";
-            return url;
+            return _services.Options.VirtualPathRoot;
         }
     }
 
@@ -156,7 +153,7 @@ internal class HandlebarsHelpers
 
     private void ActionUrl(EncodedTextWriter output, Context context, Arguments arguments)
     {
-        if (arguments.Length < 1 || arguments.Length > 3)
+        if (arguments.Length is < 1 or > 3)
         {
             throw new ArgumentOutOfRangeException(nameof(arguments));
         }
@@ -179,7 +176,7 @@ internal class HandlebarsHelpers
                     controller = v.ControllerName;
                     break;
                 default:
-                    throw new Exception("ActionUrl: Invalid parameter 1");
+                    throw new InvalidDataException("ActionUrl: Invalid parameter 1");
             }
         }
 

@@ -18,13 +18,13 @@ public static class ViewFileSystemFactory
         return fs;
     }
 
-    private class DiskFileSystem : ViewEngineFileSystem
+    private sealed class DiskFileSystem : ViewEngineFileSystem
     {
-        string root;
+        private readonly string _root;
 
         public DiskFileSystem(string root)
         {
-            this.root = root;
+            _root = root;
         }
 
         public override string GetFileContent(string filename)
@@ -42,26 +42,24 @@ public static class ViewFileSystemFactory
             return File.Exists(GetFullPath(filePath));
         }
 
-        string GetFullPath(string filePath)
+        private string GetFullPath(string filePath)
         {
-            return Path.Combine(root, filePath.Replace("partials/", "Partials/").Replace('/', Path.DirectorySeparatorChar));
+            return Path.Combine(_root, filePath.Replace("partials/", "Partials/").Replace('/', Path.DirectorySeparatorChar));
         }
     }
 
-    private class EmbeddedFileSystem : ViewEngineFileSystem
+    private sealed class EmbeddedFileSystem : ViewEngineFileSystem
     {
         public override string GetFileContent(string filename)
         {
-            using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(GetFullPath(filename)))
+            using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(GetFullPath(filename));
+            if (stream == null)
             {
-                if (stream == null)
-                    return null;
-
-                using (var reader = new StreamReader(stream, Encoding.UTF8))
-                {
-                    return reader.ReadToEnd();
-                }
+                return null;
             }
+
+            using var reader = new StreamReader(stream, Encoding.UTF8);
+            return reader.ReadToEnd();
         }
 
         protected override string CombinePath(string dir, string otherFileName)
@@ -74,10 +72,9 @@ public static class ViewFileSystemFactory
             return Assembly.GetExecutingAssembly().GetManifestResourceInfo(GetFullPath(filePath)) != null;
         }
 
-        string GetFullPath(string filePath)
+        private string GetFullPath(string filePath)
         {
             return Path.Combine(nameof(Quartzmin) + ".Views", filePath.Replace("partials/", "Partials/")).Replace('/', '.').Replace('\\', '.');
         }
     }
-
 }

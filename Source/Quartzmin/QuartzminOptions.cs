@@ -5,7 +5,7 @@ namespace Quartzmin;
 public class QuartzminOptions
 {
     /// <summary>
-    /// Supports any value that is a viable as a img src attribute value: url, or base64
+    /// Gets or sets supports any value that is a viable as a img src attribute value: url, or base64
     /// src='data:image/jpeg;base64, LzlqLzRBQ...[end of base64 data]'
     /// Defaults to the quartzmin original logo
     /// </summary>
@@ -13,17 +13,34 @@ public class QuartzminOptions
 
     public string ProductName { get; set; } = "";
 
-    public string VirtualPathRoot { get; set; } = "/";
+    private string _virtualPathRoot = "/";
+    public string VirtualPathRoot
+    {
+        get
+        {
+            var pathRoot = _virtualPathRoot;
+            if (!pathRoot.EndsWith("/"))
+            {
+                pathRoot += "/";
+            }
+
+            return pathRoot;
+        }
+        set
+        {
+            _virtualPathRoot = value;
+        }
+    }
 
     public IScheduler Scheduler { get; set; }
 
     /// <summary>
-    /// Supported value types in job data map.
+    /// Gets supported value types in job data map.
     /// </summary>
-    public List<TypeHandlerBase> StandardTypes { get; } = new List<TypeHandlerBase>();
+    public List<TypeHandlerBase> StandardTypes { get; } = new ();
 
     /// <summary>
-    /// Default type for new job data map item.
+    /// Gets or sets default type for new job data map item.
     /// </summary>
     public TypeHandlerBase DefaultSelectedType { get; set; }
 
