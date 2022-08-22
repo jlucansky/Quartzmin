@@ -15,16 +15,23 @@ public class Startup
 
     public void Configure(IApplicationBuilder app)
     {
-        app.UseRouting();
-        app.UseEndpoints(endpoints =>
+        app.Use(async (context, next) =>
         {
-            endpoints.MapGet("/", () => "Hello");
+            context.Items["header"] = "a";
+            await next.Invoke(context);
         });
 
         app.UseQuartzmin(new QuartzminOptions
         {
             Scheduler = DemoScheduler.Create().Result,
-            VirtualPathRoot = _virtialPathRoot
+            VirtualPathRoot = _virtialPathRoot,
+            DeployedAsWebAppliaction = false
+        });
+
+        app.UseRouting();
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapGet("/", () => "Hello");
         });
     }
 }
