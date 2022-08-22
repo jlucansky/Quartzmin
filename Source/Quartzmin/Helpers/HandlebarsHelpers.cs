@@ -86,7 +86,8 @@ internal class HandlebarsHelpers
     {
         get
         {
-            return _services.Options.VirtualPathRoot;
+            var prefix = _services.Options.DeployedAsWebAppliaction ? "." : string.Empty;
+            return $"{prefix}{_services.Options.VirtualPathRoot}";
         }
     }
 
