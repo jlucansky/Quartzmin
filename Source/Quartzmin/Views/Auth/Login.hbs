@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <base href="{{BaseUrl}}">
+    <base id="myBase" href="{{BaseUrl}}">
 
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -53,6 +53,17 @@
         </form>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const baseObj = document.getElementById('myBase');
+        const baseUrl = '{{BaseUrl}}';
+        const idx = location.pathname.indexOf({{BaseUrl}}) + baseUrl.length;
+        const path = location.pathname.substring(0, idx);
+
+        baseObj.href = location.origin + path;
+    }, false);
+</script>
 
 <script>
     $(function () {
