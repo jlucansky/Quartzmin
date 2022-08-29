@@ -45,7 +45,7 @@ internal class HandlebarsHelpers
         h.RegisterHelper("not", (o, c, a) => o.Write(IsTrue(a[0]) ? "False" : "True"));
 
         h.RegisterHelper(nameof(BaseUrl),
-            (o, c, a) => o.WriteSafeString(BaseUrl));
+            (o, c, a) => WriteBaseUrl(o, c, a));
         h.RegisterHelper(nameof(MenuItemActionLink),
             (o, c, a) => MenuItemActionLink(o, c, a));
         h.RegisterHelper(nameof(RenderJobDataMapValue),
@@ -82,7 +82,7 @@ internal class HandlebarsHelpers
 
     string UrlEncode(string value) => HttpUtility.UrlEncode(value);
 
-    string BaseUrl
+    private string BaseUrl
     {
         get
         {
@@ -91,14 +91,22 @@ internal class HandlebarsHelpers
         }
     }
 
+    private void WriteBaseUrl(EncodedTextWriter output, Context context, Arguments arguments)
+    {
+        output.WriteSafeString($"{BaseUrl}");
+    }
+
     private string AddQueryString(string uri, IEnumerable<KeyValuePair<string, object>> queryString)
     {
         if (queryString == null)
+        {
             return uri;
+        }
 
         var anchorIndex = uri.IndexOf('#');
         var uriToBeAppended = uri;
         var anchorText = "";
+
         // If there is an anchor, then the query string must be inserted before its first occurence.
         if (anchorIndex != -1)
         {
@@ -125,7 +133,7 @@ internal class HandlebarsHelpers
         return sb.ToString();
     }
 
-    void ViewBag(EncodedTextWriter output, Context context, Arguments arguments)
+    private void ViewBag(EncodedTextWriter output, Context context, Arguments arguments)
     {
         var dict = (IDictionary<string, object>)arguments[0];
         var viewBag = (IDictionary<string, object>)context["ViewBag"];

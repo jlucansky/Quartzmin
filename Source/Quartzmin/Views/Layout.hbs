@@ -62,7 +62,19 @@
     </div>
 
     <div class="ui hidden divider"></div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const baseObj = document.getElementById('myBase');
+            const baseUrl = '{{BaseUrl}}';
+            const idx = location.pathname.indexOf({{BaseUrl}}) + baseUrl.length;
+            const path = location.pathname.substring(0, idx);
 
+            baseObj.href = location.origin + path;
+
+            console.log(baseObj.href);
+        }, false);
+    </script>
     <script>
         $(function () {
             $('#top-menu .ui.dropdown').dropdown();
