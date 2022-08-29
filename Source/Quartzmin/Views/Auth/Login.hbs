@@ -3,6 +3,17 @@
 <head>
     <base id="myBase" href="{{BaseUrl}}">
 
+    <script>
+        (function () {
+            const baseObj = document.getElementById('myBase');
+            const baseUrl = '{{BaseUrl}}';
+            const idx = location.pathname.indexOf(baseUrl) + baseUrl.length;
+            const path = location.pathname.substring(0, idx);
+
+            baseObj.href = location.origin + path;
+        }());
+    </script>
+
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -53,17 +64,6 @@
         </form>
     </div>
 </div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const baseObj = document.getElementById('myBase');
-        const baseUrl = '{{BaseUrl}}';
-        const idx = location.pathname.indexOf({{BaseUrl}}) + baseUrl.length;
-        const path = location.pathname.substring(0, idx);
-
-        baseObj.href = location.origin + path;
-    }, false);
-</script>
 
 <script>
     $(function () {
