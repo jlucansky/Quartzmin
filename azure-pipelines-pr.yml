@@ -14,7 +14,7 @@ pool:
 variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
-  dotNetVersion: '6.0.x'
+  dotNetVersion: '7.0.x'
   buildConfiguration: 'Release'
 
 steps:
