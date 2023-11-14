@@ -32,8 +32,6 @@ public class QuartzminOptions
         }
     }
 
-    public bool DeployedAsWebAppliaction { get; set; }
-
     public IScheduler Scheduler { get; set; }
 
     /// <summary>
