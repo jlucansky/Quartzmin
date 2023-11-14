@@ -17,6 +17,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetCoreSelfHost", "Source\E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCoreDocker", "Source\Examples\AspNetCoreDocker\AspNetCoreDocker.csproj", "{68D816F2-21BF-4376-ABF4-70390E4783C5}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{6E1B13E9-3462-4C6D-9284-9A0275EEAEEE}"
+	ProjectSection(SolutionItems) = preProject
+		azure-pipelines.yml = azure-pipelines.yml
+		azure-pipelines-pr.yml = azure-pipelines-pr.yml
+		Directory.Build.props = Directory.Build.props
+		LICENSE = LICENSE
+		README.md = README.md
+		version.json = version.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
