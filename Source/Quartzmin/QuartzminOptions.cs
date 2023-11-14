@@ -32,7 +32,7 @@ public class QuartzminOptions
         }
     }
 
-    public bool DeployedAsWebAppliaction { get; set; }
+    public string WebAppName { get; set; }
 
     public IScheduler Scheduler { get; set; }
 

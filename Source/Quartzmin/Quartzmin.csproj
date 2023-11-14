@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>true</ImplicitUsings>
         <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
         <GeneratePackageOnBuild Condition="'$(Configuration)' == 'Release'">true</GeneratePackageOnBuild>
@@ -31,21 +31,23 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Handlebars.Net" Version="2.1.2" />
-        <PackageReference Include="JsonSubTypes" Version="1.9.0" />
-        <PackageReference Include="Quartz" Version="3.4.0" />
+        <PackageReference Include="Handlebars.Net" Version="2.1.4" />
+        <PackageReference Include="JsonSubTypes" Version="2.0.1" />
+        <PackageReference Include="Quartz" Version="3.7.0" />
         <PackageReference Update="Nerdbank.GitVersioning">
-            <Version>3.5.107</Version>
+            <Version>3.6.133</Version>
+        </PackageReference>
+        <PackageReference Update="Microsoft.VisualStudio.Threading.Analyzers" Version="17.7.30">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
     </ItemGroup>
 
     <ItemGroup>
         <FrameworkReference Include="Microsoft.AspNetCore.App" />
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.5" />
-        <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="2.2.0" />
-        <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="6.0.5" />
-        <PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="6.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.13" />
+        <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.13" />
+        <PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="7.0.0" />
     </ItemGroup>
 
     <ItemGroup>

@@ -1,18 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <base href="{{BaseUrl}}">
-
-    <script>
-        (function () {
-            const baseObj = document.getElementById('myBase');
-            const baseUrl = '{{BaseUrl}}';
-            const idx = location.pathname.indexOf(baseUrl) + baseUrl.length;
-            const path = location.pathname.substring(0, idx);
-
-            baseObj.href = location.origin + path;
-        }());
-    </script>
+    <base id="myBase" href="{{BaseUrl}}">
 
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -78,6 +67,17 @@
         $(function () {
             $('#top-menu .ui.dropdown').dropdown();
         });
+    </script>
+
+    <script>
+        (function () {
+            const baseObj = document.getElementById('myBase');
+            const baseUrl = '{{BaseUrl}}';
+            const idx = location.pathname.indexOf(baseUrl) + baseUrl.length;
+            const path = location.pathname.substring(0, idx);
+
+            baseObj.href = location.origin + path;
+        }());
     </script>
 
     {{#footer}}

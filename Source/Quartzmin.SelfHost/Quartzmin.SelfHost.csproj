@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
         <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
         <GeneratePackageOnBuild Condition="'$(Configuration)' == 'Release'">true</GeneratePackageOnBuild>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -22,6 +21,7 @@
         <Copyright>Copyright © 2018 Jan Lucansky</Copyright>
         <RepositoryType>git</RepositoryType>
         <RepositoryUrl>https://github.com/jlucansky/Quartzmin</RepositoryUrl>
+        <TargetFramework>net7.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>

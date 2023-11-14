@@ -16,6 +16,11 @@ public static class ApplicationBuilderExtensions
             options.VirtualPathRoot = opt.VirtualPathRoot;
         }
 
+        if (opt != null && !string.IsNullOrEmpty(opt.WebAppName))
+        {
+            options.WebAppName = opt.WebAppName;
+        }
+
         app.UseFileServer(options);
 
         var services = Services.Create(options);
@@ -80,9 +85,14 @@ public static class ApplicationBuilderExtensions
     /// </summary>
     /// <param name="services">Service collection</param>
     /// <param name="virtualPathRoot">Virtual path root, default empty; if set, it will replace the value set in UseQuartzmin</param>
-    public static void AddQuartzmin(this IServiceCollection services, string virtualPathRoot = "")
+    /// <param name="webAppName">Web Application Name of IIS WebSite</param>
+    public static void AddQuartzmin(this IServiceCollection services, string virtualPathRoot = "", string webAppName = "")
     {
-        var options = new QuartzminOptions { VirtualPathRoot = virtualPathRoot };
+        var options = new QuartzminOptions
+        {
+            VirtualPathRoot = virtualPathRoot,
+            WebAppName = webAppName
+        };
         services.AddSingleton(options);
 
         services.AddSignalR();
