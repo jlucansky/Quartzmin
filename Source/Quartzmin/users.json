@@ -1,7 +1,7 @@
 [
   {
-    "UserName": "admin.1",
-    "Password": "6292d395a1f5efcf18be8bf51c696c241f950531a5b5035d36de0d7a88416604",
+    "UserName": "testuser",
+    "Password": "3bee8ba99556f6a831995626bd816199e3fdfc5a4bd5bd502e32470d909e896f", //Test@123!
     "Role": "Admin"
   }
 ]

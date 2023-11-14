@@ -52,7 +52,11 @@ public class AuthController : PageControllerBase
             new ClaimsPrincipal(claimsIdentity),
             authProperties);
 
-        return Ok(new { returnUrl = $"{Services.Options.VirtualPathRoot}Scheduler" });
+        var returnPath = string.IsNullOrEmpty(Services.Options.WebAppName)
+            ? Services.Options.VirtualPathRoot
+            : $"/{Services.Options.WebAppName}{Services.Options.VirtualPathRoot}";
+
+        return Ok(new { returnUrl = $"{returnPath}Scheduler" });
     }
 
     [HttpPost]

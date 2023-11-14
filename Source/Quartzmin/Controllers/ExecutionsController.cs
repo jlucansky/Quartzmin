@@ -1,57 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Quartz;
-using Quartz.Impl.Matchers;
-using Quartz.Plugins.RecentHistory;
-using Quartzmin.Helpers;
-using Quartzmin.Models;
+﻿namespace Quartzmin.Controllers;
 
-namespace Quartzmin.Controllers
+public class ExecutionsController : PageControllerBase
 {
-    public class ExecutionsController : PageControllerBase
+    [HttpGet]
+    public async Task<IActionResult> IndexAsync()
     {
-        [HttpGet]
-        public async Task<IActionResult> IndexAsync()
+        var currentlyExecutingJobs = await Scheduler.GetCurrentlyExecutingJobs();
+
+        var list = new List<object>();
+
+        foreach (var exec in currentlyExecutingJobs)
         {
-            var currentlyExecutingJobs = await Scheduler.GetCurrentlyExecutingJobs();
-
-            var list = new List<object>();
-
-            foreach (var exec in currentlyExecutingJobs)
+            list.Add(new
             {
-                list.Add(new
-                {
-                    Id = exec.FireInstanceId,
-                    JobGroup = exec.JobDetail.Key.Group,
-                    JobName = exec.JobDetail.Key.Name,
-                    TriggerGroup = exec.Trigger.Key.Group,
-                    TriggerName = exec.Trigger.Key.Name,
-                    ScheduledFireTime = exec.ScheduledFireTimeUtc?.UtcDateTime.ToDefaultFormat(),
-                    ActualFireTime = exec.FireTimeUtc.UtcDateTime.ToDefaultFormat(),
-                    RunTime = exec.JobRunTime.ToString("hh\\:mm\\:ss")
-                });
-            }
-
-            return View(list);
+                Id = exec.FireInstanceId,
+                JobGroup = exec.JobDetail.Key.Group,
+                JobName = exec.JobDetail.Key.Name,
+                TriggerGroup = exec.Trigger.Key.Group,
+                TriggerName = exec.Trigger.Key.Name,
+                ScheduledFireTime = exec.ScheduledFireTimeUtc?.UtcDateTime.ToDefaultFormat(),
+                ActualFireTime = exec.FireTimeUtc.UtcDateTime.ToDefaultFormat(),
+                RunTime = exec.JobRunTime.ToString("hh\\:mm\\:ss")
+            });
         }
 
-        public class InterruptArgs
+        return View(list);
+    }
+
+    public class InterruptArgs
+    {
+        public string Id { get; set; }
+    }
+
+    [HttpPost, JsonErrorResponse]
+    public async Task<IActionResult> InterruptAsync([FromBody] InterruptArgs args)
+    {
+        if (!await Scheduler.Interrupt(args.Id))
         {
-            public string Id { get; set; }
+            throw new InvalidOperationException("Cannot interrupt execution " + args.Id);
         }
 
-        [HttpPost, JsonErrorResponse]
-        public async Task<IActionResult> InterruptAsync([FromBody] InterruptArgs args)
-        {
-            if (!await Scheduler.Interrupt(args.Id))
-            {
-                throw new InvalidOperationException("Cannot interrupt execution " + args.Id);
-            }
-
-            return NoContent();
-        }
+        return NoContent();
     }
 }

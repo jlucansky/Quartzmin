@@ -32,6 +32,8 @@ public class QuartzminOptions
         }
     }
 
+    public string WebAppName { get; set; }
+
     public IScheduler Scheduler { get; set; }
 
     /// <summary>

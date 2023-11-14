@@ -86,7 +86,14 @@ internal class HandlebarsHelpers
     {
         get
         {
-            return $"{_services.Options.VirtualPathRoot}";
+            if (string.IsNullOrEmpty(_services.Options.WebAppName))
+            {
+                return $"{_services.Options.VirtualPathRoot}";
+            }
+            else
+            {
+                return $"/{_services.Options.WebAppName}{_services.Options.VirtualPathRoot}";
+            }
         }
     }
 
