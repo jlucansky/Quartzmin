@@ -24,8 +24,7 @@ public class Startup
         app.UseQuartzmin(new QuartzminOptions
         {
             Scheduler = DemoScheduler.Create().Result,
-            VirtualPathRoot = _virtialPathRoot,
-            DeployedAsWebAppliaction = false
+            VirtualPathRoot = _virtialPathRoot
         });
 
         app.UseRouting();
