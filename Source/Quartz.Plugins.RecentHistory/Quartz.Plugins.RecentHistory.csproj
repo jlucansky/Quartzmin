@@ -1,37 +1,45 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net452</TargetFrameworks>
-    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
-    <GeneratePackageOnBuild Condition="'$(Configuration)' == 'Release'">true</GeneratePackageOnBuild>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <NoWarn>1591</NoWarn>
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+        <GeneratePackageOnBuild Condition="'$(Configuration)' == 'Release'">true</GeneratePackageOnBuild>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <NoWarn>1591</NoWarn>
 
-    <Version>1.0.3</Version>
-    <Product>Quartz.Plugins.RecentHistory</Product>
-    <Title>Quartz.NET plugin to persist recent job execution history</Title>
-    <Authors>Jan Lucansky</Authors>
-    <PackageProjectUrl>https://github.com/jlucansky/Quartzmin</PackageProjectUrl>
-    <Description>This is supporting package for Quartzmin</Description>
-    <PackageTags>quartz;recent;history</PackageTags>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <FileVersion>1.0.0.0</FileVersion>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <Copyright>Copyright © 2018 Jan Lucansky</Copyright>
-    <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/jlucansky/Quartzmin</RepositoryUrl>
-  </PropertyGroup>
+        <Version>1.0.3</Version>
+        <PackageId>NextQuartmin.Plugins.RecentHistory</PackageId>
+        <Product>NextQuartmin.Plugins.RecentHistory</Product>
+        <Title>Quartz.NET plugin to persist recent job execution history</Title>
+        <Authors>Jan Lucansky</Authors>
+        <PackageProjectUrl>https://github.com/david-x-chen/Quartzmin</PackageProjectUrl>
+        <Description>This is supporting package for Quartzmin-Next</Description>
+        <PackageTags>quartz;recent;history</PackageTags>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+        <FileVersion>1.0.0.0</FileVersion>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <Copyright>Copyright © 2018 Jan Lucansky</Copyright>
+        <RepositoryType>git</RepositoryType>
+        <RepositoryUrl>https://github.com/jlucansky/Quartzmin</RepositoryUrl>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <None Include="..\..\LICENSE" Pack="true" PackagePath="" />
-  </ItemGroup>
+    <ItemGroup>
+        <None Include="..\..\LICENSE" Pack="true" PackagePath=""/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Quartz" Version="3.0.7" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Quartz" Version="3.7.0" />
+        <PackageReference Update="Nerdbank.GitVersioning">
+            <Version>3.6.133</Version>
+        </PackageReference>
+        <PackageReference Update="Microsoft.VisualStudio.Threading.Analyzers" Version="17.7.30">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
 
-  <ItemGroup>
-    <None Remove="*.vspscc" />
-  </ItemGroup>
+    <ItemGroup>
+        <None Remove="*.vspscc"/>
+    </ItemGroup>
 
 </Project>

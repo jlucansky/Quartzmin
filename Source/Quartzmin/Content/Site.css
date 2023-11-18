@@ -340,7 +340,7 @@ tr.job-key a > span.group {
 }
 
 .dashboard-histogram .histogram > .bar {
-    width: 13px;
+    width: 5px;
 }
 
 #scheduler-dashboard .ui.table{

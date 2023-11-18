@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <base href="{{BaseUrl}}">
+    <base id="myBase" href="{{BaseUrl}}">
 
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,14 +22,16 @@
     <link rel="stylesheet" href="Content/Fonts/Lato.css" type="text/css" />
     <link rel="stylesheet" href="Content/Site.css" type="text/css" />
 
-    <script src="Content/Lib/jquery-3.3.1.min.js"></script>
+    <script src="Content/Lib/jquery.min.js"></script>
     <script src="Content/Lib/moment.min.js"></script>
     <script src="Content/Lib/FileSaver.js"></script>
     <script src="Content/Lib/semantic-ui/semantic.min.js"></script>
     <script src="Content/Lib/semantic-ui/state.min.js"></script>
     <script src="Content/Lib/semantic-ui/calendar.min.js"></script>
+    <script src="Content/Lib/signalr.min.js"></script>
 
     <script src="Content/Scripts/global.js"></script>
+    <script src="Content/Scripts/quartzHub.js"></script>
 </head>
 <body>
     <div class="ui top inverted stackable menu" id="top-menu">
@@ -45,18 +47,13 @@
             {{MenuItemActionLink 'History'}}
             {{MenuItemActionLink 'Calendars'}}
 
-            <!--
             <div class="right menu">
                 <div class="ui dropdown item">
-                    <i class="user circle large icon"></i>
-                    domain\user
-                    <i class="dropdown icon"></i>
-                    <div class="menu">
-                        <a class="item center" href="#">Logout</a>
-                    </div>
+                    <form id="logout" method="post" action="{{ActionUrl "Logout" "Auth"}}">
+                        <a class="item center" onclick="this.parentNode.submit();">Logout</a>
+                    </form>
                 </div>
             </div>
-            -->
         </div>
     </div>
 
@@ -65,11 +62,22 @@
     </div>
 
     <div class="ui hidden divider"></div>
-
+    
     <script>
         $(function () {
             $('#top-menu .ui.dropdown').dropdown();
         });
+    </script>
+
+    <script>
+        (function () {
+            const baseObj = document.getElementById('myBase');
+            const baseUrl = '{{BaseUrl}}';
+            const idx = location.pathname.indexOf(baseUrl) + baseUrl.length;
+            const path = location.pathname.substring(0, idx);
+
+            baseObj.href = location.origin + path;
+        }());
     </script>
 
     {{#footer}}

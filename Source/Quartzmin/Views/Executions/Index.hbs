@@ -5,6 +5,14 @@
 
 <div id="msg-panel"></div>
 
+<div class="ui message">
+    <i class="info circle icon"></i>
+    <p>This method is not cluster aware.</p>
+    <p>That is, it will only interrupt instances of the identified <strong>InterruptableJob</strong> currently executing
+        in this Scheduler instance, not across the entire cluster.</p>
+
+</div>
+
 <table class="ui single line table highlight-rows" id="execution-list">
     <thead>
         <tr>

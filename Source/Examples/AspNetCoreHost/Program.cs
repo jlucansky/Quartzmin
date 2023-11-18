@@ -1,18 +1,26 @@
-﻿using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Builder;
+using Quartzmin;
 
-namespace Quartzmin.AspNetCore
+const string virtialPathRoot = "/quartzmin";
+
+var builder = WebApplication.CreateBuilder();
+
+builder.Services.AddQuartzmin(virtialPathRoot, "test");
+
+var app = builder.Build();
+
+app.Use(async (context, next) =>
 {
-    class Program
-    {
-        public static void Main(string[] args)
-        {
-            BuildWebHost(args).Run();
-        }
+    context.Items["header"] = "a";
+    await next.Invoke(context);
+});
 
-        public static IWebHost BuildWebHost(string[] args)
-        {
-            return WebHost.CreateDefaultBuilder(args).UseStartup<Startup>().Build();
-        }
-    }
-}
+app.UseQuartzmin(new QuartzminOptions
+{
+    Scheduler = DemoScheduler.Create().Result
+});
+
+app.UseRouting();
+app.MapGet("/", () => "Hello");
+
+app.Run();

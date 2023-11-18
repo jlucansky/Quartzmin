@@ -1,0 +1,47 @@
+# ASP.NET Core (.NET Framework)
+# Build and test ASP.NET Core projects targeting the full .NET Framework.
+# Add steps that publish symbols, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger: none
+
+pr:
+  - main
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  dotNetVersion: '7.0.x'
+  buildConfiguration: 'Release'
+
+steps:
+  - task: UseDotNet@2
+    inputs:
+      version: $(dotNetVersion)
+      includePreviewVersions: true
+
+  - task: NuGetToolInstaller@1
+
+  - task: NuGetCommand@2
+    inputs:
+      restoreSolution: '$(solution)'
+
+  - script: nbgv cloud
+    displayName: Set Version
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Build Quartzmin'
+    inputs:
+      command: 'build'
+      projects: '**/Source/Quartzmin/Quartzmin.csproj'
+      arguments: '--configuration $(buildConfiguration)'
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Build Quartzmin.SelfHost'
+    inputs:
+      command: 'build'
+      projects: '**/Source/Quartzmin.SelfHost/Quartzmin.SelfHost.csproj'
+      arguments: '--configuration $(buildConfiguration)'

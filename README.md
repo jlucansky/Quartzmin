@@ -43,8 +43,8 @@ To install Quartzmin, run the following command in the Package Manager Console
 PM> Install-Package Quartzmin
 ```
 ## Minimum requirements
-- .NET Framework 4.5.2 
-- .NET Standard 2.0
+- ~~.NET Framework 4.5.2~~ No longer support .NET Framework in branch SignalR
+- .NET Standard 2.0 / dotnet 6
 
 ## Usage
 ### Embedded web server
@@ -103,6 +103,21 @@ public void Configure(IApplicationBuilder app)
     });
 }
 ```
+
+## Add User
+1.Create users.json at root folder.
+2.Use generate a SHA256 password.
+3.Add contents to users.json
+```json
+[
+  {
+    "UserName": "testuser",
+    "Password": "[SHA256 password]",
+    "Role": "User"
+  }
+]
+```
+
 
 ## Notes
 In clustered environment, it make more sense to host Quarzmin on single dedicated Quartz.NET node in standby mode and implement own `IExecutionHistoryStore` depending on database or ORM framework you typically incorporate. Every clustered Quarz.NET node should be configured with `ExecutionHistoryPlugin` and only dedicated node for management may have `QuartzminPlugin`.
